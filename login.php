@@ -11,14 +11,16 @@ include('include/navbar.php');
 <!--   main content     -->
 <div class="container">
 
-<!-- login form -->
-<div class="mainContent">
+
 <!--               login title -->
-        <h2 class="formTitle">Login</h2>
+  <div class="formTitle">
+    <h2>Login</h2>
+  </div>
+
         <form action="login.php" method="post">
             <!--username inputGroup-->
             <div class="inputGroup">
-               <div class="inputDescription">Username: </div>
+               <div class="inputDescription">Username or E-mail address: </div>
                 <input name="username">
             </div>
             <!--password inputGroup-->
@@ -37,14 +39,14 @@ include('include/navbar.php');
             <?php
             }else{ ?>
 
-            <div class="registerInLogin">
-or create a new account <a href="register.php">register</a>
+            <div class="moreFormDetails">
+or create a new account <a href="signup.php">register</a>
             </div><?php }?>
         <!--submit form-->
-        <input type="submit" id="loginBtn" value="Login">
+        <input type="submit" id="submitFormBtn" value="Login">
         </form><!--login form-->
 
-    </div><!--main content-->
+    </div><!--container-->
 
 <?php
 include('include/footer.php');
