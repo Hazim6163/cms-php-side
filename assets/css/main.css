@@ -1,12 +1,13 @@
 *{
   margin: 0;
+    padding: 0;
 }
 
 /*     navbar     */
 /*-------------------------------------------*/
 .navbar{
     display: flex;
-    background-color: #f1f1f1;
+    background-color: #a74165;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -17,9 +18,10 @@
 }
 .brand{
     padding: 16px;
+    font-size: 28px;
 }
 .brand a{
-    color: #a74165;
+    color: #f1f1f1;
     font-weight: bold;
     text-decoration: none;
 }
@@ -34,16 +36,111 @@
     padding: 16px;
     text-align: center;
     transition: background-color 0.4s;
+    font-size: 20px;
 }
 .menuLink a{
-    color: #2d383c;
+    color: #f1f1f1;
     text-decoration: none;
 }
 .menuLink:hover{
-    background-color: #a74165;
+    background-color: #f1f1f1;
 }
 .menuLink:hover a{
-    color: #f1f1f1;
+    color: #a74165;
+}
+
+/*     Main page     */
+/*-------------------------------------------*/
+.container{
+    display: flex;
+    justify-content: center;
+    margin-top: 64px;
+}
+
+/*     Form      */
+/*-------------------------------------------*/
+.formTitle{
+    text-align: center;
+    font-family: Cardo;
+    font-size: 56px;
+    color: #a74165;
+    margin-bottom: 24px;
+}
+
+
+.inputGroup{
+  margin-bottom: 16px;
+}
+
+.inputDescription{
+    font-family: Roboto;
+    font-size: 14px;
+    color: #5e5e5e;
+    margin-bottom: 8px;
+}
+
+.invalidEntry {
+    padding-top: 4px;
+    font-family: Roboto;
+    font-size: 12px;/*12px*/
+    color: #cc4b37;
+    font-weight: 700;
+}
+
+.container input{
+    display: block;
+    width: 340px;
+    height: 39px;
+    padding: 0px 8px;
+    border: 1px solid #cacaca;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-size: 16px;
+    color: #0a0a0a;
+    box-shadow: 0px 0px 5px rgba(202,202,202,1);
+}
+
+.container input:focus{
+
+    border: 2px solid #a74165;
+}
+
+
+
+.registerInLogin{
+    padding-top: 16px;
+    margin-bottom: 24px;
+    font-family: Arimo;
+    font-size: 16px;
+    color: #5e5e5e;
+}
+
+.registerInLogin a{
+    text-decoration: none;
+    color: #a74165;
+}
+
+#loginBtn{
+    margin: 16px auto 36px auto;
+    display: block;
+    width: 80px;
+    height: 35px;
+    padding: 6px 10px;
+    border: 2px solid #cacaca;
+    border-radius: 5px;
+    font-family: Cardo;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    background-color: #ffffff;
+    color: #a74165;
+    transition: background-color 0.4s;
+    cursor: pointer;
+}
+
+#loginBtn:hover{
+    background-color: #a74165;
+    color: #ffffff;
 }
 
 
@@ -72,5 +169,8 @@
         padding-top: 16px;
         width: 100%;
         margin-bottom: 16px;
+    }
+    .container input{
+        width: 100%
     }
 }
