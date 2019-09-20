@@ -47,9 +47,10 @@ $(document).ready(function () {
         },
         success: function (data) {
           $('#modalDialogCrop').css('display', 'none');
-          $('#afterImgSelectImg').html(data);
+          $('#afterImgSelectImg').html('<img src="'+ data +'" class="img-thumbnail" />');
           $('.afterImgSelect').css('display', 'block');
           $('.beforeImgSelect').css('display', 'none');
+          $('#profilePicAfterCrop').val(data);
         }
       });
     })

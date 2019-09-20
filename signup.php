@@ -58,6 +58,7 @@ include('include/navbar.php');
             </div><!--password inputGroup-->
             <!-- profile pic-->
             <input name="profilePic" id="profilePic" type="file" style="display: none" accept="image/*">
+            <input name="profilePicAfterCrop" id="profilePicAfterCrop" type="text" style="display: none">
             <?php
             if ($validateErr){?>
 
