@@ -5,7 +5,8 @@
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <!-- material icon -->
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
@@ -17,5 +18,7 @@
     <link rel="stylesheet" href="assets/css/main.css" type="text/css">
     <?php echo $costumeCss ?>
     <title><?php echo $title; ?></title>
-  </head>
-  <body>
+</head>
+
+<body>
+  
