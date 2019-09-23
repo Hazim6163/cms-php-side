@@ -1,4 +1,9 @@
 <?php
+require 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::create(__DIR__, 'sendgrid.env');
+$dotenv->load();
+
 $title = 'Signup';
 $costumeCss = '<link rel="stylesheet" href="assets/css/croppie.css" type="text/css">';
 global $validateErr;
@@ -19,9 +24,6 @@ if (isset($_POST['submit'])){
     $password= $_POST['password'];
     $img = $_POST['profilePicAfterCrop'];
 
-    // create the img file : 
-    $file = curl_file_create ( realpath($img) );
-
     /** send the data to the main server : */
 
     // init url:
@@ -30,18 +32,35 @@ if (isset($_POST['submit'])){
     //create the verification code : 
     $vKey = rand(100000, 999999);
 
-    //TODO: Send the Validation vKey Email
+    /**
+     * check if there is an img
+     */
+    $user;
+    if(!empty($img)){
+        // create the img file : 
+        $file = curl_file_create ( realpath($img) );
+        //user obj: 
+        $user = array(
+            'fname' => $fname,
+            'lname' => $lname,
+            'username' => $username,
+            'email' => $email,
+            'password' => $password,
+            'vKey' => $vKey,
+            'img' => $file
+        );
+    }else{
+        //user obj: 
+        $user = array(
+            'fname' => $fname,
+            'lname' => $lname,
+            'username' => $username,
+            'email' => $email,
+            'password' => $password,
+            'vKey' => $vKey
+        );
+    }
     
-    //user obj: 
-    $user = array(
-        'fname' => $fname,
-        'lname' => $lname,
-        'username' => $username,
-        'email' => $email,
-        'password' => $password,
-        'vKey' => $vKey,
-        'img' => $file
-    );
     //init curl:
     $ch = curl_init($url);
     // Configuring curl options
@@ -63,7 +82,6 @@ if (isset($_POST['submit'])){
     $responseCode = $info['http_code'];
     $result = json_decode($result);
 
-    print_r($result);
 
     if($responseCode == 406 || $responseCode == 400){
         $GLOBALS['validateErr'] = true;
@@ -73,7 +91,29 @@ if (isset($_POST['submit'])){
         $_SESSION['token'] = $result->token;
         $_SESSION['username'] = $username;
         session_write_close();
-        header('Location: ./validation/signup.php');
+
+        //delete the user img form php server because it saved in the server ->
+        unlink($img);
+
+        //Send the Validation vKey Email:
+        $Semail = new \SendGrid\Mail\Mail(); 
+        $Semail->setFrom("CMS@example.com", "CMS PROJECT");
+        $Semail->setSubject("Please confirm you E-mail");
+        $Semail->addTo($email, $fname . ' ' .$lname);
+        $Semail->addContent(
+            "text/html", "<strong>vKey: </strong>".$vKey //add custom html here
+        );
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        try {
+            $response = $sendgrid->send($Semail);
+            //print $response->statusCode() . "<br>"; //to get the response code
+            //print_r($response->headers());    //to get the response Header
+            //print $response->body() . "<br>"; //to get the response body
+            header('Location: ./validation/signup.php');
+        } catch (Exception $e) {
+            echo 'Caught exception: '. $e->getMessage() ."<br>";
+        }
+
     }
 
 }
