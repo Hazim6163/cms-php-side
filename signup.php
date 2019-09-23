@@ -4,6 +4,81 @@ $costumeCss = '<link rel="stylesheet" href="assets/css/croppie.css" type="text/c
 global $validateErr;
 global $errMsg;
 
+if (isset($_POST['submit'])){
+
+    //check if signup submit: 
+    if($_POST['submit'] != 'Signup'){
+        header('Refresh:0');
+    }
+
+    //handle the request and extract the values:
+    $fname= $_POST['fname'];
+    $lname= $_POST['lname'];
+    $username= $_POST['username'];
+    $email= $_POST['email'];
+    $password= $_POST['password'];
+    $img = $_POST['profilePicAfterCrop'];
+
+    // create the img file : 
+    $file = curl_file_create ( realpath($img) );
+
+    /** send the data to the main server : */
+
+    // init url:
+    $url = 'http://localhost:3000/users/register';
+
+    //create the verification code : 
+    $vKey = rand(100000, 999999);
+
+    //TODO: Send the Validation vKey Email
+    
+    //user obj: 
+    $user = array(
+        'fname' => $fname,
+        'lname' => $lname,
+        'username' => $username,
+        'email' => $email,
+        'password' => $password,
+        'vKey' => $vKey,
+        'img' => $file
+    );
+    //init curl:
+    $ch = curl_init($url);
+    // Configuring curl options
+    $options = array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => $user
+    );
+    
+    // Setting curl options
+    curl_setopt_array( $ch, $options );
+
+    // Getting results
+    $result = curl_exec($ch); // Getting jSON result string
+
+    $info = curl_getinfo($ch);
+    curl_close($ch);
+
+    $responseCode = $info['http_code'];
+    $result = json_decode($result);
+
+    print_r($result);
+
+    if($responseCode == 406 || $responseCode == 400){
+        $GLOBALS['validateErr'] = true;
+        $GLOBALS['errMsg'] = $result->error;
+    }else{
+        session_start();
+        $_SESSION['token'] = $result->token;
+        $_SESSION['username'] = $username;
+        session_write_close();
+        header('Location: ./validation/signup.php');
+    }
+
+}
+
+
 include('include/header.php');
 include('include/navbar.php');
 ?>
@@ -37,9 +112,14 @@ include('include/navbar.php');
             </div>
         </div>
         <!--name inputGroup-->
-        <div class="inputGroup">
-            <div class="inputDescription">Name: </div>
-            <input name="name" type="text">
+        <div class="inputGroup-6">
+            <div class="inputDescription">First Name: </div>
+            <input name="fname" type="text">
+        </div>
+        <!--name inputGroup-->
+        <div class="inputGroup-6">
+            <div class="inputDescription">Last Name: </div>
+            <input name="lname" type="text">
         </div>
         <!--username inputGroup-->
         <div class="inputGroup">
@@ -76,7 +156,7 @@ include('include/navbar.php');
     already have an account <a href="login.php">Login</a>
 </div><?php }?>
 <!--submit form-->
-<input type="submit" id="submitFormBtn" value="Signup">
+<input type="submit" id="submitFormBtn" name="submit" value="Signup">
 </form>
 <!--Signup form-->
 
@@ -85,9 +165,12 @@ include('include/navbar.php');
 <div class="modalDialogCrop" id="modalDialogCrop">
     <div class="modal-content">
         <div class="modal-body">
-            <span class="close">&times;</span>
+            <span class="close" id="closeModalBtn">&times;</span>
             <div id="image_demo" style="width:350px; margin-top:30px"></div>
-            <button class="" id="crop_image">Crop & Upload Image</button>
+            <button class="mdc-button mdc-button--raised" id="crop_image">
+                <i class="material-icons mdc-button__icon" aria-hidden="true">save</i>
+                <span class="mdc-button__label">Save</span>
+            </button>
         </div>
     </div>
 </div><!-- crop img dialog -->

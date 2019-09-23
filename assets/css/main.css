@@ -164,6 +164,18 @@
     color: #a74165;
 }
 
+.inputGroup-6 input{
+    display: inline-block;
+    width: 85%;
+}
+.inputGroup-6 > .inputDescription{
+   width: 50%;
+}
+.inputGroup-6 {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
 #submitFormBtn {
     margin: 16px auto 36px auto;
     display: block;
@@ -216,7 +228,13 @@
     background-color: #fefefe;
     padding: 20px;
     margin: 64px;
-    text-align: left;
+    text-align: center;
+}
+
+#crop_image{
+    background-color: #a74165;
+    font-size: 18px;
+    border-radius: 20%;
 }
 
 /* The Close Button */

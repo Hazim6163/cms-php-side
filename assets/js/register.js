@@ -56,4 +56,10 @@ $(document).ready(function () {
     })
   });
 
+  //to close Modal on close btn clicked:
+  $('#closeModalBtn').click((event) => {
+    console.log('done');
+    $('#modalDialogCrop').css('display', 'none');
+  });
+
 });
