@@ -90,22 +90,23 @@ if (isset($_POST['submit'])){
         session_start();
         $_SESSION['token'] = $result->token;
         $_SESSION['username'] = $username;
+        $_SESSION['verified'] = 0;
         session_write_close();
 
         //delete the user img form php server because it saved in the server ->
         unlink($img);
 
         //Send the Validation vKey Email:
-        $Semail = new \SendGrid\Mail\Mail(); 
+        /*$Semail = new \SendGrid\Mail\Mail(); 
         $Semail->setFrom("CMS@example.com", "CMS PROJECT");
         $Semail->setSubject("Please confirm you E-mail");
         $Semail->addTo($email, $fname . ' ' .$lname);
         $Semail->addContent(
             "text/html", "<strong>vKey: </strong>".$vKey //add custom html here
         );
-        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));*/
         try {
-            $response = $sendgrid->send($Semail);
+            //$response = $sendgrid->send($Semail);
             //print $response->statusCode() . "<br>"; //to get the response code
             //print_r($response->headers());    //to get the response Header
             //print $response->body() . "<br>"; //to get the response body
