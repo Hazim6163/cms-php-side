@@ -1,6 +1,12 @@
 <?php
 $title = 'Login';
 
+//check if the user already logged in :
+session_start();
+if(isset($_SESSION['token'])){
+    header('Location: ./index.php');
+}      
+
 $isErr = false;
 $errMsg;
 

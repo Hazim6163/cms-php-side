@@ -1,6 +1,13 @@
 <?php
 require 'vendor/autoload.php';
 
+//check if the user already logged in :
+session_start();
+if(isset($_SESSION['token'])){
+    header('Location: ./index.php');
+}
+
+//get the email server info
 $dotenv = Dotenv\Dotenv::create(__DIR__, 'sendgrid.env');
 $dotenv->load();
 
@@ -95,16 +102,16 @@ if (isset($_POST['submit'])){
         unlink($img);
 
         //Send the Validation vKey Email:
-        /*$Semail = new \SendGrid\Mail\Mail(); 
+        $Semail = new \SendGrid\Mail\Mail(); 
         $Semail->setFrom("CMS@example.com", "CMS PROJECT");
         $Semail->setSubject("Please confirm you E-mail");
         $Semail->addTo($email, $fname . ' ' .$lname);
         $Semail->addContent(
             "text/html", "<strong>vKey: </strong>".$vKey //add custom html here
         );
-        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));*/
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'));
         try {
-            //$response = $sendgrid->send($Semail);
+            $response = $sendgrid->send($Semail);
             //print $response->statusCode() . "<br>"; //to get the response code
             //print_r($response->headers());    //to get the response Header
             //print $response->body() . "<br>"; //to get the response body
