@@ -1,3 +1,7 @@
+<?php
+    //TODO logged in users navbar 
+?>
+
 <!--       navbar    -->
 <nav class="navbar">
     <div class="brandContainer">
@@ -7,24 +11,35 @@
     </div>
     <ul class="menuLinkContainer">
         <li class="menuLink">
-            <a href="#">Home</a>
+            <a href="http://localhost/html/CMS/index.php">Home</a>
         </li>
         <li class="menuLink">
-            <a href="#">Categories</a>
+            <a href="">Categories</a>
         </li>
         <?php
-
-if(isset($_SESSION['username'])){
+if(isset($_SESSION['token'])){
                 ?>
         <li class="menuLink">
-            <a href="#">Logout</a>
+            <a href="#" id="logout">Logout</a>
         </li>
         <?php }else { ?>
         <li class="menuLink">
-            <a href="#">Login</a>
+            <a href="http://localhost/html/CMS/login.php">Login</a>
         </li>
         <?php }?>
     </ul>
     <!--menu links-->
 </nav>
 <!--nav bar-->
+
+<script>
+    $(document).ready(function () {
+        $('#logout').click( function(){
+            <?php
+                unset($_SESSION['token']);
+                session_write_close();
+            ?>
+            location.reload();
+        });
+    });
+</script>
