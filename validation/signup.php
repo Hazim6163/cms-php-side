@@ -22,26 +22,28 @@ if($_SESSION['verified'] == 1){ //TODO: set the verified to 1 after login and af
 //extract the data from the session:
 $token = $_SESSION['token'];
 
-$postFields = array(
-    'token' => $token
-);
+//the user need to confirm the account :
 
 $vKey;
-$email;
-$fname;
-$userFounded = false;
+$email = $_SESSION['email'];
+$fname = $_SESSION['fname'];
 
 if(isset($_POST['submit'])){
 
     //get the vKey from the user: 
-        $uVKey = $_POST['vKey'];
+        $uVKey = (int)$_POST['vKey'];
 
     //send the post request to the server ->
-        $url = 'http://localhost:3000/users/getVKey';
+        $url = 'http://localhost:3000/users/confirm';
+        $postFields = array(
+            'vKey' => $uVKey
+        );
+        $postFields = json_encode($postFields);
         $options = array(
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => 1,
-            CURLOPT_POSTFIELDS => $postFields
+            CURLOPT_CUSTOMREQUEST => 'PATCH',
+            CURLOPT_POSTFIELDS => $postFields,
+            CURLOPT_HTTPHEADER => array('Content-type: application/json', 'Authorization: '.$token)
         );
         $ch = curl_init($url);
         curl_setopt_array($ch, $options);
@@ -54,16 +56,14 @@ if(isset($_POST['submit'])){
         $result = json_decode($result);
 
     if($responseCode != 200){
-        //echo('there is an error');
+        $_SESSION['error'] = $result->error;
+
     }else{
-        $userFounded = true;
-        //catch the vKey and Email from the server 
-        $vKey = $result->vKey;
-        $email = $result->email;
-        $fname = $result->fname;
+        //catch the verified value from the server 
+        $verified = $result->verified;
 
         //compare the vKeys:
-        if($vKey == $uVKey){
+        if($verified == 1){
             //conformation successfully: 
                 $_SESSION['verified'] = 1 ;
                 header('Location: ../index.php');
@@ -131,32 +131,22 @@ include('../include/navbar.php');
 
 </style>
 
-<?php if($userFounded){ ?>
-    <div class="container">
-        <h1 class="title">Welcome <?php echo($fname) ?> !!</h1>
-        <div class="content">
-            <p>we already sent you the confirmation code to your E-mail: <b><?php echo($email) ?></b>.</p>
-            <p style="padding: 16px;">please enter the confirmation Code:</p>
-            <form action="" method="post">
-                <div class="inputGroup-6 vKey-input">
-                    <div class="inputDescription">vKey: </div>
-                    <input name="vKey" type="number">
+<div class="container">
+    <h1 class="title">Welcome <?php echo($fname) ?> !!</h1>
+    <div class="content">
+        <p>we already sent you the confirmation code to your E-mail: <b><?php echo($email) ?></b>.</p>
+        <p style="padding: 16px;">please enter the confirmation Code:</p>
+        <form action="" method="post">
+            <div class="inputGroup-6 vKey-input">
+                <div class="inputDescription">vKey: </div>
+                <input name="vKey" type="number">
+            </div>
+            <?php if (isset($_SESSION['error'])){ ?>
+                <div class="invalidEntry">
+                    <span><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></span>
                 </div>
-                <?php if (isset($_SESSION['error'])){ ?>
-                    <div class="invalidEntry">
-                        <span><?php echo $_SESSION['error']; ?></span>
-                    </div>
-                <?php } ?>
-                <input type="submit" id="submitFormBtn" name="submit" value="confirm">
-            </form>
-        </div>
+            <?php } ?>
+            <input type="submit" id="submitFormBtn" name="submit" value="confirm">
+        </form>
     </div>
-<?php 
-}
-else{
-    /* if the user not founded on the server or was server error
-    unset($_SESSION('token')); //to redirect the user to the login page
-    header('Location: ../login.php');
-    */
-} 
-?>
+</div>
