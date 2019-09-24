@@ -12,22 +12,60 @@ if(!isset($_SESSION['token'])){
     header('Location: ../login.php');
 }
 
-//check if the user already confirmed the account: 
-if($_SESSION['verified'] == 1){ //TODO: set the verified to 1 after login and after conformation
-    header('Location: ../index.php');
-}
-
-//the user need to confirm the account :
-
 //extract the data from the session:
 $token = $_SESSION['token'];
 
-//the user need to confirm the account :
+$email;
+$fname;
+$isAlreadyConfirmed = false;
 
-$vKey;
-$email = $_SESSION['email'];
-$fname = $_SESSION['fname'];
+/**
+ * set the value of $email and $fname and $isAlreadyConfirmed
+ * $token: user token to authentication in the server
+ */
+function getUserInfo($token){
+    global $email;
+    global $fname;
+    global $isAlreadyConfirmed;
+    //send request to get confirmation data;
+    $url = 'http://localhost:3000/users/conformation-info';
+    $options = array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array('Content-type: application/json', 'Authorization: '.$token)
+    );
+    $ch = curl_init($url);
+    curl_setopt_array($ch, $options);
 
+    $result = curl_exec($ch);
+    $info = curl_getinfo($ch);
+    curl_close($ch);
+
+    $responseCode = $info['http_code'];
+    $result = json_decode($result);
+
+    if($responseCode != 200){
+        $_SESSION['error'] = $result->error;
+        return;
+    }
+
+    $email=$result->email;
+    $fname=$result->fname;
+
+    if($result->verified == 1){ 
+        $isAlreadyConfirmed = true;
+    }
+}
+
+getUserInfo($token);
+
+if($isAlreadyConfirmed){
+    header('Location: ../index.php');
+}
+
+
+
+// account confirmation request:
 if(isset($_POST['submit'])){
 
     //get the vKey from the user: 
@@ -65,7 +103,6 @@ if(isset($_POST['submit'])){
         //compare the vKeys:
         if($verified == 1){
             //conformation successfully: 
-                $_SESSION['verified'] = 1 ;
                 header('Location: ../index.php');
         }else {
             //confirmation failed:
