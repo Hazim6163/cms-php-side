@@ -89,10 +89,6 @@ if (isset($_POST['submit'])){
     }else{
         session_start();
         $_SESSION['token'] = $result->token;
-        $_SESSION['username'] = $username;
-        $_SESSION['verified'] = 0;
-        $_SESSION['email'] = $email;
-        $_SESSION['fname'] = $fname;
         session_write_close();
 
         //delete the user img form php server because it saved in the server ->
