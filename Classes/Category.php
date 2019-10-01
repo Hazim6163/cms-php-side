@@ -26,6 +26,9 @@ class Category {
         
     }
     
+    /**
+     * to get single category details
+     */
     public static function fromServer($id) {
         $instance = new self();
         
@@ -84,6 +87,62 @@ class Category {
     public static function getCategories(){
         $error = false;
         $url = 'http://localhost:3000/catdegories/';
+        $options = array(
+            CURLOPT_RETURNTRANSFER=> TRUE,
+            CURLOPT_CUSTOMREQUEST => 'GET'
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+        
+        $result = json_decode(curl_exec($ch));
+        $info = curl_getinfo($ch);
+        $resCode = $info['http_code'];
+        curl_close($ch);
+        
+        if($resCode != 200){
+            $error = true;
+        }
+        $resultWithBol = array(
+            'result' => $result,
+            'error' => $error
+        );
+        return $resultWithBol;
+    }
+
+    /**
+     * to get the children categories 
+     */
+    public static function getCatByCatId($catId){
+        $error = false;
+        $url = 'http://localhost:3000/catdegories/category?id='.$catId;
+        $options = array(
+            CURLOPT_RETURNTRANSFER=> TRUE,
+            CURLOPT_CUSTOMREQUEST => 'GET'
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+        
+        $result = json_decode(curl_exec($ch));
+        $info = curl_getinfo($ch);
+        $resCode = $info['http_code'];
+        curl_close($ch);
+        
+        if($resCode != 200){
+            $error = true;
+        }
+        $resultWithBol = array(
+            'result' => $result,
+            'error' => $error
+        );
+        return $resultWithBol;
+    }
+
+    /**
+     * to get the root categories:
+     */
+    public static function getRootCategories(){
+        $error = false;
+        $url = 'http://localhost:3000/catdegories/category/home';
         $options = array(
             CURLOPT_RETURNTRANSFER=> TRUE,
             CURLOPT_CUSTOMREQUEST => 'GET'
