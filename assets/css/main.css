@@ -7,9 +7,10 @@
 /*-------------------------------------------*/
 .navbar {
     display: flex;
-    background-color: #a74165;
+    background-color: #000000;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-around;
+    height: 90px;
 }
 
 .brandContainer {
@@ -19,6 +20,7 @@
 }
 
 .brand {
+    font-family:Germania One;
     padding: 16px;
     font-size: 28px;
 }
@@ -26,6 +28,7 @@
 .brand a {
     color: #f1f1f1;
     font-weight: bold;
+    font-size: 36px;
     text-decoration: none;
 }
 
@@ -38,14 +41,22 @@
 }
 
 .menuLink {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 100%;
+    font-family: 'Roboto Condensed';
     padding: 16px;
     text-align: center;
     transition: background-color 0.4s;
-    font-size: 20px;
+    font-size: 24px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .menuLink a {
-    color: #f1f1f1;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -54,12 +65,41 @@
 }
 
 .menuLink:hover a {
-    color: #a74165;
+    color: #000000;
+}
+
+/*     footer      */
+/*--------------------------*/
+.footer{
+    background-color: #000;
+    color:#fff;
+    display: flex;
+    justify-content: space-around;
+    height: 225px;
+}
+
+.footerBrand{
+    font-family: 'Germania One';
+    font-size: 36px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.footerContent{
+    font-size:24px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin-top:auto;
+    margin-bottom: auto;
+}
+
+body{
+    min-height: 100vh;
 }
 
 /*     Main page     */
 /*-------------------------------------------*/
 .container {
+    min-height: 65vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
