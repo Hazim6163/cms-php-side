@@ -1,0 +1,23 @@
+/*     footer      */
+/*--------------------------*/
+.footer{
+    background-color: #000;
+    color:#fff;
+    display: flex;
+    justify-content: space-around;
+    height: 225px;
+}
+
+.footerBrand{
+    font-family: 'Germania One';
+    font-size: 36px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.footerContent{
+    font-size:24px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    margin-top:auto;
+    margin-bottom: auto;
+}

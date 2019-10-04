@@ -12,7 +12,10 @@ $dotenv = Dotenv\Dotenv::create(__DIR__, 'sendgrid.env');
 $dotenv->load();
 
 $title = 'Signup';
-$costume_head = '<link rel="stylesheet" href="assets/css/croppie.css" type="text/css">';
+$custom_head = '
+    <link rel="stylesheet" href="assets/css/croppie.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/main.css" type="text/css">
+';
 global $validateErr;
 global $errMsg;
 

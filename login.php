@@ -1,5 +1,8 @@
 <?php
 $title = 'Login';
+$custom_head = '
+<link rel="stylesheet" href="./assets/css/main.css" type="text/css">
+';
 
 //check if the user already logged in :
 session_start();

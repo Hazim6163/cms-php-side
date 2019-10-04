@@ -1,7 +1,7 @@
 <?php
 
 $title = 'Confirm Account';
-$costume_head = '
+$custom_head = '
 <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
 ';
