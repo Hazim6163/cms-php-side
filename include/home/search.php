@@ -158,6 +158,7 @@
                 $("#searchBoxContainer").css("-webkit-border-radius", "12px 12px 12px 12px");
             }else{
                 $("#liveSearchResult").css("visibility", "visible");
+                $("#liveSearchResult").css("z-index", "1");
                 $("#searchBoxContainer").css("border-radius", "12px 12px 0px 0px");
                 $("#searchBoxContainer").css("-moz-border-radius", "12px 12px 0px 0px");
                 $("#searchBoxContainer").css("-webkit-border-radius", "12px 12px 0px 0px");
