@@ -2,7 +2,7 @@
 require ('./Classes/Category.php');
 require ('./Classes/Post.php');
 
-$costume_head = '
+$costumeCss = '
 <link rel="stylesheet" href="./assets/css/index.css">
 ';
 
@@ -55,6 +55,7 @@ foreach ($lastPosts as $post) {
     *    <br><br>');  
     */ 
 }
+include('./include/home/search.php');
 ?>
 
 
