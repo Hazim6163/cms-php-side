@@ -28,65 +28,57 @@ class Post {
     public $isFounded;
     
     public static function formServer($id){
-        $instance = new self();
-        
         $url = 'http://localhost:3000/posts/?id='.$id;
-        $options = array(
-            CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
-        );
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
+        $result = Post::connectToServer($url, 'GET');
+        return $result;
         
-        $result = json_decode(curl_exec($ch));
-        $info = curl_getinfo($ch);
-        $resCode = $info['http_code'];
-        curl_close($ch);
-        
-        if($resCode != 200){
-            $instance->isFounded = false;
-        }else{
-            $instance->isFounded = true;
-            $instance->authorId = $result->authorId;
-            $instance->title = $result->title;
-            $instance->des = $result->des;
-            $instance->body = $result->body;
-            $instance->lastUpdate = $result->lastUpdate;
-            $instance->commentsCount = $result->commentsCount;
-            $instance->likesCount = $result->likesCount;
-            $instance->comments = $result->comments;
-            $instance->answers = $result->answers;
-            $instance->imgUrl = $result->imgUrl;
-            $instance->id = $result->id;
-            $instance->parentId = $result->parentId;
-        }
-        
-        return $instance;
     }
     
     public static function getCategoryPosts($catId){
-        $isFounded = true;
         $url = 'http://localhost:3000/posts/category?id='.$catId;
+        $result = Post::connectToServer($url, 'GET');
+        return $result;
+    }
+
+    /**
+     * getLastPosts
+     */
+    public static function getLastPosts(){
+        $url = 'http://localhost:3000/posts/last';
+        $result = Post::connectToServer($url, 'GET');
+        return $result;
+    }
+
+    /**
+     * function to connect to the server and return the result.
+     * @url : the url to the server.
+     * @request: request type GET POST etc. .
+     * return array with error field true if there any error false if not 
+     * and result array content the returned value from the server.
+     */
+    public static function  connectToServer($url, $request){
+        $error = false;
+        $url = $url;
         $options = array(
             CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
+            CURLOPT_CUSTOMREQUEST => $request
         );
         $ch = curl_init($url);
         curl_setopt_array($ch, $options);
-        
-        $result = json_decode(curl_exec($ch));
+
+        $result = json_decode(curl_exec($ch), true);
         $info = curl_getinfo($ch);
         $resCode = $info['http_code'];
         curl_close($ch);
-        
+
         if($resCode != 200){
-            $isFounded = false;
+            $error = true;
         }
         $resultWithBool = array(
-            result => $result,
-            isFounded => $isFounded
+            'result' => $result,
+            'error' => $error
         );
-        
+
         return $resultWithBool;
     }
     

@@ -30,36 +30,9 @@ class Category {
      * to get single category details
      */
     public static function fromServer($id) {
-        $instance = new self();
-        
         $url = 'http://localhost:3000/categories/?id='.$id;
-        $options = array(
-            CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
-        );
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
-        
-        $result = json_decode(curl_exec($ch));
-        $info = curl_getinfo($ch);
-        $resCode = $info['http_code'];
-        curl_close($ch);
-        
-        if($resCode != 200){
-            $instance->isFounded = false;
-        }else{
-            $instance->isFounded = true;
-            $instance->title = $result->title;
-            $instance->des = $result->des;
-            $instance->lastUpdate = $result->lastUpdate;
-            $instance->nestedCategories = $result->nestedCategories;
-            $instance->postsCount = $result->postsCount;
-            $instance->imgUrl = $result->imgUrl;
-            $instance->id = $result->id;
-            $instance->parentId = $result->parentId;
-        }
-        
-        return $instance;
+        $result = Category::connectToServer($url, 'GET');
+        return $result;
     }
     
     public static function withDet($id, $parentId, $title, $des,
@@ -85,84 +58,60 @@ class Category {
      * to get all categories from the server
      **/
     public static function getCategories(){
-        $error = false;
-        $url = 'http://localhost:3000/catdegories/';
-        $options = array(
-            CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
-        );
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
-        
-        $result = json_decode(curl_exec($ch));
-        $info = curl_getinfo($ch);
-        $resCode = $info['http_code'];
-        curl_close($ch);
-        
-        if($resCode != 200){
-            $error = true;
-        }
-        $resultWithBol = array(
-            'result' => $result,
-            'error' => $error
-        );
-        return $resultWithBol;
+        $url = 'http://localhost:3000/categories/';
+        $result = Category::connectToServer($url, 'GET');
+        return $result;
     }
 
     /**
      * to get the children categories 
      */
     public static function getCatByCatId($catId){
-        $error = false;
-        $url = 'http://localhost:3000/catdegories/category?id='.$catId;
-        $options = array(
-            CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
-        );
-        $ch = curl_init($url);
-        curl_setopt_array($ch, $options);
-        
-        $result = json_decode(curl_exec($ch));
-        $info = curl_getinfo($ch);
-        $resCode = $info['http_code'];
-        curl_close($ch);
-        
-        if($resCode != 200){
-            $error = true;
-        }
-        $resultWithBol = array(
-            'result' => $result,
-            'error' => $error
-        );
-        return $resultWithBol;
+        $url = 'http://localhost:3000/categories/category?id='.$catId;
+        $result = Category::connectToServer($url, 'GET');
+        return $result;
     }
 
     /**
      * to get the root categories:
      */
     public static function getRootCategories(){
+        $url = 'http://localhost:3000/categories/home';
+        $result = Category::connectToServer($url, 'GET');
+        return $result;
+    }
+
+    /**
+     * function to connect to the server and return the result.
+     * @url : the url to the server.
+     * @request: request type GET POST etc. .
+     * return array with error field true if there any error false if not 
+     * and result array content the returned value from the server.
+     */
+    public static function  connectToServer($url, $request){
         $error = false;
-        $url = 'http://localhost:3000/catdegories/category/home';
+        $url = $url;
         $options = array(
             CURLOPT_RETURNTRANSFER=> TRUE,
-            CURLOPT_CUSTOMREQUEST => 'GET'
+            CURLOPT_CUSTOMREQUEST => $request
         );
         $ch = curl_init($url);
         curl_setopt_array($ch, $options);
-        
-        $result = json_decode(curl_exec($ch));
+
+        $result = json_decode(curl_exec($ch), true);
         $info = curl_getinfo($ch);
         $resCode = $info['http_code'];
         curl_close($ch);
-        
+
         if($resCode != 200){
             $error = true;
         }
-        $resultWithBol = array(
+        $resultWithBool = array(
             'result' => $result,
             'error' => $error
         );
-        return $resultWithBol;
+
+        return $resultWithBool;
     }
     
 }
