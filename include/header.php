@@ -1,6 +1,6 @@
 <?php
   global $title;
-  global $costumeCss;
+  global $costume_head;
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="http://localhost/html/cms/assets/css/main.css" type="text/css">
-    <?php echo $costumeCss ?>
+    <?php echo $costume_head ?>
     <title><?php echo $title; ?></title>
 </head>
 
