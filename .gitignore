@@ -2,3 +2,5 @@
 .vscode/spellright.dict
 vendor/
 sendgrid.env
+*.png
+*.bk.*
