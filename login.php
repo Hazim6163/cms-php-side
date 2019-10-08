@@ -42,11 +42,39 @@ if (isset($_POST['submit'])) {
         $errMsg = $result->error;
     }else {
         //done
-        session_start();
         $_SESSION['token'] = $result->token;
+        $userInfo = getUserInfo($result->token);
+        $_SESSION['userInfo'] = $userInfo;
         session_write_close();
         header('Location: ./index.php');
    }
+}
+
+function getUserInfo($token){
+    $url = 'http://localhost:3000/users/getUserCard';
+    $requestHeaders = array(
+        'Authorization: '.$token
+    );
+    //init curl:
+    $ch = curl_init($url);
+    // Configuring curl options
+    $options = array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => $requestHeaders
+    );
+    
+    // Setting curl options
+    curl_setopt_array( $ch, $options );
+
+    // Getting results
+    $result = curl_exec($ch); // Getting jSON result string
+
+    $info = curl_getinfo($ch);
+    curl_close($ch);
+
+    $responseCode = $info['http_code'];
+    $result = json_decode($result);
+    return $result;
 }
 
 include('include/header.php');
