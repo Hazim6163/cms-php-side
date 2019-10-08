@@ -17,6 +17,9 @@ include('./include/navbar.php');
     <div class="searchBar">
         <?php include('./include/home/search.php') ?>
     </div>
+    <div class="categories">
+        <?php include('./include/home/categories.php'); ?>
+    </div>
 </div>
 
 <?php 
