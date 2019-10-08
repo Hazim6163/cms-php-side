@@ -1,5 +1,5 @@
 <?php
-    //TODO logged in users navbar 
+    //TODO logged in users navbar
 ?>
 
 <!--       navbar    -->
@@ -16,9 +16,7 @@
         <li class="menuLink">
             <a href="">Categories</a>
         </li>
-        <?php
-if(isset($_SESSION['token'])){
-                ?>
+        <?php if(isset($_SESSION['token'])){ ?>
         <li class="menuLink">
             <a href="#" id="logout">Logout</a>
         </li>
@@ -36,8 +34,10 @@ if(isset($_SESSION['token'])){
     $(document).ready(function () {
         $('#logout').click( function(){
             <?php
-                unset($_SESSION['token']);
-                session_write_close();
+                //TODO fix auto logout when uncomment this two lines
+                //unset($_SESSION['token']);
+                //unset($_SESSION['userInfo']);
+                //session_write_close();
             ?>
             location.reload();
         });
