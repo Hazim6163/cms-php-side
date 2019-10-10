@@ -112,10 +112,45 @@ function getPostHeader(post){
 
 //create post body
 function getPostBody(post) {
+    //post body container
     const postBody = $('<div>',{
         id: 'postBody'+post._id,
         class: 'postBody'
     });
+
+    //check if the post has an img: 
+    if(post.imgUrl){
+        var $postImgContainer = $("<div>", {
+            id : 'postImgContainer'+post._id,
+            "class": "postImgContainer"
+        });
+        var $postImg = $("<img>", {
+            id : 'postImg'+post._id,
+            "class": "postImg"
+        });
+        $postImg.attr('src', postImgBase+post.imgUrl);
+        $postImg.appendTo($postImgContainer);
+        $postImgContainer.appendTo(postBody);
+    }
+    //post content
+    var $postContent = $("<div>", {
+        id : 'postContent'+post._id,
+        "class": "postContent"
+    });
+    //post title
+    var $postTitle = $("<div>", {
+        id : 'postTitle'+post._id,
+        "class": "postTitle"
+    }).html(post.title);
+    $postTitle.appendTo($postContent);
+    //post description
+    var $postDes = $("<div>", {
+        id : 'postDes'+post._id,
+        "class": "postDes"
+    }).html(post.des);
+    $postDes.appendTo($postContent);
+    //append post content to post body
+    $postContent.appendTo(postBody);
 
     return postBody;
 }
