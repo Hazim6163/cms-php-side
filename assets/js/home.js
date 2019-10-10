@@ -214,7 +214,7 @@ function getUserInfo(){
 }
 
 /**---------------  post functions --------------- */
-//get post elements
+//get post  elements
 function getPostElements(){
     var postElements = {
         post : $('#p_post'),
