@@ -3,7 +3,7 @@
 $title = 'Home';
 $custom_head = '
 <link rel="stylesheet" href="./assets/css/index.css">
-<script src="./assets/js/home.js"></script>
+
 <script src="https://kit.fontawesome.com/9b9c3e7d62.js" crossorigin="anonymous"></script>
 ';
 
@@ -28,7 +28,7 @@ include('./include/navbar.php');
         <?php include('./include/home/posts.php'); ?>
     </div>
 </div>
-
+<script src="./assets/js/home.js"></script>
 <?php 
 include('./include/footer.php');
 ?>
