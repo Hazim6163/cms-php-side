@@ -101,12 +101,12 @@ if(isset($_POST['postLike'])){
 <!-- posts container -->
 <div class="p_postsContainer" id="p_postsContainer"></div>
 
-<!-- post element will change the username in post header to postAuthor-->
+<!-- post element -->
 <div class="post" id="post" hidden>
     <div class="postHeader" id="postHeader">
         <div class="userPhoto" id="userPhoto"></div>
         <div class="headerContent" id="headerContent">
-            <div class="username" id="postAuthor"></div>
+            <div class="postAuthor" id="postAuthor"></div>
             <div class="postDate" id="postDate"></div>
         </div>
     </div>
