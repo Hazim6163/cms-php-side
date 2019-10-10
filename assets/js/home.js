@@ -331,6 +331,75 @@ function getCommentFooter(comment){
         class: 'commentFooter'
     });
 
+    //comment date will show the updated at date:
+    const $commentDate = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentDate"
+    }).html(comment.updatedAt);
+    $commentDate.appendTo(commentFooter);
+
+    // comment like icon count container
+    const $commentLikes = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentLikes"
+    }).css('cursor', 'pointer');
+    $commentLikes.appendTo(commentFooter);
+
+    //comment like icon
+    const $commentLikeIcon = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentLikeIcon"
+    });
+    //append comment like icon to the comment likes container
+    $commentLikeIcon.appendTo($commentLikes);
+    //check if the use has already likes the comment:
+    const alreadyLiked = comment.likers.find((liker)=>{
+        return liker.id == userInfo.id;
+    });//TODO ON COMMENT LIKE ICON CLICK
+    if(alreadyLiked){
+        $commentLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+    }else{
+        $commentLikeIcon.html('<i class="far fa-thumbs-up"></i>');
+    }
+    //likes count
+    const $commentLikesCount = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentLikesCount"
+    });
+    //append the likes count to the comment likes container
+    $commentLikesCount.appendTo($commentLikes);
+    //check if the comment has likes:
+    if(comment.likesCount > 0){
+        $commentLikesCount.html(comment.likesCount+' Likes');
+    }else{
+        $commentLikesCount.html(' Like');
+    }
+
+    //comment replays:
+    const $replays = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "replays"
+    }).css('cursor', 'pointer');
+    $replays.appendTo(commentFooter);
+    //comment replay Icon
+    const $commentReplayIcon = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentReplayIcon"
+    }).html('<i class="far fa-comments"></i>');
+    $commentReplayIcon.appendTo($replays);
+    //comment replays Count:
+    const  $commentReplaysCount = $("<div>", {
+        id: 'commentFooter'+comment._id,
+        "class": "commentReplaysCount"
+    });//TODO ON COMMENT REPLAYS COUNT CLICK
+    $commentReplaysCount.appendTo($replays);
+    //check if comment has replays;
+    if(comment.replaysCount > 0){
+        $commentReplaysCount.html(comment.replaysCount+' Replays');
+    }else{
+        $commentReplaysCount.html(' Replay');
+    }
+
     return commentFooter;
 }
 //get comment replays function;
