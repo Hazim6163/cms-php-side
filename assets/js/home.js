@@ -34,7 +34,7 @@ $.post('./include/home/posts.php', {lastPosts: true}, (lastPosts)=>{
 function createPost(post){
     //create post container:
     var postContainer = $('<div>',{
-        id: post._id,
+        id: 'post' + post._id,
         class: 'post'
     });
     // post header
@@ -233,13 +233,116 @@ function getPostFooter(post){
 
 //create post comments
 function getPostComments(post){
-    const postComments = $('<div>',{
-        id: 'postComments'+post._id,
-        class: 'postComments'
+    const comments = $('<div>',{
+        id: 'comments'+post._id,
+        class: 'comments'
+    }).html('Comments: ');//TODO ADD TOGGLE AND HIDE BY DEFAULT
+    //check if the post has comments:
+    if(!post.commentsCount > 0){
+        //TODO NO COMMENTS BE THE FIRST ONE WHO COMMENT THE POST.
+        comments.html('there are no comments be the first one who comment the post').addClass('postNoComments');
+        return comments;
+    }
+
+    post.comments.forEach((comment)=>{
+        comments.append(createComment(comment));
+    });
+    
+
+    return comments;
+}
+
+
+//create comment function:
+function createComment(comment){
+    const commentContainer = $('<div>',{
+        id: 'commentContainer'+comment._id,
+        class: 'commentContainer'
     });
 
-    return postComments;
+    //comment header
+    const commentHeader = getCommentHeader(comment);
+    commentContainer.append(commentHeader);
+    //comment body
+    const commentBody = getCommentBody(comment);
+    commentContainer.append(commentBody);
+    //comment footer
+    const commentFooter = getCommentFooter(comment);
+    commentContainer.append(commentFooter);
+    //comment Replays
+    //check if the comment has replays:
+    if(comment.replaysCount > 0){
+        const commentReplays = getCommentReplays(comment);
+        commentContainer.append(commentReplays);
+    }
+
+    return commentContainer;
 }
+
+//get comment header function;
+function getCommentHeader(comment){
+    //extract the commenter info
+    const commenter = comment.authorInfo;
+
+    const commentHeader = $('<div>',{
+        id: 'commentHeader'+comment._id,
+        class: 'commentHeader'
+    });
+
+    const $commenterPhoto = $("<div>", {
+        id: 'commenterPhoto'+comment._id,
+        "class": "commenterPhoto"
+    });
+    $commenterPhoto.appendTo(commentHeader);
+    //commenter img:
+    var $imgCommenterPhoto = $("<img>", {
+        id: 'imgCommenterPhoto'+comment._id,
+        "class": "imgCommenterPhoto"
+    });
+    $imgCommenterPhoto.appendTo($commenterPhoto);
+    //check if the commenter has an img
+    if(commenter.photoUrl){
+        $imgCommenterPhoto.attr('src', userImgBase+commenter.photoUrl);
+    }else{
+        $imgCommenterPhoto.html('<div class="userIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
+    }
+    var $commenterName = $("<div>", {
+        id: 'commenterName'+comment._id,
+        "class": "commenterName"
+    }).html(commenter.fname+' '+ commenter.lname);
+    $commenterName.appendTo(commentHeader);
+
+    return commentHeader;
+}
+
+//get comment body function;
+function getCommentBody(comment){
+    const commentBody = $('<div>',{
+        id: 'commentBody'+comment._id,
+        class: 'commentBody'
+    });
+
+    return commentBody;
+}
+//get comment footer function;
+function getCommentFooter(comment){
+    const commentFooter = $('<div>',{
+        id: 'commentFooter'+comment._id,
+        class: 'commentFooter'
+    });
+
+    return commentFooter;
+}
+//get comment replays function;
+function getCommentReplays(comment){
+    const commentReplays = $('<div>',{
+        id: 'commentReplays'+comment._id,
+        class: 'commentReplays'
+    });
+
+    return commentReplays;
+}
+
 
 //reactions ...
 function onAction(post, postContainer){
