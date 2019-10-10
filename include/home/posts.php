@@ -9,10 +9,13 @@
  *      - receive the like request on the post, comment and replay
  * will content html elements:
  *      - posts Container
- */
+*/
+
+// start session
+session_start();
+
 //user information request:
 if(isset($_POST['userInformation'])){
-    session_start();
     //check if the user logged in
     if(isset($_SESSION['token'])){
         global $userInfo; 
@@ -30,7 +33,6 @@ if(isset($_POST['lastPosts'])){
     if (!$lastPosts['error']) {
         $lastPosts = $lastPosts['result'];
     }else{
-        session_start();
         $_SESSION['errorCode'] = 601;
         session_write_close();
         header('Location: ./error.php');
@@ -41,7 +43,6 @@ if(isset($_POST['lastPosts'])){
 
 //replay like toggle:
 if(isset($_POST['replayLike'])){
-    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/replay/like';
@@ -60,7 +61,6 @@ if(isset($_POST['replayLike'])){
 
 //comment like toggle:
 if(isset($_POST['commentLike'])){
-    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/comment/like';
@@ -78,7 +78,6 @@ if(isset($_POST['commentLike'])){
 
 //post Like:
 if(isset($_POST['postLike'])){
-    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/like';
