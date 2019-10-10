@@ -455,6 +455,31 @@ function getReplayHeader(replay){
         class: 'replayHeader'
     });
 
+    //replay like icon id, likes count id and extract the replay author info
+    const replayLikeIconId = 'replayLikeIcon'+replay._id;
+    const replayLikesCount = 'replaysLikesCount'+ replay._id;
+    const replayer = replay.authorInfo;
+
+    //replay author img
+    const $replayerPhoto = $("<div>", {
+        id: 'replayerPhoto'+replay._id,
+        "class": "replayerPhoto"
+    });
+    $replayerPhoto.appendTo(replayHeader);
+    const $imgReplayerPhoto = $("<img>", {
+        id: 'imgReplayerPhoto'+replay._id,
+        "class": "imgReplayerPhoto"
+    }).attr('src',userImgBase+replayer.photoUrl);
+    $imgReplayerPhoto.appendTo($replayerPhoto);
+
+    //replay author name
+    const $replayerName = $("<div>", {
+        id: 'replayerName'+replay._id,
+        "class": "replayerName"
+    }).html(replayer.fname+ ' ' +replayer.lname);
+    $replayerName.appendTo(replayHeader);
+
+
     return replayHeader;
 }
 
