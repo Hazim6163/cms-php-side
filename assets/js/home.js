@@ -455,9 +455,7 @@ function getReplayHeader(replay){
         class: 'replayHeader'
     });
 
-    //replay like icon id, likes count id and extract the replay author info
-    const replayLikeIconId = 'replayLikeIcon'+replay._id;
-    const replayLikesCount = 'replaysLikesCount'+ replay._id;
+    //replay extract the replay author info
     const replayer = replay.authorInfo;
 
     //replay author img
@@ -495,10 +493,52 @@ function getReplayBody(replay){
 
 //create replay footer
 function getReplayFooter(replay){
+    const replayLikeIconId = 'replayLikeIcon'+replay._id;
+    const replayLikesCount = 'replaysLikesCount'+ replay._id;
+
     const replayFooter = $('<div>',{
         id: 'replayFooter'+replay._id,
         class: 'replayFooter'
     });
+    //replay date
+    const $replayDate = $("<div>", {
+        id: 'replayDate'+replay._id,
+        "class": "replayDate"
+    }).html(replay.updatedAt);
+    replayFooter.append($replayDate);
+    var $replayLikes = $("<div>", {
+        id: 'replayLikes'+replay._id,
+        "class": "replayLikes"
+    }).css('cursor', 'pointer');
+    replayFooter.append($replayLikes);
+    //check if the user already liked the replay:
+    const alreadyLiked = replay.likers.find((liker)=>{
+        return liker.id == userInfo.id;
+    });
+    const $replayLikeIcon = $("<div>", {
+        id: replayLikeIconId,
+        "class": "replayLikeIcon"
+    });
+    $replayLikes.append($replayLikeIcon);
+    if(alreadyLiked){
+        $replayLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+    }else{
+        $replayLikeIcon.html('<i class="far fa-thumbs-up"></i>');
+    }
+
+    //replay Likes count:
+    var $replayLikesCount = $("<div>", {
+        id: replayLikesCount,
+        "class": "replayLikesCount"
+    })
+    $replayLikes.append($replayLikesCount);
+    //check if the comment has likes:
+    if(replay.likesCount > 0){
+        $replayLikesCount.html(replay.likesCount+' Likes');
+    }else{
+        $replayLikesCount.html(' Like');
+    }
+    
 
     return replayFooter;
 }
