@@ -89,7 +89,7 @@ body {
     display: flex;
     flex-wrap: wrap;
 }
-.imgUserPhoto{
+.authorImg{
     width:40px;
     height: 40px;
     display: flex;
@@ -105,7 +105,7 @@ body {
     justify-content: center;
     text-align: center;
 }
-.userPhoto{
+.authorImgContainer{
     width:40px;
     height: 40px;
     border-radius: 50%;

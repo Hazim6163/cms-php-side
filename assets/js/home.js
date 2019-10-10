@@ -11,6 +11,11 @@ var userLoggedIn = false;
 var userInfo = getUserInfo();
 
 
+//urls:
+const userImgBase = 'http://localhost:3000/user/profilePhoto?id=';
+const postImgBase = 'http://localhost:3000/file/uri?uri=';
+
+
 //get posts container:
 const postsContainer = $('#p_postsContainer');
 
@@ -52,10 +57,55 @@ function createPost(post){
 
 //create post header
 function getPostHeader(post){
+    //extract the author info
+    const authorInfo = post.authorInfo;
+
+    //create the header container:
     const postHeader = $('<div>',{
         id: 'postHeader'+post._id,
         class: 'postHeader'
     });
+
+    //create the author img container
+    var $authorImgContainer = $("<div>", {
+        id: 'authorImgContainer'+post._id,
+        "class": "authorImgContainer"
+    });
+
+    //check if the author has an img
+    if(authorInfo.photoUrl){
+        var $authorImg = $("<img>", {
+        id: 'authorImg'+post._id,
+        "class": "authorImg"
+        });
+        $authorImg.attr('src', userImgBase + authorInfo.photoUrl );
+        $authorImg.appendTo($authorImgContainer);
+    }else{
+        $authorImgContainer.html('<div class="authorIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
+    }
+    $authorImgContainer.appendTo(postHeader);
+
+    //header content:
+    var $headerContent = $("<div>", {
+        id: 'headerContent'+post._id,
+        "class": "headerContent"
+    });
+    //author name:
+    var $authorName = $("<div>", {
+        id: 'authorName'+post._id,
+        "class": "authorName"
+    });
+    $authorName.html(authorInfo.fname+' '+authorInfo.lname);
+    $authorName.appendTo($headerContent);
+    //post date:
+    var $postDate = $("<div>", {
+        id: 'postDate'+post._id,
+        "class": "postDate"
+    }).html(post.updatedAt);
+    $postDate.appendTo($headerContent);
+    //append header content to post header;
+    $headerContent.appendTo(postHeader);
+
 
     return postHeader;
 }
