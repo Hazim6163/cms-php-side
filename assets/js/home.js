@@ -49,6 +49,9 @@ function createPost(post){
     // post comments
     postComments = getPostComments(post);
     postComments.appendTo(postContainer);
+
+    //TODO CREATE INPUT FILES FOR REPLAY
+
     //create on Actions reactions:
     postContainer = onAction(post, postContainer);
 
@@ -275,6 +278,7 @@ function createComment(comment){
         const commentReplays = getCommentReplays(comment);
         commentContainer.append(commentReplays);
     }
+    //TODO CREATE INPUT FILES FOR REPLAY
 
     return commentContainer;
 }
@@ -405,13 +409,74 @@ function getCommentFooter(comment){
 //get comment replays function;
 function getCommentReplays(comment){
     const commentReplays = $('<div>',{
-        id: 'commentReplays'+comment._id,
-        class: 'commentReplays'
+        id: 'replaysContainer'+comment._id,
+        class: 'replaysContainer'
+    });
+
+    //check if the comment has replays:
+    if(!comment.replays > 0){
+        return commentReplays;
+    }
+    //then the comment has replays:
+    comment.replays.forEach((replay)=>{
+        commentReplays.append(createReplay(replay));
     });
 
     return commentReplays;
 }
 
+
+//create replay function
+function createReplay(replay){
+    //create replay Container
+    const replayContainer = $('<div>', {
+        id: 'replayContainer'+replay._id,
+        class:'replayContainer'
+    });
+
+    //replay header
+    const replayHeader = getReplayHeader(replay);
+    replayContainer.append(replayHeader);
+    //replay body
+    const replayBody = getReplayBody(replay);
+    replayContainer.append(replayBody);
+    //replay footer
+    const replayFooter = getReplayFooter(replay);
+    replayContainer.append(replayFooter);
+
+    return replayContainer;
+
+}
+
+//create replay header
+function getReplayHeader(replay){
+    const replayHeader = $('<div>',{
+        id: 'replayHeader'+replay._id,
+        class: 'replayHeader'
+    });
+
+    return replayHeader;
+}
+
+//create replay body
+function getReplayBody(replay){
+    const replayBody = $('<div>',{
+        id: 'replayBody'+replay._id,
+        class: 'replayBody'
+    });
+
+    return replayBody;
+}
+
+//create replay footer
+function getReplayFooter(replay){
+    const replayFooter = $('<div>',{
+        id: 'replayFooter'+replay._id,
+        class: 'replayFooter'
+    });
+
+    return replayFooter;
+}
 
 //reactions ...
 function onAction(post, postContainer){
