@@ -320,7 +320,7 @@ function getCommentBody(comment){
     const commentBody = $('<div>',{
         id: 'commentBody'+comment._id,
         class: 'commentBody'
-    });
+    }).html(comment.body);
 
     return commentBody;
 }
