@@ -157,10 +157,76 @@ function getPostBody(post) {
 
 //create post footer
 function getPostFooter(post){
+    //create post footer container:
     const postFooter = $('<div>',{
         id: 'postFooter'+post._id,
         class: 'postFooter'
     });
+
+    //post like container
+    var $postLikes = $("<div>", {
+        id : 'postLikes'+post._id,
+        "class": "postLikes"
+    }).css('cursor', 'pointer');
+    //append post likes to post footer:
+    $postLikes.appendTo(postFooter);
+
+    //post Like Icon
+    var $postLikeIcon = $("<div>", {
+        id : 'postLikeIcon'+post._id,
+        "class": "postLikeIcon"
+    });//TODO ADD LISTENER ON POST LIKE CLICK
+    $postLikeIcon.appendTo($postLikes);
+    //check if the user has already likes the post:
+    const alreadyLiked = post.likers.find((liker)=>{
+        return liker.id == userInfo.id;
+    });
+    if(alreadyLiked){
+        $postLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+    }else{
+        $postLikeIcon.html('<i class="far fa-thumbs-up"></i>');
+    }
+
+    //likes count :
+    var $postLikesCount = $("<div>", {
+        id: 'postLikesCount'+post._id,
+        "class": "postLikesCount"
+    });//TODO ON LIKES COUNT CLICK LISTENER
+    $postLikesCount.appendTo($postLikes);
+    //check if the post has likes:
+    if(post.likesCount > 0){
+        $postLikesCount.html(post.likesCount+' Likes');
+    }else{
+        $postLikesCount.html(' Like');
+    }
+
+    //comments like icon and count:
+    var $commentsToggle = $("<div>", {
+        id: 'commentsToggle'+post._id,
+        "class": "commentsToggle"
+    }).css('cursor', 'pointer');
+    $commentsToggle.appendTo(postFooter);
+
+    //comment icon
+    var $postReplayIcon = $("<div>", {
+        id: 'postReplayIcon'+post._id,
+        "class": "postReplayIcon"
+    }).html('<i class="far fa-comments"></i>');//TODO ADD ON POST COMMENT ICON CLICK LISTENER
+    $postReplayIcon.appendTo($commentsToggle);
+
+    //comments count:
+    var $postCommentsCount = $("<div>", {
+        id: 'postCommentsCount'+post._id,
+        "class": "postCommentsCount"
+    })
+    $postCommentsCount.appendTo($commentsToggle);
+
+    //check if post has comments;
+    if(post.commentsCount > 0){
+        $postCommentsCount.html(post.commentsCount+' Comments');//TODO ADD ON POST COMMENTS COUNT CLICK LISTENER
+    }else{
+        $postCommentsCount.html(' Comment');
+    }
 
     return postFooter;
 }
@@ -195,7 +261,7 @@ function log(des, msg) {
 function getUserInfo(){
     var userInfo;
     $.ajax({
-        async: true,
+        async: false,
         type:'POST',
         url: './include/home/posts.php',
         data: {userInformation: true},
