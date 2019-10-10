@@ -18,6 +18,7 @@ if(!isset($_COOKIE["PHPSESSID"])){
 
 //user information request:
 if(isset($_POST['userInformation'])){
+    session_start();
     //check if the user logged in
     if(isset($_SESSION['token'])){
         global $userInfo; 
@@ -35,6 +36,7 @@ if(isset($_POST['lastPosts'])){
     if (!$lastPosts['error']) {
         $lastPosts = $lastPosts['result'];
     }else{
+        session_start();
         $_SESSION['errorCode'] = 601;
         session_write_close();
         header('Location: ./error.php');
@@ -45,6 +47,7 @@ if(isset($_POST['lastPosts'])){
 
 //replay like toggle:
 if(isset($_POST['replayLike'])){
+    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/replay/like';
@@ -63,6 +66,7 @@ if(isset($_POST['replayLike'])){
 
 //comment like toggle:
 if(isset($_POST['commentLike'])){
+    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/comment/like';
@@ -80,6 +84,7 @@ if(isset($_POST['commentLike'])){
 
 //post Like:
 if(isset($_POST['postLike'])){
+    session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
     $url = 'http://localhost:3000/posts/like';
@@ -102,62 +107,62 @@ if(isset($_POST['postLike'])){
 <div class="p_postsContainer" id="p_postsContainer"></div>
 
 <!-- post element -->
-<div class="post" id="post" hidden>
-    <div class="postHeader" id="postHeader">
-        <div class="userPhoto" id="userPhoto"></div>
-        <div class="headerContent" id="headerContent">
-            <div class="postAuthor" id="postAuthor"></div>
-            <div class="postDate" id="postDate"></div>
+<div class="post" id="p_post" hidden>
+    <div class="postHeader" id="p_postHeader">
+        <div class="userPhoto" id="p_userPhoto"></div>
+        <div class="headerContent" id="p_headerContent">
+            <div class="postAuthor" id="p_postAuthor"></div>
+            <div class="postDate" id="p_postDate"></div>
         </div>
     </div>
-    <div class="postBody" id="postBody">
-        <div class="postPhoto" id="postPhoto" hidden>
+    <div class="postBody" id="p_postBody">
+        <div class="postPhoto" id="p_postPhoto" hidden>
         </div>
-        <div class="postContent" id="postContent">
-            <div class="postTitle" id="postTitle"></div>
-            <div class="postDes" id="postDes"></div>
-        </div>
-    </div>
-    <div class="postFooter" id="postFooter">
-        <div class="postLikes" id="postLikes">
-            <div class="postLikeIcon" id="postLikeIcon" hidden></div>
-            <div class="postLikesCount" id="postLikesCount"></div>
-        </div>
-        <div class="commentsToggle" id="commentsToggle">
-            <div class="postReplayIcon" id="postReplayIcon"></div>
-            <div class="postCommentsCount" id="postCommentsCount"></div>
+        <div class="postContent" id="p_postContent">
+            <div class="postTitle" id="p_postTitle"></div>
+            <div class="postDes" id="p_postDes"></div>
         </div>
     </div>
-    <div class="comments" id="comments">
-        <div class="commentsContainer" id="commentContainer">
-            <div class="commentHeader" id="commentHeader">
-                <div class="commenterPhoto" id="commenterPhoto"></div>
+    <div class="postFooter" id="p_postFooter">
+        <div class="postLikes" id="p_postLikes">
+            <div class="postLikeIcon" id="p_postLikeIcon" hidden></div>
+            <div class="postLikesCount" id="p_postLikesCount"></div>
+        </div>
+        <div class="commentsToggle" id="p_commentsToggle">
+            <div class="postReplayIcon" id="p_postReplayIcon"></div>
+            <div class="postCommentsCount" id="p_postCommentsCount"></div>
+        </div>
+    </div>
+    <div class="comments" id="p_comments">
+        <div class="commentsContainer" id="p_commentContainer">
+            <div class="commentHeader" id="p_commentHeader">
+                <div class="commenterPhoto" id="p_commenterPhoto"></div>
                 <div class="commenterName" id="commenterName"></div>
             </div>
-            <div class="commentBody" id="commentBody"></div>
-            <div class="commentFooter" id="commentFooter">
-                <div class="commentDate" id="commentDate"></div>
-                <div class="commentLikes" id="commentLikes">
-                    <div class="commentLikeIcon" id="commentLikeIcon"></div>
-                    <div class="commentLikesCount" id="commentLikesCount"></div>
+            <div class="commentBody" id="p_commentBody"></div>
+            <div class="commentFooter" id="p_commentFooter">
+                <div class="commentDate" id="p_commentDate"></div>
+                <div class="commentLikes" id="p_commentLikes">
+                    <div class="commentLikeIcon" id="p_commentLikeIcon"></div>
+                    <div class="commentLikesCount" id="p_commentLikesCount"></div>
                 </div>
-                <div class="replays" id="replays">
-                    <div class="commentReplayIcon" id="commentReplayIcon"></div>
-                    <div class="commentReplaysCount" id="commentReplaysCount"></div>
+                <div class="replays" id="p_replays">
+                    <div class="commentReplayIcon" id="p_commentReplayIcon"></div>
+                    <div class="commentReplaysCount" id="p_commentReplaysCount"></div>
                 </div>
             </div>
-            <div class="replaysContainer" id="replaysContainer">
-                <div class="replayContainer" id="replayContainer">
-                    <div class="replayHeader" id="replayHeader">
-                        <div class="replayerPhoto" id="replayerPhoto" hidden></div>
-                        <div class="replayerName" id="replayerName"></div>
+            <div class="replaysContainer" id="p_replaysContainer">
+                <div class="replayContainer" id="p_replayContainer">
+                    <div class="replayHeader" id="p_replayHeader">
+                        <div class="replayerPhoto" id="p_replayerPhoto" hidden></div>
+                        <div class="replayerName" id="p_replayerName"></div>
                     </div>
-                    <div class="replayBody" id="replayBody"></div>
-                    <div class="replayFooter" id="replayFooter">
-                        <div class="replayDate" id="replayDate"></div>
-                        <div class="replayLikes" id="replayLikes">
-                            <div class="replayLikeIcon" id="replayLikeIcon"></div>
-                            <div class="replayLikesCount" id="replayLikesCount"></div>
+                    <div class="replayBody" id="p_replayBody"></div>
+                    <div class="replayFooter" id="p_replayFooter">
+                        <div class="replayDate" id="p_replayDate"></div>
+                        <div class="replayLikes" id="p_replayLikes">
+                            <div class="replayLikeIcon" id="p_replayLikeIcon"></div>
+                            <div class="replayLikesCount" id="p_replayLikesCount"></div>
                         </div>
                     </div>
                 </div>
