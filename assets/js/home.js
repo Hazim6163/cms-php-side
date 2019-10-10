@@ -488,7 +488,7 @@ function getReplayBody(replay){
     const replayBody = $('<div>',{
         id: 'replayBody'+replay._id,
         class: 'replayBody'
-    });
+    }).html(replay.body);
 
     return replayBody;
 }
