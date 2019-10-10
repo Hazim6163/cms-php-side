@@ -11,8 +11,10 @@
  *      - posts Container
 */
 
-// start session
-session_start();
+// start session if not started:
+if(!isset($_COOKIE["PHPSESSID"])){
+  session_start();
+}
 
 //user information request:
 if(isset($_POST['userInformation'])){
@@ -95,4 +97,71 @@ if(isset($_POST['postLike'])){
 ?>
 
 <!--html elements-->
+
+<!-- posts container -->
 <div class="p_postsContainer" id="p_postsContainer"></div>
+
+<!-- post element will change the username in post header to postAuthor-->
+<div class="post" id="post" hidden>
+    <div class="postHeader" id="postHeader">
+        <div class="userPhoto" id="userPhoto"></div>
+        <div class="headerContent" id="headerContent">
+            <div class="username" id="postAuthor"></div>
+            <div class="postDate" id="postDate"></div>
+        </div>
+    </div>
+    <div class="postBody" id="postBody">
+        <div class="postPhoto" id="postPhoto" hidden>
+        </div>
+        <div class="postContent" id="postContent">
+            <div class="postTitle" id="postTitle"></div>
+            <div class="postDes" id="postDes"></div>
+        </div>
+    </div>
+    <div class="postFooter" id="postFooter">
+        <div class="postLikes" id="postLikes">
+            <div class="postLikeIcon" id="postLikeIcon" hidden></div>
+            <div class="postLikesCount" id="postLikesCount"></div>
+        </div>
+        <div class="commentsToggle" id="commentsToggle">
+            <div class="postReplayIcon" id="postReplayIcon"></div>
+            <div class="postCommentsCount" id="postCommentsCount"></div>
+        </div>
+    </div>
+    <div class="comments" id="comments">
+        <div class="commentsContainer" id="commentContainer">
+            <div class="commentHeader" id="commentHeader">
+                <div class="commenterPhoto" id="commenterPhoto"></div>
+                <div class="commenterName" id="commenterName"></div>
+            </div>
+            <div class="commentBody" id="commentBody"></div>
+            <div class="commentFooter" id="commentFooter">
+                <div class="commentDate" id="commentDate"></div>
+                <div class="commentLikes" id="commentLikes">
+                    <div class="commentLikeIcon" id="commentLikeIcon"></div>
+                    <div class="commentLikesCount" id="commentLikesCount"></div>
+                </div>
+                <div class="replays" id="replays">
+                    <div class="commentReplayIcon" id="commentReplayIcon"></div>
+                    <div class="commentReplaysCount" id="commentReplaysCount"></div>
+                </div>
+            </div>
+            <div class="replaysContainer" id="replaysContainer">
+                <div class="replayContainer" id="replayContainer">
+                    <div class="replayHeader" id="replayHeader">
+                        <div class="replayerPhoto" id="replayerPhoto" hidden></div>
+                        <div class="replayerName" id="replayerName"></div>
+                    </div>
+                    <div class="replayBody" id="replayBody"></div>
+                    <div class="replayFooter" id="replayFooter">
+                        <div class="replayDate" id="replayDate"></div>
+                        <div class="replayLikes" id="replayLikes">
+                            <div class="replayLikeIcon" id="replayLikeIcon"></div>
+                            <div class="replayLikesCount" id="replayLikesCount"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
