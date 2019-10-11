@@ -110,6 +110,17 @@ if(isset($_POST['postLikers'])){
     return;
 }
 
+//comment Likers array:
+if(isset($_POST['commentLikers'])){
+    $commentId = $_POST['commentId'];
+    $url = 'http://localhost:3000/posts/comments/likers?commentId=' .$commentId;
+    require('../../classes/utils.php');
+    $res = Utils::getRequest($url);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->

@@ -337,21 +337,21 @@ function getCommentFooter(comment){
 
     //comment date will show the updated at date:
     const $commentDate = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentDate'+comment._id,
         "class": "commentDate"
     }).html(comment.updatedAt);
     $commentDate.appendTo(commentFooter);
 
     // comment like icon count container
     const $commentLikes = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentLikes'+comment._id,
         "class": "commentLikes"
     }).css('cursor', 'pointer');
     $commentLikes.appendTo(commentFooter);
 
     //comment like icon
     const $commentLikeIcon = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentLikeIcon'+comment._id,
         "class": "commentLikeIcon"
     });
     //append comment like icon to the comment likes container
@@ -359,7 +359,8 @@ function getCommentFooter(comment){
     //check if the use has already likes the comment:
     const alreadyLiked = comment.likers.find((liker)=>{
         return liker.id == userInfo.id;
-    });//TODO ON COMMENT LIKE ICON CLICK
+    });
+    setOnCommentLikeIconClick($commentLikeIcon, comment.postId, comment._id);
     if(alreadyLiked){
         $commentLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
     }else{
@@ -367,9 +368,10 @@ function getCommentFooter(comment){
     }
     //likes count
     const $commentLikesCount = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentLikesCount'+comment._id,
         "class": "commentLikesCount"
     });
+    setOnCommentLikesCountClick($commentLikesCount, comment._id);
     //append the likes count to the comment likes container
     $commentLikesCount.appendTo($commentLikes);
     //check if the comment has likes:
@@ -381,19 +383,20 @@ function getCommentFooter(comment){
 
     //comment replays:
     const $replays = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'replays'+comment._id,
         "class": "replays"
     }).css('cursor', 'pointer');
+    setOnCommentFooterReplayClick($replays, comment._id);
     $replays.appendTo(commentFooter);
     //comment replay Icon
     const $commentReplayIcon = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentReplayIcon'+comment._id,
         "class": "commentReplayIcon"
     }).html('<i class="far fa-comments"></i>');
     $commentReplayIcon.appendTo($replays);
     //comment replays Count:
     const  $commentReplaysCount = $("<div>", {
-        id: 'commentFooter'+comment._id,
+        id: 'commentReplaysCount'+comment._id,
         "class": "commentReplaysCount"
     });//TODO ON COMMENT REPLAYS COUNT CLICK
     $commentReplaysCount.appendTo($replays);
@@ -411,7 +414,7 @@ function getCommentReplays(comment){
     const commentReplays = $('<div>',{
         id: 'replaysContainer'+comment._id,
         class: 'replaysContainer'
-    });
+    }).hide();
 
     //check if the comment has replays:
     if(!comment.replays > 0){
@@ -543,7 +546,7 @@ function getReplayFooter(replay){
     return replayFooter;
 }
 
-// post reactions ...
+/** --------------------------- posts reactions: ---------------------------------------*/
 // on post replay Icon click
 function setOnPostFooterReplayClick(icon, postId){
     icon.click(()=>{
@@ -601,6 +604,68 @@ function onPostLikesCountClick(component, postId){
                 $('#postLikesCount'+postId).html(res.likesCount+' Likes');
             }else{
                 $('#postLikersCount'+postId).html(' Like');
+            }
+        }, 'json');
+        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
+    });
+}
+
+/** --------------------------- comments reactions: ---------------------------------------*/
+//set on comment footer replays click
+function setOnCommentFooterReplayClick(icon, commentId){
+    icon.click(()=>{
+        $('#replaysContainer'+commentId).toggle('slow');
+    });
+}
+//set on comment like icon click
+function setOnCommentLikeIconClick(icon, postId, commentId){
+    icon.click(()=>{
+        log('inside set on listener', commentId);
+        //check if the user logged in
+        if(!userLoggedIn){
+            alert('please Login before try to like post');
+            //TODO CREATE A LOGIN MODEL
+            return;
+        }
+        //animate the like icon:
+        $('#commentLikeIcon'+commentId).toggleClass('rotate');
+        $.post('./include/home/posts.php',{commentLike: true, commentId: commentId, postId: postId}, (response)=>{
+            var likesCount = response.likesCount;
+            var action = response.action;
+            var likersRes = response.likers;
+            //check if like or dislike
+            if(action > 0){
+                $('#commentLikeIcon'+commentId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            }else{
+                $('#commentLikeIcon'+commentId).html('<i class="far fa-thumbs-up"></i>');
+            }
+            if(likesCount > 0){
+                $('#commentLikesCount'+commentId).html(likesCount+' Likes');
+            }else{
+                $('#commentLikesCount'+commentId).html('Like');
+            }
+            $('#commentLikeIcon'+commentId).toggleClass('rotate');
+        }, 'json');
+    });
+}
+//set on comments likes count click
+function setOnCommentLikesCountClick(icon, commentId){
+    icon.click(()=>{
+        //send to php server the likers and like count request 
+        $.post('./include/home/posts.php', {commentLikers: true, commentId: commentId}, (res)=>{
+            log('on comment likers count click', res);
+            //likers name list to show it in the alert for this time
+            likersNameList='';
+            res.likers.forEach((liker)=>{
+                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            })
+            //alert to show the name list:
+            alert(likersNameList);
+            //update the likes count
+            if(res.likesCount > 0){
+                $('#commentLikesCount'+postId).html(res.likesCount+' Likes');
+            }else{
+                $('#commentLikesCount'+postId).html(' Like');
             }
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
