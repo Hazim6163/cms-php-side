@@ -121,6 +121,17 @@ if(isset($_POST['commentLikers'])){
     return;
 }
 
+//replay Likers array:
+if(isset($_POST['replayLikers'])){
+    $replayId = $_POST['replayId'];
+    $url = 'http://localhost:3000/posts/replays/likers?replayId=' .$replayId;
+    require('../../classes/utils.php');
+    $res = Utils::getRequest($url);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->

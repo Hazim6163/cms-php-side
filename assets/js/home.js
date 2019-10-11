@@ -497,7 +497,7 @@ function getReplayBody(replay){
 //create replay footer
 function getReplayFooter(replay){
     const replayLikeIconId = 'replayLikeIcon'+replay._id;
-    const replayLikesCount = 'replaysLikesCount'+ replay._id;
+    const replayLikesCount = 'replayLikesCount'+ replay._id;
 
     const replayFooter = $('<div>',{
         id: 'replayFooter'+replay._id,
@@ -522,6 +522,7 @@ function getReplayFooter(replay){
         id: replayLikeIconId,
         "class": "replayLikeIcon"
     });
+    setOnReplayLikeIconClick($replayLikeIcon, replay._id, replay.commentId, replay.postId);
     $replayLikes.append($replayLikeIcon);
     if(alreadyLiked){
         $replayLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
@@ -533,7 +534,8 @@ function getReplayFooter(replay){
     var $replayLikesCount = $("<div>", {
         id: replayLikesCount,
         "class": "replayLikesCount"
-    })
+    });
+    setOnReplayLikesCountClick($replayLikesCount, replay._id);
     $replayLikes.append($replayLikesCount);
     //check if the comment has likes:
     if(replay.likesCount > 0){
@@ -663,14 +665,67 @@ function setOnCommentLikesCountClick(icon, commentId){
             alert(likersNameList);
             //update the likes count
             if(res.likesCount > 0){
-                $('#commentLikesCount'+postId).html(res.likesCount+' Likes');
+                $('#commentLikesCount'+commentId).html(res.likesCount+' Likes');
             }else{
-                $('#commentLikesCount'+postId).html(' Like');
+                $('#commentLikesCount'+commentId).html(' Like');
             }
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
 }
+
+/** --------------------------- replays reactions: ---------------------------------------*/
+//set on replay like icon click:
+function setOnReplayLikeIconClick(icon, replayId, commentId, postId){
+    icon.click(()=>{
+        //check if the user logged in
+        if(!userLoggedIn){
+            alert('please Login before try to like post');
+            //TODO CREATE A LOGIN MODEL
+            return;
+        }
+        //animate the like icon:
+        $('#replayLikeIcon'+replayId).toggleClass('rotate');
+        $.post('./include/home/posts.php',{replayLike: true,replayId: replayId, commentId: commentId, postId: postId}, (response)=>{
+            var likesCount = response.likesCount;
+            var action = response.action;
+            //check if like or dislike
+            if(action > 0){
+                $('#replayLikeIcon'+replayId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            }else{
+                $('#replayLikeIcon'+replayId).html('<i class="far fa-thumbs-up"></i>');
+            }
+            if(likesCount > 0){
+                $('#replayLikesCount'+replayId).html(likesCount+' Likes');
+            }else{
+                $('#replayLikesCount'+replayId).html('Like');
+            }
+            $('#replayLikeIcon'+replayId).toggleClass('rotate');
+        }, 'json');
+    });
+}
+// set on replay likes count click
+function setOnReplayLikesCountClick(icon, replayId){
+    icon.click(()=>{
+        //send to php server the likers and like count request 
+        $.post('./include/home/posts.php', {replayLikers: true, replayId: replayId}, (res)=>{
+            //likers name list to show it in the alert for this time
+            likersNameList='';
+            res.likers.forEach((liker)=>{
+                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            })
+            //alert to show the name list:
+            alert(likersNameList);
+            //update the likes count
+            if(res.likesCount > 0){
+                $('#replayLikesCount'+replayId).html(res.likesCount+' Likes');
+            }else{
+                $('#replayLikesCount'+replayId).html(' Like');
+            }
+        }, 'json');
+        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
+    });
+} 
 
 //log message:
 function log(des, msg) {
