@@ -360,8 +360,82 @@ function getCommentHeader(comment){
         "class": "commenterName"
     }).html(commenter.fname+' '+ commenter.lname);
     $commenterName.appendTo(commentHeader);
+    //check if the user logged in:
+    if(!userLoggedIn){
+        //return the user is not logged in
+        return commentHeader;
+    }
+    //check if the current user is the comment author
+    if(!commenter.id == userInfo._id){
+        // return the current user is not the comment author
+        return commentHeader;
+    }
 
+    //create comment author edit icon:
+    const tools = $('<div>',{
+        id:'commentAuthorTools'+comment._id,
+        class: 'commentAuthorTools'
+    }).html('<i class="fas fa-ellipsis-v"></i>');
+    tools.appendTo(commentHeader);
+    //author edit icon on click menu:
+    tools.click(()=>{
+        createPostCommentAuthorEditIconMenu(tools, comment._id);
+    });
+    //return the current user is the comment author
     return commentHeader;
+}
+
+//Comment author edit icon menu:
+function createPostCommentAuthorEditIconMenu(icon, commentId){
+    //check if the modal already created to remove the modal
+    if($('#editCommentModal'+commentId).html()){
+        //remove close class from the icon
+        icon.html('<i class="fas fa-ellipsis-v"></i>');
+        $('#editCommentModal'+commentId).remove();
+        return;
+    }
+    //add close class to the icon
+    icon.html('<i class="fas fa-times"></i>');
+
+    //get positions:
+    const iconX = icon.offset().left;
+    const iconY = icon.offset().top;
+    //set the modal position:
+    const modalX = iconX;
+    const modalY = iconY + icon.height();
+    //create the modal:
+    const editModal = $('<div>',{
+        id:'editCommentModal'+commentId,
+        class:'editCommentModal'
+    });
+    //style the modal
+    editModal.css({
+        'top': modalY,
+        'left': modalX
+    });
+    //animate the modal
+    editModal.animate({
+        'width': '70px'
+    }, 100)
+    //edit comment:
+    const edit = $('<div>',{
+        id:'editCommentButton'+commentId,
+        class: 'editCommentButton'
+    }).html('Edit').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    edit.appendTo(editModal);
+    //line break:
+    const line = $('<div>').addClass('editCommentModalLineBreak');
+    line.appendTo(editModal);
+    //delete  comment:
+    const  deleteComment =  $('<div>',{
+        id: 'deleteCommentButton'+commentId,
+        class: 'deleteCommentButton'
+    }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    deleteComment.appendTo(editModal);
+    
+
+    //append to body 
+    $('body').append(editModal);
 }
 
 //get comment body function;
