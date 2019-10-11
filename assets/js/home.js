@@ -49,6 +49,8 @@ function createPost(post){
     // post comments
     postComments = getPostComments(post);
     postComments.appendTo(postContainer);
+    // add post comment
+
 
     //TODO CREATE INPUT FILES FOR REPLAY
 
@@ -226,7 +228,7 @@ function getPostFooter(post){
 
     //check if post has comments;
     if(post.commentsCount > 0){
-        $postCommentsCount.html(post.commentsCount+' Comments');//TODO ADD ON POST COMMENTS COUNT CLICK LISTENER
+        $postCommentsCount.html(post.commentsCount+' Comments');
     }else{
         $postCommentsCount.html(' Comment');
     }
@@ -398,7 +400,7 @@ function getCommentFooter(comment){
     const  $commentReplaysCount = $("<div>", {
         id: 'commentReplaysCount'+comment._id,
         "class": "commentReplaysCount"
-    });//TODO ON COMMENT REPLAYS COUNT CLICK
+    });
     $commentReplaysCount.appendTo($replays);
     //check if comment has replays;
     if(comment.replaysCount > 0){
@@ -593,7 +595,6 @@ function onPostLikesCountClick(component, postId){
     component.click(()=>{
         //send to php server ger likers and like count request 
         $.post('./include/home/posts.php', {postLikers: true, postId: postId}, (res)=>{
-            log('on post likers count click', res);
             //likers name list to show it in the alert for this time
             likersNameList='';
             res.likers.forEach((liker)=>{
@@ -622,7 +623,6 @@ function setOnCommentFooterReplayClick(icon, commentId){
 //set on comment like icon click
 function setOnCommentLikeIconClick(icon, postId, commentId){
     icon.click(()=>{
-        log('inside set on listener', commentId);
         //check if the user logged in
         if(!userLoggedIn){
             alert('please Login before try to like post');
@@ -655,7 +655,6 @@ function setOnCommentLikesCountClick(icon, commentId){
     icon.click(()=>{
         //send to php server the likers and like count request 
         $.post('./include/home/posts.php', {commentLikers: true, commentId: commentId}, (res)=>{
-            log('on comment likers count click', res);
             //likers name list to show it in the alert for this time
             likersNameList='';
             res.likers.forEach((liker)=>{
