@@ -52,9 +52,6 @@ function createPost(post){
 
     //TODO CREATE INPUT FILES FOR REPLAY
 
-    //create on Actions reactions:
-    postContainer = onAction(post, postContainer);
-
     return postContainer;
 }
 
@@ -178,7 +175,8 @@ function getPostFooter(post){
     var $postLikeIcon = $("<div>", {
         id : 'postLikeIcon'+post._id,
         "class": "postLikeIcon"
-    });//TODO ADD LISTENER ON POST LIKE CLICK
+    });
+    onPostLikeIconClick($postLikeIcon, post._id);
     $postLikeIcon.appendTo($postLikes);
     //check if the user has already likes the post:
     const alreadyLiked = post.likers.find((liker)=>{
@@ -194,7 +192,8 @@ function getPostFooter(post){
     var $postLikesCount = $("<div>", {
         id: 'postLikesCount'+post._id,
         "class": "postLikesCount"
-    });//TODO ON LIKES COUNT CLICK LISTENER
+    });
+    onPostLikesCountClick($postLikesCount, post._id);
     $postLikesCount.appendTo($postLikes);
     //check if the post has likes:
     if(post.likesCount > 0){
@@ -203,18 +202,19 @@ function getPostFooter(post){
         $postLikesCount.html(' Like');
     }
 
-    //comments like icon and count:
+    //comments replay icon and count:
     var $commentsToggle = $("<div>", {
         id: 'commentsToggle'+post._id,
         "class": "commentsToggle"
     }).css('cursor', 'pointer');
+    setOnPostFooterReplayClick($commentsToggle, post._id);
     $commentsToggle.appendTo(postFooter);
 
     //comment icon
     var $postReplayIcon = $("<div>", {
         id: 'postReplayIcon'+post._id,
         "class": "postReplayIcon"
-    }).html('<i class="far fa-comments"></i>');//TODO ADD ON POST COMMENT ICON CLICK LISTENER
+    }).html('<i class="far fa-comments"></i>');
     $postReplayIcon.appendTo($commentsToggle);
 
     //comments count:
@@ -239,7 +239,7 @@ function getPostComments(post){
     const comments = $('<div>',{
         id: 'comments'+post._id,
         class: 'comments'
-    }).html('Comments: ');//TODO ADD TOGGLE AND HIDE BY DEFAULT
+    }).html('Comments: ').hide();
     //check if the post has comments:
     if(!post.commentsCount > 0){
         //TODO NO COMMENTS BE THE FIRST ONE WHO COMMENT THE POST.
@@ -543,9 +543,68 @@ function getReplayFooter(replay){
     return replayFooter;
 }
 
-//reactions ...
-function onAction(post, postContainer){
-    return postContainer;
+// post reactions ...
+// on post replay Icon click
+function setOnPostFooterReplayClick(icon, postId){
+    icon.click(()=>{
+        $('#comments'+postId).toggle('slow');
+    });
+}
+// on post like icon click
+function onPostLikeIconClick(icon, postId){
+    icon.click(()=>{
+        //check if the user logged in
+        if(!userLoggedIn){
+            alert('please Login before try to like post');
+            //TODO CREATE A LOGIN MODEL
+            return;
+        }
+        //animate the like icon:
+        $('#postLikeIcon'+postId).toggleClass('rotate');
+        $.post('./include/home/posts.php',{postLike: true, postId: postId}, (response)=>{
+            var likesCount = response.likesCount;
+            var action = response.action;
+            var likersRes = response.likers;
+            //check if like or dislike
+            if(action > 0){
+                $('#postLikeIcon'+postId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            }else{
+                $('#postLikeIcon'+postId).html('<i class="far fa-thumbs-up"></i>');
+            }
+            if(likesCount > 0){
+                $('#postLikesCount'+postId).html(likesCount+' Likes');
+            }else{
+                $('#postLikesCount'+postId).html('Like');
+            }
+            $('#postLikeIcon'+postId).toggleClass('rotate');
+
+            likers = likersRes;
+
+        }, 'json');
+    });
+}
+//on post likes count click 
+function onPostLikesCountClick(component, postId){
+    component.click(()=>{
+        //send to php server ger likers and like count request 
+        $.post('./include/home/posts.php', {postLikers: true, postId: postId}, (res)=>{
+            log('on post likers count click', res);
+            //likers name list to show it in the alert for this time
+            likersNameList='';
+            res.likers.forEach((liker)=>{
+                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            })
+            //alert to show the name list:
+            alert(likersNameList);
+            //update the likes count
+            if(res.likesCount > 0){
+                $('#postLikesCount'+postId).html(res.likesCount+' Likes');
+            }else{
+                $('#postLikersCount'+postId).html(' Like');
+            }
+        }, 'json');
+        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
+    });
 }
 
 //log message:

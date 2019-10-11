@@ -99,6 +99,17 @@ if(isset($_POST['postLike'])){
     return;
 }
 
+//post likers array:
+if(isset($_POST['postLikers'])){
+    $postId = $_POST['postId'];
+    $url = 'http://localhost:3000/posts/likers?postId=' . $postId;
+    require('../../classes/utils.php');
+    $res = Utils::getRequest($url);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->

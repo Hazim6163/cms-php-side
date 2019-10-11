@@ -25,6 +25,20 @@ class Utils{
 
     return $result;
     }
+
+    public static function getRequest($url){
+        $url = $url;
+        $options = array(
+            CURLOPT_RETURNTRANSFER=> TRUE,
+            CURLOPT_CUSTOMREQUEST => 'GET'
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+
+        $result = curl_exec($ch);
+
+        return $result;
+    }
 }
 
 ?>
