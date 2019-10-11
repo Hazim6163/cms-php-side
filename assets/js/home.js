@@ -50,9 +50,10 @@ function createPost(post){
     postComments = getPostComments(post);
     postComments.appendTo(postContainer);
     // add post comment
-
-
-    //TODO CREATE INPUT FILES FOR REPLAY
+    addComment = getAddPostComment(post._id);
+    addComment.appendTo(postComments);
+    //TODO create comment input field to add comment
+    
 
     return postContainer;
 }
@@ -257,6 +258,34 @@ function getPostComments(post){
     return comments;
 }
 
+//add post comment:
+function getAddPostComment(postId){
+    //create add post comment container
+    const addPostCommentContainer = $('<div>',{
+        id: 'addPostCommentContainer'+postId,
+        class: 'addPostCommentContainer'
+    });
+    //create add post input field
+    const addPostCommentInput = $('<textarea>',{
+        id : 'addPostCommentInput'+postId,
+        class : 'addPostCommentInput'
+    }).attr('rows', 1);
+    //append input filed to add comment container
+    addPostCommentContainer.append(addPostCommentInput);
+    //on comment textarea lines changed:
+    autoTextAreaCommentInputHeight(addPostCommentInput, 24);
+    //submit comment button
+    const addPostCommentInputSubmit = $('<div>', {
+        id: 'addPostCommentInputSubmit'+postId,
+        class : 'addPostCommentInputSubmit'
+    }).css('cursor', 'pointer').html('comment');
+    setOnPostCommentSubmitListener(addPostCommentInputSubmit, postId);
+    addPostCommentInputSubmit.addClass('addPostCommentInputSubmit');
+    //append submit button to add comment container
+    addPostCommentContainer.append(addPostCommentInputSubmit);
+
+    return addPostCommentContainer;
+}
 
 //create comment function:
 function createComment(comment){
@@ -611,6 +640,36 @@ function onPostLikesCountClick(component, postId){
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
+}
+//on comment textarea lines changed:
+function autoTextAreaCommentInputHeight(textarea, defaultHeight){
+    //create on new line event 
+    textarea.keyup(()=>{
+        textarea.height(defaultHeight);
+        textarea.height(textarea.prop('scrollHeight')-4);
+    });
+}
+//on post comment submit
+function setOnPostCommentSubmitListener(button, postId){
+    button.click(()=>{
+        //check if the user logged in:
+        if(!userLoggedIn){
+            alert('please login before comment');
+            //TODO add login modal
+            return;
+        }
+        //extract the comment body
+        const commentBody = $('#addPostCommentInput'+postId).val();
+        if(commentBody == '' || commentBody == null){
+            alert('comment cannot be empty');
+            //TODO add alert modal
+            return;
+        }
+        //send add post comment request to php
+        $.post('./include/home/posts.php', {addPostComment: true, postId: postId, commentBody: commentBody}, (res)=>{
+            log('post comments', res);
+        });
+    })
 }
 
 /** --------------------------- comments reactions: ---------------------------------------*/

@@ -132,6 +132,26 @@ if(isset($_POST['replayLikers'])){
     return;
 }
 
+//send add post comment request :
+if(isset($_POST['addPostComment'])){
+    session_start();
+    $postId = $_POST['postId'];
+    $commentBody = $_POST['commentBody'];
+    $url = 'http://localhost:3000/posts/comment';
+    $postData = array(
+        'postId' =>  $postId,
+        'body' => $commentBody
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../../classes/utils.php');
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
+    
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->
