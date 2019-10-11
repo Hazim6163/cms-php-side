@@ -11,10 +11,6 @@
  *      - posts Container
 */
 
-// start session if not started:
-if(!isset($_COOKIE["PHPSESSID"])){
-  session_start();
-}
 
 //user information request:
 if(isset($_POST['userInformation'])){

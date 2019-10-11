@@ -176,10 +176,14 @@ function getPostFooter(post){
     });
     onPostLikeIconClick($postLikeIcon, post._id);
     $postLikeIcon.appendTo($postLikes);
-    //check if the user has already likes the post:
-    const alreadyLiked = post.likers.find((liker)=>{
-        return liker.id == userInfo.id;
-    });
+    //check if the user logged in.
+    var alreadyLiked = false;
+    if(userLoggedIn){
+        //check if the user has already likes the post:
+        alreadyLiked = post.likers.find((liker)=>{
+            return liker.id == userInfo.id;
+        });
+    }
     if(alreadyLiked){
         $postLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
     }else{
@@ -397,10 +401,14 @@ function getCommentFooter(comment){
     });
     //append comment like icon to the comment likes container
     $commentLikeIcon.appendTo($commentLikes);
-    //check if the use has already likes the comment:
-    const alreadyLiked = comment.likers.find((liker)=>{
-        return liker.id == userInfo.id;
-    });
+    //check if the user logged in:
+    var alreadyLiked = false;
+    if(userLoggedIn){
+        //check if the use has already likes the comment:
+        alreadyLiked = comment.likers.find((liker)=>{
+            return liker.id == userInfo.id;
+        });
+    }
     setOnCommentLikeIconClick($commentLikeIcon, comment.postId, comment._id);
     if(alreadyLiked){
         $commentLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
@@ -555,10 +563,14 @@ function getReplayFooter(replay){
         "class": "replayLikes"
     }).css('cursor', 'pointer');
     replayFooter.append($replayLikes);
-    //check if the user already liked the replay:
-    const alreadyLiked = replay.likers.find((liker)=>{
-        return liker.id == userInfo.id;
-    });
+    //check if the use logged in:
+    var alreadyLiked = false;
+    if(userLoggedIn){
+        //check if the user already liked the replay:
+        alreadyLiked = replay.likers.find((liker)=>{
+            return liker.id == userInfo.id;
+        });
+    }
     const $replayLikeIcon = $("<div>", {
         id: replayLikeIconId,
         "class": "replayLikeIcon"
@@ -601,7 +613,7 @@ function onPostLikeIconClick(icon, postId){
     icon.click(()=>{
         //check if the user logged in
         if(!userLoggedIn){
-            alert('please Login before try to like post');
+            alert('please Login before try to like the post');
             //TODO CREATE A LOGIN MODEL
             return;
         }
@@ -695,7 +707,7 @@ function setOnCommentLikeIconClick(icon, postId, commentId){
     icon.click(()=>{
         //check if the user logged in
         if(!userLoggedIn){
-            alert('please Login before try to like post');
+            alert('please Login before try to like the comment');
             //TODO CREATE A LOGIN MODEL
             return;
         }
@@ -749,7 +761,7 @@ function setOnReplayLikeIconClick(icon, replayId, commentId, postId){
     icon.click(()=>{
         //check if the user logged in
         if(!userLoggedIn){
-            alert('please Login before try to like post');
+            alert('please Login before try to like the replay');
             //TODO CREATE A LOGIN MODEL
             return;
         }
