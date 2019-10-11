@@ -47,13 +47,8 @@ function createPost(post){
     postFooter = getPostFooter(post);
     postFooter.appendTo(postContainer);
     // post comments
-    postComments = getPostComments(post);
+    postComments = getPostComments(post._id, post.commentsCount, post.comments);
     postComments.appendTo(postContainer);
-    // add post comment
-    addComment = getAddPostComment(post._id);
-    addComment.appendTo(postComments);
-    //TODO create comment input field to add comment
-    
 
     return postContainer;
 }
@@ -238,22 +233,37 @@ function getPostFooter(post){
 }
 
 //create post comments
-function getPostComments(post){
-    const comments = $('<div>',{
-        id: 'comments'+post._id,
-        class: 'comments'
-    }).html('Comments: ').hide();
+function getPostComments(postId, commentsCount, PostComments){
+    //check if we need to update the section or create from scratch:
+    var comments;
+    if(!$('#comments'+postId).html()){
+        comments = $('<div>',{
+            id: 'comments'+postId,
+            class: 'comments'
+        }).html('Comments: ').hide();
+    }else{
+        comments = $('#comments'+postId);
+        comments.html('');
+        comments.show();
+    }
+    
     //check if the post has comments:
-    if(!post.commentsCount > 0){
+    if(!commentsCount > 0){
         //TODO NO COMMENTS BE THE FIRST ONE WHO COMMENT THE POST.
         comments.html('there are no comments be the first one who comment the post').addClass('postNoComments');
+        // add post comment
+        addComment = getAddPostComment(postId);
+        addComment.appendTo(comments);
         return comments;
     }
 
-    post.comments.forEach((comment)=>{
+    PostComments.forEach((comment)=>{
         comments.append(createComment(comment));
     });
-    
+
+    // add post comment
+    addComment = getAddPostComment(postId);
+    addComment.appendTo(comments);
 
     return comments;
 }
@@ -667,8 +677,9 @@ function setOnPostCommentSubmitListener(button, postId){
         }
         //send add post comment request to php
         $.post('./include/home/posts.php', {addPostComment: true, postId: postId, commentBody: commentBody}, (res)=>{
-            log('post comments', res);
-        });
+            //recreate the post comments container:
+            getPostComments(postId, res.commentsCount, res.comments);
+        }, 'json');
     })
 }
 
