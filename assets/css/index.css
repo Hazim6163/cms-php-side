@@ -2,6 +2,7 @@
 body {
     margin: 0px;
     box-sizing: border-box;
+    color: #353535;
 }
 
 .container{
@@ -114,14 +115,15 @@ body {
 .headerContent{
     padding-left: 8px;
 }
-.postAuthor{
-    font-size: 18px;
+.authorName{
+    font-size: 17px;
 }
 
 .postDate, .commentDate, .replayDate {
     font-size: .7rem;
     margin-top:.5em;
     margin-bottom: auto;
+    color:#646464;
 }
 /*remove the margin from  the post date*/
 .postDate{
@@ -146,6 +148,7 @@ body {
 }
 .postDes{
     font-size: 16px;
+    color:#646464;
 }
 .postFooter{
     display:flex;
@@ -292,7 +295,7 @@ text-align: center;
 
 .addPostCommentContainer{
     display:flex;
-    margin: 8px 40px;
+    margin: 0px 40px 8px 40px;
     padding: 8px 0px;
 }
 .addPostCommentInput {

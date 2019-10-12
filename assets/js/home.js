@@ -103,7 +103,7 @@ function getPostHeader(post){
     var $postDate = $("<div>", {
         id: 'postDate'+post._id,
         "class": "postDate"
-    }).html(post.updatedAt);
+    }).html(postDateFormate(post.updatedAt));
     $postDate.appendTo($headerContent);
     //append header content to post header;
     $headerContent.appendTo(postHeader);
@@ -257,7 +257,7 @@ function getPostComments(postId, commentsCount, PostComments){
     
     //check if the post has comments:
     if(!commentsCount > 0){
-        comments.html('there are no comments be the first one who comment the post').addClass('postNoComments');
+        comments.html('there\'s no comments be the first one who comment the post').addClass('postNoComments');
         // add post comment
         addComment = getAddPostComment(postId);
         addComment.appendTo(comments);
@@ -582,7 +582,7 @@ function getCommentFooter(comment){
     const $commentDate = $("<div>", {
         id: 'commentDate'+comment._id,
         "class": "commentDate"
-    }).html(comment.updatedAt);
+    }).html(commentDateFormate(comment.updatedAt));
     $commentDate.appendTo(commentFooter);
 
     // comment like icon count container
@@ -1032,4 +1032,72 @@ function getUserInfo(){
         dataType: 'json'
     });
     return userInfo;
+}
+
+function postDateFormate(date){
+    date = new Date(date);
+    var day  = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+
+    return day+'.'+month+'.'+year;
+}
+
+function commentDateFormate(date){
+    date = new Date(date);
+    var day  = date.getDate();
+    var month = date.getMonth()+1;
+    var year = date.getFullYear();
+    var minute = date.getMinutes();
+    var hour = date.getHours();
+
+
+    if(hour<10){
+        hour = 0+''+hour;
+    }
+    if(minute< 10){
+        minute = 0+''+minute;
+    }
+
+    switch(date.getMonth()){
+        case 0 :
+            month = 'January';
+            break;
+        case 1 :
+            month = 'February';
+            break;
+        case 2 :
+            month = 'March';
+            break;
+        case 3 :
+            month = 'April';
+            break;
+        case 4 :
+            month = 'May';
+            break;
+        case 5 :
+            month = 'June';
+            break;
+        case 6 :
+            month = 'July';
+            break;
+        case 7 :
+            month = 'August';
+            break;
+        case 8 :
+            month = 'September';
+            break;
+        case 9 :
+            month = 'October';
+            break;
+        case 10 :
+            month = 'November';
+            break;
+        case 11 :
+            month = 'December';
+            break;
+    }
+    // 15:30 01.October.20118
+
+    return day+'.'+month+'.'+year+'&nbsp;&nbsp;&nbsp;'+hour+':'+minute+'&nbsp;&nbsp;&nbsp;';
 }
