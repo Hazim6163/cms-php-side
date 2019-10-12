@@ -15,6 +15,10 @@ var userInfo = getUserInfo();
 const userImgBase = 'http://localhost:3000/user/profilePhoto?id=';
 const postImgBase = 'http://localhost:3000/file/uri?uri=';
 
+//vars:
+// to check comment edit Progress
+var commentInEditProgress = false;
+
 
 //get posts container:
 const postsContainer = $('#p_postsContainer');
@@ -303,6 +307,8 @@ function getAddPostComment(postId){
 
 //create comment function:
 function createComment(comment){
+    // to show the multi line comments:
+    comment.body = comment.body.replace(/\n/g,'<br>');
     const commentContainer = $('<div>',{
         id: 'commentContainer'+comment._id,
         class: 'commentContainer'
@@ -379,6 +385,10 @@ function getCommentHeader(comment){
     tools.appendTo(commentHeader);
     //author edit icon on click menu:
     tools.click(()=>{
+        // to stop inflate menu when the edit comment in progress
+        if(commentInEditProgress){
+            return;
+        }
         createPostCommentAuthorEditIconMenu(tools, comment._id, comment.postId);
     });
     //return the current user is the comment author
@@ -422,6 +432,16 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
         id:'editCommentButton'+commentId,
         class: 'editCommentButton'
     }).html('Edit').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    edit.click(()=>{
+        commentInEditProgress = true;
+        //close the menu
+        createPostCommentAuthorEditIconMenu(icon, commentId, postId);
+        //change the menu icon 
+        $('#commentAuthorTools'+commentId).html('<i class="fas fa-spinner"></i>');
+        $('#commentAuthorTools'+commentId).toggleClass('rotate');
+        //send to edit post comment function
+        editPostComment(commentId, postId);
+    });
     edit.appendTo(editModal);
     //line break:
     const line = $('<div>').addClass('editCommentModalLineBreak');
@@ -446,6 +466,89 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
     $('body').append(editModal);
 }
 
+//edit post comment request
+function editPostComment(commentId, postId){
+    const commentBody = $('#commentBody'+commentId).html();
+    //hide the comment container form comments container
+    $('#commentContainer'+commentId).hide();
+    //hide the add Post Comment Container
+    $('#addPostCommentContainer'+postId).hide();
+    //create edit comment container
+    const editCommentContainer = $('<div>',{
+        id: 'editCommentContainer'+commentId,
+        class: 'editCommentContainer'
+    });
+    const editCommentInput = $('<textarea>',{
+        id:'editCommentInput'+commentId,
+        class: 'editCommentInput'
+    }).attr('rows', 1).html(commentBody);
+    editCommentInput.appendTo(editCommentContainer);
+    //on comment textarea lines changed:
+    autoTextAreaCommentInputHeight(editCommentInput, 24);
+    //submit update comment button
+    const updatePostCommentButton = $('<div>', {
+        id: 'updatePostCommentButton'+commentId,
+        class : 'updatePostCommentButton'
+    }).css('cursor', 'pointer').html('Update');
+    //set on confirm update comment click:
+    updatePostCommentButton.click(()=>{
+        const commentBody = $('#editCommentInput'+commentId).val();
+        onPostUpdateComment(commentId, postId, commentBody);
+    })
+    updatePostCommentButton.appendTo(editCommentContainer);
+    //cancel comment update progress:
+    const cancelUpdatePostCommentButton =  $('<div>', {
+        id: 'cancelUpdatePostCommentButton'+commentId,
+        class : 'cancelUpdatePostCommentButton'
+    }).css('cursor', 'pointer').html('Cancel');
+    // set on cancel update comment click
+    cancelUpdatePostCommentButton.click(()=>{
+        onUpdateCommentFinish(commentId, postId);
+    })
+    cancelUpdatePostCommentButton.appendTo(editCommentContainer);
+
+
+    //append update comment container to the post comments container.
+    $('#comments'+postId).append(editCommentContainer);
+}
+
+//on confirm update comment click
+function onPostUpdateComment(commentId, postId, commentBody){
+    //check if the comments are the same:
+    if($('#commentBody'+commentId).html() == commentBody){
+        onUpdateCommentFinish(commentId, postId);
+        return;
+    }
+    //send update comment request:
+    $.post('./include/home/posts.php', {updatePostComment: true, commentId: commentId, commentBody: commentBody}, (res)=>{
+        //update the comments container:
+        getPostComments(postId, res.commentsCount, res.postComments);
+        //update the comments count in the post footer
+        //check if there is comments :
+        if(res.commentsCount > 0){
+            $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
+        }else{
+            $('#postCommentsCount'+postId).html(' Comment');
+        }
+        //finish the update comment request:
+        onUpdateCommentFinish(commentId, postId);
+    }, 'json');
+}
+
+//on cancel update comment:
+function onUpdateCommentFinish(commentId, postId){
+    commentInEditProgress = false;
+    //show the comment container in comments container
+    $('#commentContainer'+commentId).show();
+    //show add Post Comment Container
+    $('#addPostCommentContainer'+postId).show();
+    //remove the update comment container:
+    $('#editCommentContainer'+commentId).remove();
+    //remove rotate class from the menu icon and set the default icon
+    $('#commentAuthorTools'+commentId).html('<i class="fas fa-ellipsis-v"></i>');
+    $('#commentAuthorTools'+commentId).removeClass('rotate');
+}
+
 //delete post comment request
 function deletePostComment(commentId, postId){
     $.post('./include/home/posts.php', {deletePostComment: true, postId: postId, commentId: commentId}, (res)=>{
@@ -458,7 +561,6 @@ function deletePostComment(commentId, postId){
         }else{
             $('#postCommentsCount'+postId).html(' Comment');
         }
-        $('#postCommentsCount'+postId)
     }, 'json');
 }
 

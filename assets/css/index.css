@@ -334,3 +334,43 @@ body {
     height:1px;
     text-align: center;
 }
+
+/******************** edit comment *******************/
+.editCommentContainer{
+    display:flex;
+    padding: 8px 0px;
+}
+.editCommentInput{
+    flex:1;
+    font-size: .9rem;
+    height: 24px;
+    overflow-y: hidden;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    resize: none;
+}
+.updatePostCommentButton{
+	height: 31px;
+	text-align: center;
+    margin-top: auto;
+	background-color: black;
+	color: #e2e2e2;
+	padding-left: 16px;
+	padding-right: 16px;
+	box-sizing: border-box;
+	padding-top: 3px;
+}
+.updatePostCommentButton:hover{
+    background-color: black;
+	color: aqua;
+}
+.cancelUpdatePostCommentButton{
+    height: 31px;
+	text-align: center;
+    margin-top: auto;
+	background-color: #3f0000;
+	color: white;
+	padding-left: 16px;
+	padding-right: 16px;
+	box-sizing: border-box;
+	padding-top: 3px;
+}

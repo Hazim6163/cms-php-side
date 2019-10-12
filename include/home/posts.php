@@ -164,6 +164,26 @@ if(isset($_POST['deletePostComment'])){
     return;
 }
 
+//update post comment request:
+if(isset($_POST['updatePostComment'])){
+    session_start();
+    $commentId = $_POST['commentId'];
+    $commentBody = $_POST['commentBody'];
+    $url = 'http://localhost:3000/posts/comment';
+    $patchField = array(
+        'commentId' => $commentId,
+        'commentBody' => $commentBody
+    );
+    $headers = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../../classes/utils.php');
+    $res = Utils::patchRequest($url, $patchField, $headers);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->
