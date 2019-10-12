@@ -673,7 +673,6 @@ function getCommentReplays(comment){
         //add replay
         addReplay = getAddCommentReplay(comment._id, comment.postId);
         addReplay.appendTo(commentReplays);
-        log(commentReplays);
         return commentReplays;
     }
     //then the comment has replays:
@@ -721,7 +720,7 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
     button.click(()=>{
         //check if the user logged in:
         if(!userLoggedIn){
-            alert('please login before comment');
+            alert('please login before leave a Replay');
             //TODO add login modal
             return;
         }
@@ -734,7 +733,7 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
         }
         //send add comment replay request to php
         $.post('./include/home/posts.php', {addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId}, (res)=>{
-            log('add replay res', res);
+            getCommentReplays(res.comment);
         }, 'json');
     })
 }
