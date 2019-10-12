@@ -379,14 +379,14 @@ function getCommentHeader(comment){
     tools.appendTo(commentHeader);
     //author edit icon on click menu:
     tools.click(()=>{
-        createPostCommentAuthorEditIconMenu(tools, comment._id);
+        createPostCommentAuthorEditIconMenu(tools, comment._id, comment.postId);
     });
     //return the current user is the comment author
     return commentHeader;
 }
 
 //Comment author edit icon menu:
-function createPostCommentAuthorEditIconMenu(icon, commentId){
+function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
     //check if the modal already created to remove the modal
     if($('#editCommentModal'+commentId).html()){
         //remove close class from the icon
@@ -431,11 +431,35 @@ function createPostCommentAuthorEditIconMenu(icon, commentId){
         id: 'deleteCommentButton'+commentId,
         class: 'deleteCommentButton'
     }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    deleteComment.click(()=>{
+        //to close the menu
+        createPostCommentAuthorEditIconMenu(icon, commentId, postId);
+        //change the icon to in progress
+        $('#commentAuthorTools'+commentId).html('<i class="fas fa-spinner"></i>');
+        icon.toggleClass('rotate');
+        deletePostComment(commentId, postId);
+    })
     deleteComment.appendTo(editModal);
     
 
     //append to body 
     $('body').append(editModal);
+}
+
+//delete post comment request
+function deletePostComment(commentId, postId){
+    $.post('./include/home/posts.php', {deletePostComment: true, postId: postId, commentId: commentId}, (res)=>{
+        //update the comments container
+        getPostComments(postId, res.commentsCount, res.comments);
+        //update the comments count in the post footer
+        //check if there is comments :
+        if(res.commentsCount > 0){
+            $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
+        }else{
+            $('#postCommentsCount'+postId).html(' Comment');
+        }
+        $('#postCommentsCount'+postId)
+    }, 'json');
 }
 
 //get comment body function;

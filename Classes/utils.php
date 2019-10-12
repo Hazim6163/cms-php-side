@@ -64,6 +64,21 @@ class Utils{
 
         return $result;
     }
+
+    public static function deleteRequest($url, $headers){
+        $url = $url;
+        $options = array(
+            CURLOPT_RETURNTRANSFER=> TRUE,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_HTTPHEADER => $headers
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+
+        $result = curl_exec($ch);
+
+        return $result;
+    }
 }
 
 ?>

@@ -148,6 +148,22 @@ if(isset($_POST['addPostComment'])){
     return;
 }
 
+//delete post comment request:
+if(isset($_POST['deletePostComment'])){
+    session_start();
+    $postId = $_POST['postId'];
+    $commentId = $_POST['commentId'];
+    $url = 'http://localhost:3000/posts/comment?commentId='.$commentId.'&postId='.$postId;
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../../classes/utils.php');
+    $res = Utils::deleteRequest($url, $requestHeaders);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->
