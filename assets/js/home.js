@@ -323,12 +323,8 @@ function createComment(comment){
     const commentFooter = getCommentFooter(comment);
     commentContainer.append(commentFooter);
     //comment Replays
-    //check if the comment has replays:
-    if(comment.replaysCount > 0){
-        const commentReplays = getCommentReplays(comment);
-        commentContainer.append(commentReplays);
-    }
-    //TODO CREATE INPUT FILES FOR REPLAY
+    const commentReplays = getCommentReplays(comment);
+    commentContainer.append(commentReplays);
 
     return commentContainer;
 }
@@ -658,13 +654,26 @@ function getCommentFooter(comment){
 }
 //get comment replays function;
 function getCommentReplays(comment){
-    const commentReplays = $('<div>',{
-        id: 'replaysContainer'+comment._id,
-        class: 'replaysContainer'
-    }).hide();
+    //check if we need to update the section or create from scratch:
+    var commentReplays;
+    if(!$('#replaysContainer'+comment._id).html()){
+        commentReplays = $('<div>',{
+            id: 'replaysContainer'+comment._id,
+            class: 'replaysContainer'
+        }).hide();
+    }else{
+        commentReplays = $('#replaysContainer'+comment._id);
+        commentReplays.html('');
+        commentReplays.show();
+    }
 
     //check if the comment has replays:
-    if(!comment.replays > 0){
+    if(!comment.replaysCount > 0){
+        commentReplays.html('this comment has no replays be the first one who replay the comment').addClass('postNoComments');
+        //add replay
+        addReplay = getAddCommentReplay(comment._id, comment.postId);
+        addReplay.appendTo(commentReplays);
+        log(commentReplays);
         return commentReplays;
     }
     //then the comment has replays:
@@ -672,9 +681,63 @@ function getCommentReplays(comment){
         commentReplays.append(createReplay(replay));
     });
 
+    //add replay
+    addReplay = getAddCommentReplay(comment._id, comment.postId);
+    addReplay.appendTo(commentReplays);
+    
+
     return commentReplays;
 }
 
+//add comment replay
+function getAddCommentReplay(commentId, postId){
+    //create add replay container
+    const addCommentReplayContainer = $('<div>',{
+        id:'addCommentReplayContainer'+commentId,
+        class: 'addCommentReplayContainer'
+    });
+    //create add comment input field:
+    const addCommentReplayInput = $('<textarea>',{
+        id : 'addCommentReplayInput'+commentId,
+        class : 'addCommentReplayInput'
+    }).attr('rows', 1);
+    addCommentReplayInput.appendTo(addCommentReplayContainer);
+    //on replay textarea lines changed:
+    autoTextAreaCommentInputHeight(addCommentReplayInput, 24);
+    //submit replay button
+    const addCommentReplaySubmit = $('<div>', {
+        id: 'addCommentReplaySubmit'+commentId,
+        class : 'addCommentReplaySubmit'
+    }).css('cursor', 'pointer').html('Replay');
+    setOnReplaySubmitClickListener(addCommentReplaySubmit, commentId, postId);
+    //append submit button to add replay container
+    addCommentReplayContainer.append(addCommentReplaySubmit);
+
+    return addCommentReplayContainer;
+}
+
+//on comment replay submit
+function setOnReplaySubmitClickListener(button, commentId, postId){
+    button.click(()=>{
+        //check if the user logged in:
+        if(!userLoggedIn){
+            alert('please login before comment');
+            //TODO add login modal
+            return;
+        }
+        //extract the replay body
+        const replayBody = $('#addCommentReplayInput'+commentId).val();
+        if(replayBody == '' || replayBody == null){
+            alert('replay cannot be empty');
+            //TODO add alert modal
+            return;
+        }
+        //send add comment replay request to php
+        $.post('./include/home/posts.php', {addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId}, (res)=>{
+            log('add replay res', res);
+        }, 'json');
+    })
+}
 
 //create replay function
 function createReplay(replay){

@@ -184,6 +184,28 @@ if(isset($_POST['updatePostComment'])){
     return;
 }
 
+//add replay:
+if(isset($_POST['addCommentReplay'])){
+    session_start();
+    $postId = $_POST['postId'];
+    $commentId = $_POST['commentId'];
+    $body = $_POST['replayBody'];
+    $url = 'http://localhost:3000/posts/replay';
+    $postData = array(
+        'postId' =>  $postId,
+        'body' => $body,
+        'commentId' => $commentId
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../../classes/utils.php');
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
+    
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->

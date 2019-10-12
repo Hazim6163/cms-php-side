@@ -254,7 +254,6 @@ body {
     margin-left:30px;
     font-size:13px;
     display:flex;
-    padding-bottom:16px;
 }
 .replayLikes{
     padding-left:8px;
@@ -411,3 +410,49 @@ text-align: center;
 	font-size: 13px;
 	color: gray;
 }
+
+/** ------------ add replay ----------- */
+/* .commentAuthorTools{
+    padding: 0px 14px;
+    text-align: center;
+    } */
+    
+    .addCommentReplayContainer{
+        display:flex;
+        margin: 0px 0px 8px 40px;
+        padding: 8px 0px ;
+    }
+    .addCommentReplayInput {
+        flex: 1;
+        font-size: .9rem;
+        height: 24px;
+        overflow-y: hidden;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        resize: none;
+        border: 1px solid gray;
+        border-radius: 9px;
+        -moz-border-radius: 9px;
+        -webkit-border-radius: 9px;
+        padding: 4px;
+    }
+    .addCommentReplaySubmit {
+        height: 31px;
+        min-width: 108px;
+        text-align: center;
+        margin-top: auto;
+        background-color: black;
+        color: white;
+        padding-left: 16px;
+        padding-right: 16px;
+        box-sizing: border-box;
+        padding-top: 3px;
+        font-size: 18px;
+        border-radius: 9px;
+        margin-left: 8px;
+        margin-bottom: 2px;
+    }
+    .addCommentReplaySubmit:hover{
+        background-color: black;
+        color: aqua;
+    }
+    
