@@ -285,28 +285,43 @@ body {
 }
 
 /** ------------ add comment ----------- */
+.commentAuthorTools{
+padding: 0px 14px;
+text-align: center;
+}
+
 .addPostCommentContainer{
     display:flex;
+    margin: 8px 40px;
     padding: 8px 0px;
 }
-.addPostCommentInput{
-    flex:1;
-    font-size: .9rem;
-    height: 24px;
-    overflow-y: hidden;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    resize: none;
+.addPostCommentInput {
+	flex: 1;
+	font-size: .9rem;
+	height: 24px;
+	overflow-y: hidden;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	resize: none;
+	border: 1px solid gray;
+	border-radius: 9px;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	padding: 4px;
 }
-.addPostCommentInputSubmit{
+.addPostCommentInputSubmit {
 	height: 31px;
 	text-align: center;
-    margin-top: auto;
+	margin-top: auto;
 	background-color: black;
 	color: white;
 	padding-left: 16px;
 	padding-right: 16px;
 	box-sizing: border-box;
 	padding-top: 3px;
+	font-size: 18px;
+	border-radius: 9px;
+	margin-left: 8px;
+	margin-bottom: 2px;
 }
 .addPostCommentInputSubmit:hover{
     background-color: black;
@@ -339,25 +354,35 @@ body {
 .editCommentContainer{
     display:flex;
     padding: 8px 0px;
+    margin: 8px 40px;
 }
 .editCommentInput{
-    flex:1;
-    font-size: .9rem;
-    height: 24px;
-    overflow-y: hidden;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    resize: none;
+    flex: 1;
+	font-size: .9rem;
+	height: 24px;
+	overflow-y: hidden;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	resize: none;
+	border: 1px solid gray;
+	border-radius: 9px;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	padding: 4px;
 }
 .updatePostCommentButton{
 	height: 31px;
 	text-align: center;
-    margin-top: auto;
+	margin-top: auto;
 	background-color: black;
-	color: #e2e2e2;
+	color: white;
 	padding-left: 16px;
 	padding-right: 16px;
 	box-sizing: border-box;
 	padding-top: 3px;
+	font-size: 18px;
+	border-radius: 9px;
+	margin-left: 8px;
+	margin-bottom: 2px;
 }
 .updatePostCommentButton:hover{
     background-color: black;
@@ -366,11 +391,20 @@ body {
 .cancelUpdatePostCommentButton{
     height: 31px;
 	text-align: center;
-    margin-top: auto;
-	background-color: #3f0000;
+	margin-top: auto;
+	background-color: rgb(75, 0, 0);
 	color: white;
 	padding-left: 16px;
 	padding-right: 16px;
 	box-sizing: border-box;
 	padding-top: 3px;
+	font-size: 18px;
+	border-radius: 9px;
+	margin-left: 8px;
+	margin-bottom: 2px;
+}
+
+.postNoComments{
+	font-size: 13px;
+	color: gray;
 }

@@ -3,7 +3,7 @@
  * 
  * User Information:
  * get user information userLoggedIn bool and userInfo content userCard.
- * 
+ * //TODO fix search problem
  */
 
 //get user information:
@@ -257,7 +257,6 @@ function getPostComments(postId, commentsCount, PostComments){
     
     //check if the post has comments:
     if(!commentsCount > 0){
-        //TODO NO COMMENTS BE THE FIRST ONE WHO COMMENT THE POST.
         comments.html('there are no comments be the first one who comment the post').addClass('postNoComments');
         // add post comment
         addComment = getAddPostComment(postId);
@@ -470,7 +469,6 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
 function editPostComment(commentId, postId){
     const commentBody = $('#commentBody'+commentId).html();
     //hide the comment container form comments container
-    $('#commentContainer'+commentId).hide();
     //hide the add Post Comment Container
     $('#addPostCommentContainer'+postId).hide();
     //create edit comment container
@@ -868,7 +866,7 @@ function autoTextAreaCommentInputHeight(textarea, defaultHeight){
     //create on new line event 
     textarea.keyup(()=>{
         textarea.height(defaultHeight);
-        textarea.height(textarea.prop('scrollHeight')-4);
+        textarea.height(textarea.prop('scrollHeight')-8);
     });
 }
 //on post comment submit
