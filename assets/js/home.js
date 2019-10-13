@@ -762,8 +762,7 @@ function setOnReplaySubmitClickListener(button, commentId, postId) {
         //extract the replay body
         const replayBody = $('#addCommentReplayInput' + commentId).val();
         if (replayBody == '' || replayBody == null) {
-            alert('replay cannot be empty');
-            //TODO add alert modal
+            createAlertModal('Replay cannot be Empty.');
             return;
         }
         //toggle in progress classes:
@@ -1214,8 +1213,7 @@ function setOnPostCommentSubmitListener(button, postId) {
         //extract the comment body
         const commentBody = $('#addPostCommentInput' + postId).val();
         if (commentBody == '' || commentBody == null) {
-            alert('comment cannot be empty');
-            //TODO add alert modal
+            createAlertModal('Comment cannot be Empty.');
             return;
         }
         //add in progress icon to the submit btn:
@@ -1548,4 +1546,45 @@ function createLoginModal(){
 
     //append modal to body
     $('body').append(loginModal);
+}
+
+/** --------------------------- alert modal ---------------------------------------*/
+function createAlertModal(message){
+    //alert modal
+    const alertModal = $('<div>', {
+        class: 'alertModal'
+    }).appendTo('body');
+    //alert modal container 
+    const alertModalContainer = $('<div>', {
+        id: 'alertModalContainer',
+        class: 'alertModalContainer'
+    }).appendTo(alertModal);
+    //icon message wrapped alertModalIconMsgWrapper
+    const wrapper = $('<div>', {
+        id: 'alertModalIconMsgWrapper',
+        class: 'alertModalIconMsgWrapper'
+    }).appendTo(alertModalContainer);
+    //alert icon
+    const alertIcon = $('<div>',{
+        id: 'alertModalIcon',
+        class: 'alertModalIcon'
+    }).html('<i class="fas fa-exclamation-circle"></i>').appendTo(wrapper);
+    // alert message
+    const msg = $('<div>',{
+        id: 'alertModalMessage',
+        class: 'alertModalMessage'
+    }).appendTo(wrapper).html(message);
+    // alert footer 
+    const footer = $('<div>',{
+        id: 'alertModalFooter',
+        class: 'alertModalFooter'
+    }).appendTo(alertModalContainer);
+    // close alert btn
+    const closeBtn = $('<div>',{
+        id: 'alertModalCloseBtn',
+        class: 'alertModalCloseBtn'
+    }).html('OK').appendTo(footer);
+    closeBtn.click(()=>{
+        alertModal.remove()
+    })
 }
