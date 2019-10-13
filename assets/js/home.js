@@ -19,6 +19,7 @@ const postImgBase = 'http://localhost:3000/file/uri?uri=';
 // to check comment edit Progress
 var commentInEditProgress = false;
 var commentReplayInUpdateProgress = false;
+var addPostCommentInProgress = false;
 
 
 //get posts container:
@@ -1039,6 +1040,10 @@ function autoTextAreaCommentInputHeight(textarea, defaultHeight){
 //on post comment submit
 function setOnPostCommentSubmitListener(button, postId){
     button.click(()=>{
+        //check if other add comment in progress and return:
+        if(addPostCommentInProgress){
+            return;
+        }
         //check if the user logged in:
         if(!userLoggedIn){
             alert('please login before comment');
@@ -1052,10 +1057,31 @@ function setOnPostCommentSubmitListener(button, postId){
             //TODO add alert modal
             return;
         }
+        //add in progress icon to the submit btn:
+        addPostCommentInProgress = true;
+        $('#addPostCommentInputSubmit'+ postId).hide();
+        // add spinner :
+        const spinner = $('<div>',{
+            id : 'addCommentReplaySpinner'+postId,
+            class : 'rotate addCommentReplaySpinner'
+        }).html('<i class="fas fa-spinner"></i>');
+        $('#addPostCommentContainer'+postId).append(spinner);
         //send add post comment request to php
         $.post('./include/home/posts.php', {addPostComment: true, postId: postId, commentBody: commentBody}, (res)=>{
             //recreate the post comments container:
             getPostComments(postId, res.commentsCount, res.comments);
+            //update the post comments count in the comment footer:
+            if(res.commentsCount > 0){
+                $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
+                //remove no comments class from the post comment container
+                $('#comments'+postId).removeClass('postNoComments');
+            }else{
+                $('#postCommentsCount'+postId).html(' Comment')
+            }
+            //remove in progress classes:
+            addPostCommentInProgress = false;
+            $('#addCommentReplaySpinner'+postId).remove();
+            $('#addPostCommentInputSubmit'+ postId).show();
         }, 'json');
     })
 }

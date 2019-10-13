@@ -159,6 +159,7 @@ body {
     margin-right:60px;
     margin-top:8px;
     font-size:18px;
+    color: #353535;
 }
 .commentHeader{
     padding-top:8px;
@@ -350,6 +351,11 @@ text-align: center;
     margin: 2px;
     height:1px;
     text-align: center;
+}
+.addCommentReplaySpinner{
+    text-align: center;
+    font-size: 18px;
+    margin: auto 0px auto 8px;
 }
 
 /******************** edit comment *******************/
