@@ -219,6 +219,26 @@ if(isset($_POST['deleteCommentReplay'])){
     return;
 }
 
+//update comment replay request:
+if(isset($_POST['updateCommentReplay'])){
+    session_start();
+    $replayId = $_POST['replayId'];
+    $body = $_POST['body'];
+    $url = 'http://localhost:3000/posts/replay';
+    $patchField = array(
+        'replayId' => $replayId,
+        'replayBody' => $body
+    );
+    $headers = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../../classes/utils.php');
+    $res = Utils::patchRequest($url, $patchField, $headers);
+
+    echo($res);
+    return;
+}
+
 ?>
 
 <!--html elements-->

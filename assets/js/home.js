@@ -841,14 +841,14 @@ function getReplayHeader(replay){
         if(commentReplayInUpdateProgress){
             return;
         }
-        createCommentReplayAuthorMenu(commentReplayMenuIcon, replay._id);
+        createCommentReplayAuthorMenu(commentReplayMenuIcon, replay._id, replay.commentId);
     });
 
     return replayHeader;
 }
 
 //to create replay author menu
-function createCommentReplayAuthorMenu(icon, id){
+function createCommentReplayAuthorMenu(icon, id, commentId){
     //check if the menu already create to close the menu:
     if($('#replayAuthorMenu'+id).html()){
         //remove close class from the icon
@@ -860,7 +860,7 @@ function createCommentReplayAuthorMenu(icon, id){
     //add close class to the icon
     icon.html('<i class="fas fa-times"></i>');
 
-    //create the modal: //change replayAuthorMenu to menu
+    //create the modal:
     const replayAuthorMenu = $('<div>',{
         id:'replayAuthorMenu'+id,
         class:'replayAuthorMenu'
@@ -882,6 +882,25 @@ function createCommentReplayAuthorMenu(icon, id){
         'width': '70px'
     }, 100)
 
+    //edit replay:
+    const editReplay = $('<div>',{
+        id:'editReplayBtn'+id,
+        class: 'editReplayBtn'
+    }).html('Edit').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    editReplay.click(()=>{
+        commentReplayInUpdateProgress = true;
+        //close the menu
+        createCommentReplayAuthorMenu(icon, id, commentId);
+        //change the icon to in progress
+        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-spinner"></i>');
+        $('#commentReplayMenuIcon'+id).toggleClass('rotate');
+        //send to edit replay function
+        onEditReplay(id, commentId);
+    });
+    editReplay.appendTo(replayAuthorMenu);
+    //line break:
+    const line = $('<div>').addClass('editCommentModalLineBreak');
+    line.appendTo(replayAuthorMenu);
     //delete  replay:
     const  deleteReplyMenuItem =  $('<div>',{
         id: 'deleteReplyMenuItem'+id,
@@ -890,7 +909,7 @@ function createCommentReplayAuthorMenu(icon, id){
     deleteReplyMenuItem.click(()=>{
         commentReplayInUpdateProgress = true;
         //to close the menu
-        createCommentReplayAuthorMenu(icon, id);
+        createCommentReplayAuthorMenu(icon, id, commentId);
         //change the icon to in progress
         $('#commentReplayMenuIcon'+id).html('<i class="fas fa-spinner"></i>');
         icon.toggleClass('rotate');
@@ -900,6 +919,102 @@ function createCommentReplayAuthorMenu(icon, id){
 
     //append to body 
     $('body').append(replayAuthorMenu);
+}
+
+//edit comment replay:
+function onEditReplay(replayId, commentId){
+    // get original replay body: //replace <br> \n
+    const replayBody = $('#replayBody'+ replayId).html().replace(/<br>/g,'\n');
+    // get lines count:
+    var linesCount = 1;
+    if(replayBody.match(/\n/g)){
+        linesCount = replayBody.match(/\n/g).length;
+    }
+    //hide add replay container:
+    $('#addCommentReplayContainer'+commentId).hide();
+    //create edit replay container:
+    const editReplayContainer = $('<div>',{
+        id: 'editReplayContainer'+replayId,
+        class: 'editReplayContainer'
+    });
+    const editReplayInput = $('<textarea>',{
+        id:'editReplayInput'+replayId,
+        class: 'editReplayInput'
+    }).attr('rows', linesCount).html(replayBody);
+    //set one line input height
+    if(linesCount == 1){
+        editReplayInput.css('height', '24px');
+    }
+    editReplayInput.appendTo(editReplayContainer);
+    //on replay textarea lines changed:
+    autoTextAreaCommentInputHeight(editReplayInput, 24);
+    //submit update replay button
+    const editReplaySubmitBtn = $('<div>', {
+        id: 'editReplaySubmitBtn'+replayId,
+        class : 'editReplaySubmitBtn'
+    }).css('cursor', 'pointer').html('Update');
+    //set on confirm update replay click:
+    editReplaySubmitBtn.click(()=>{
+        const replayBody = $('#editReplayInput'+replayId).val();
+        onEditCommentReplay(replayId, replayBody);
+    });
+    editReplaySubmitBtn.appendTo(editReplayContainer);
+    //cancel comment update progress:
+    const cancelEditReplayBtn =  $('<div>', {
+        id: 'cancelEditReplayBtn'+replayId,
+        class : 'cancelEditReplayBtn'
+    }).css('cursor', 'pointer').html('Cancel');
+    // set on cancel update replay click
+    cancelEditReplayBtn.click(()=>{
+        onEditReplayFinish(replayId, commentId);
+    })
+    cancelEditReplayBtn.appendTo(editReplayContainer);
+
+
+    //append edit replay container to the replays container.
+    $('#replaysContainer'+commentId).append(editReplayContainer);
+}
+
+//on comment replay finish update
+function onEditReplayFinish(replayId, commentId){
+    //remove from progress and remove classes
+    commentReplayInUpdateProgress = false;
+    //replay author menu
+    $('#commentReplayMenuIcon'+replayId).html('<i class="fas fa-ellipsis-v"></i>')
+    $('#commentReplayMenuIcon'+replayId).toggleClass('rotate');
+    //comment replays container:
+    $('#editReplayContainer'+replayId).remove();
+    $('#addCommentReplayContainer'+commentId).show();
+}
+
+//on edit comment replay function:
+function onEditCommentReplay(id, body){
+    //hide update cancel btn:
+    $('#editReplaySubmitBtn'+id).hide();
+    $('#cancelEditReplayBtn'+id).hide();
+    //show the spinner behind the edit input
+    const spinner = $('<div>',{
+        id : 'addCommentReplaySpinner'+id,
+        class : 'rotate addCommentReplaySpinner'
+    }).html('<i class="fas fa-spinner"></i>');
+    $('#editReplayContainer'+id).append(spinner);
+
+    $.post('./include/home/posts.php', {updateCommentReplay: true, replayId: id, body: body}, (res)=>{
+        //update replays container
+        getCommentReplays(res.comment);
+        //update the replays count in the comment footer:
+        if(res.comment.replaysCount > 0){
+            $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
+        }else{
+            $('#commentReplaysCount'+res.comment._id).html(' Replay');
+        }
+        //remove from progress and remove classes
+        commentReplayInUpdateProgress = false;
+        //remove the edit container:
+        $('#editReplayContainer'+id).remove();
+        //remove the spinner
+        $('#addCommentReplaySpinner'+id).remove();
+    }, 'json');
 }
 
 //delete comment replay:
@@ -945,7 +1060,7 @@ function getReplayFooter(replay){
     const $replayDate = $("<div>", {
         id: 'replayDate'+replay._id,
         "class": "replayDate"
-    }).html(replay.updatedAt);
+    }).html(commentDateFormate(replay.updatedAt));
     replayFooter.append($replayDate);
     var $replayLikes = $("<div>", {
         id: 'replayLikes'+replay._id,
