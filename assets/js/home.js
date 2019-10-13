@@ -94,7 +94,7 @@ function getPostHeader(post) {
         $authorImg.attr('src', userImgBase + authorInfo.photoUrl);
         $authorImg.appendTo($authorImgContainer);
     } else {
-        $authorImgContainer.html('<div class="authorIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
+        $authorImgContainer.html('<div class="userIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
     }
     $authorImgContainer.appendTo(postHeader);
 
@@ -731,7 +731,7 @@ function getAddCommentReplay(commentId, postId) {
     const addCommentReplayInput = $('<textarea>', {
         id: 'addCommentReplayInput' + commentId,
         class: 'addCommentReplayInput'
-    }).attr('rows', 1).css('height','34px');
+    }).attr('rows', 1).css('height', '34px');
     addCommentReplayInput.appendTo(addCommentReplayContainer);
     //on replay textarea lines changed:
     autoTextAreaCommentInputHeight(addCommentReplayInput, 24);
@@ -1173,13 +1173,8 @@ function onPostLikesCountClick(component, postId) {
     component.click(() => {
         //send to php server ger likers and like count request 
         $.post('./include/home/posts.php', { postLikers: true, postId: postId }, (res) => {
-            //likers name list to show it in the alert for this time
-            likersNameList = '';
-            res.likers.forEach((liker) => {
-                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
-            })
             //alert to show the name list:
-            alert(likersNameList);
+            createLikersModal(res.likers);
             //update the likes count
             if (res.likesCount > 0) {
                 $('#postLikesCount' + postId).html(res.likesCount + ' Likes');
@@ -1187,7 +1182,6 @@ function onPostLikesCountClick(component, postId) {
                 $('#postLikersCount' + postId).html(' Like');
             }
         }, 'json');
-        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
 }
 //on comment textarea lines changed:
@@ -1286,13 +1280,7 @@ function setOnCommentLikesCountClick(icon, commentId) {
     icon.click(() => {
         //send to php server the likers and like count request 
         $.post('./include/home/posts.php', { commentLikers: true, commentId: commentId }, (res) => {
-            //likers name list to show it in the alert for this time
-            likersNameList = '';
-            res.likers.forEach((liker) => {
-                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
-            })
-            //alert to show the name list:
-            alert(likersNameList);
+            createLikersModal(res.likers);
             //update the likes count
             if (res.likesCount > 0) {
                 $('#commentLikesCount' + commentId).html(res.likesCount + ' Likes');
@@ -1300,7 +1288,6 @@ function setOnCommentLikesCountClick(icon, commentId) {
                 $('#commentLikesCount' + commentId).html(' Like');
             }
         }, 'json');
-        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
 }
 
@@ -1338,13 +1325,7 @@ function setOnReplayLikesCountClick(icon, replayId) {
     icon.click(() => {
         //send to php server the likers and like count request 
         $.post('./include/home/posts.php', { replayLikers: true, replayId: replayId }, (res) => {
-            //likers name list to show it in the alert for this time
-            likersNameList = '';
-            res.likers.forEach((liker) => {
-                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
-            })
-            //alert to show the name list:
-            alert(likersNameList);
+            createLikersModal(res.likers);
             //update the likes count
             if (res.likesCount > 0) {
                 $('#replayLikesCount' + replayId).html(res.likesCount + ' Likes');
@@ -1352,7 +1333,6 @@ function setOnReplayLikesCountClick(icon, replayId) {
                 $('#replayLikesCount' + replayId).html(' Like');
             }
         }, 'json');
-        //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
 }
 
@@ -1587,4 +1567,63 @@ function createAlertModal(message) {
     closeBtn.click(() => {
         alertModal.remove()
     })
+}
+
+/******************************* likers modal ***************************************/
+function createLikersModal(likers) {
+    //likers modal
+    const likersModal = $('<div>', {
+        class: 'likersModal'
+    }).appendTo('body');
+    //likers Modal  container 
+    const likersModalContainer = $('<div>', {
+        id: 'likersModalContainer',
+        class: 'likersModalContainer'
+    }).appendTo(likersModal);
+    //loop throw each liker :
+    likers.forEach((liker) => {
+        // liker 
+        const likerContainer = $('<div>', {
+            id: 'likersModalLikerContainer' + liker.id,
+            class: 'likersModalLikerContainer'
+        }).appendTo(likersModalContainer);
+        //liker img:
+        const likerImgContainer = $('<div>', {
+            id: 'likersModalLikerImgContainer' + liker.id,
+            class: 'likersModalLikerImgContainer'
+        }).appendTo(likerContainer);
+        //check if the liker has img:
+        if (liker.photoUrl) {
+            const $likerImg = $("<img>", {
+                id: 'likersModalLikerImg' + liker.id,
+                "class": "likersModalLikerImg"
+            });
+            $likerImg.attr('src', userImgBase + liker.photoUrl);
+            $likerImg.appendTo(likerImgContainer);
+        } else {
+            likerImgContainer.html('<div class="likerModalUserIcon"><i class="fas fa-user"></i></div>');
+        }
+        //liker Name:
+        const likerName = $('<div>', {
+            id: 'likersModalLikerName' + liker.id,
+            class: 'likersModalLikerName'
+        }).appendTo(
+            likerContainer
+        ).html(
+            '<a href="#' + liker.id + '">' + liker.fname + ' ' + liker.lname + '</a>'//TODO CREATE USER PAGE
+        );
+    });
+    //footer 
+    const footer = $('<div>', {
+        id: 'likersModalFooter',
+        class: 'likersModalFooter'
+    }).appendTo(likersModalContainer);
+    //close btn:
+    const closeBtn = $('<div>', {
+        id: 'likersModalCloseBtn',
+        class: 'likersModalCloseBtn'
+    }).html('OK').appendTo(footer);
+    closeBtn.click(() => {
+        likersModal.remove();
+    });
 }
