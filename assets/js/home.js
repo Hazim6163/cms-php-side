@@ -1060,7 +1060,6 @@ function onDeleteCommentReplay(id){
         //stop icon animation
         commentReplayInUpdateProgress = false;
         $('#commentReplayMenuIcon'+id).html('<i class="fas fa-ellipsis-v"></i>');
-        icon.toggleClass('rotate');
     }, 'json');
     
 }
