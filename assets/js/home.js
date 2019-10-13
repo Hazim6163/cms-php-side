@@ -450,6 +450,7 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
         class: 'deleteCommentButton'
     }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
     deleteComment.click(()=>{
+        commentInEditProgress = true;
         //to close the menu
         createPostCommentAuthorEditIconMenu(icon, commentId, postId);
         //change the icon to in progress
@@ -558,6 +559,7 @@ function deletePostComment(commentId, postId){
         }else{
             $('#postCommentsCount'+postId).html(' Comment');
         }
+        commentInEditProgress = false;
     }, 'json');
 }
 
