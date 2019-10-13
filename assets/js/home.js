@@ -18,6 +18,7 @@ const postImgBase = 'http://localhost:3000/file/uri?uri=';
 //vars:
 // to check comment edit Progress
 var commentInEditProgress = false;
+var commentReplayInUpdateProgress = false;
 
 
 //get posts container:
@@ -733,7 +734,14 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
         }
         //send add comment replay request to php
         $.post('./include/home/posts.php', {addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId}, (res)=>{
+            //update comment replay container
             getCommentReplays(res.comment);
+            //update the comment replay count:
+            if(res.comment.replaysCount > 0){
+                $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
+            }else{
+                $('#commentReplaysCount'+res.comment._id).html(' Replay');
+            }
         }, 'json');
     })
 }
@@ -789,8 +797,105 @@ function getReplayHeader(replay){
     }).html(replayer.fname+ ' ' +replayer.lname);
     $replayerName.appendTo(replayHeader);
 
+    //check if the user logged in
+    if(!userLoggedIn){
+        return replayHeader;
+    }
+    //check if the current user is the author:
+    if(userInfo.id != replayer.id && userInfo.admin != 1){
+        return replayHeader;
+    }
+    // create replay author menu:
+    const commentReplayMenuIcon = $('<div>',{
+        id:'commentReplayMenuIcon'+replay._id,
+        class: 'commentReplayMenuIcon'
+    }).html('<i class="fas fa-ellipsis-v"></i>');
+    commentReplayMenuIcon.appendTo(replayHeader);
+    //author edit icon on click menu:
+    commentReplayMenuIcon.click(()=>{
+        // to stop inflate menu when the edit comment in progress
+        if(commentReplayInUpdateProgress){
+            return;
+        }
+        createCommentReplayAuthorMenu(commentReplayMenuIcon, replay._id);
+    });
 
     return replayHeader;
+}
+
+//to create replay author menu
+function createCommentReplayAuthorMenu(icon, id){
+    //check if the menu already create to close the menu:
+    if($('#replayAuthorMenu'+id).html()){
+        //remove close class from the icon
+        icon.html('<i class="fas fa-ellipsis-v"></i>');
+        $('#replayAuthorMenu'+id).remove();
+        return;
+    }
+
+    //add close class to the icon
+    icon.html('<i class="fas fa-times"></i>');
+
+    //create the modal: //change replayAuthorMenu to menu
+    const replayAuthorMenu = $('<div>',{
+        id:'replayAuthorMenu'+id,
+        class:'replayAuthorMenu'
+    });
+    
+    //get positions:
+    const iconX = icon.offset().left;
+    const iconY = icon.offset().top;
+    //set the modal position:
+    const modalX = iconX;
+    const modalY = iconY + icon.height();
+    //style the modal
+    replayAuthorMenu.css({
+        'top': modalY,
+        'left': modalX
+    });
+    //animate the modal
+    replayAuthorMenu.animate({
+        'width': '70px'
+    }, 100)
+
+    //delete  replay:
+    const  deleteReplyMenuItem =  $('<div>',{
+        id: 'deleteReplyMenuItem'+id,
+        class: 'deleteReplyMenuItem'
+    }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
+    deleteReplyMenuItem.click(()=>{
+        commentReplayInUpdateProgress = true;
+        //to close the menu
+        createCommentReplayAuthorMenu(icon, id);
+        //change the icon to in progress
+        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-spinner"></i>');
+        icon.toggleClass('rotate');
+        onDeleteCommentReplay(id);
+    })
+    deleteReplyMenuItem.appendTo(replayAuthorMenu);
+
+    //append to body 
+    $('body').append(replayAuthorMenu);
+}
+
+//delete comment replay:
+function onDeleteCommentReplay(id){
+    //send request to php
+    $.post('./include/home/posts.php', {deleteCommentReplay: true, replayId: id}, (res)=>{
+        //update the replays section
+        getCommentReplays(res.comment);
+        //update the replays count in the comment footer:
+        if(res.comment.replaysCount > 0){
+            $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
+        }else{
+            $('#commentReplaysCount'+res.comment._id).html(' Replay');
+        }
+        //stop icon animation
+        commentReplayInUpdateProgress = false;
+        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-ellipsis-v"></i>');
+        icon.toggleClass('rotate');
+    }, 'json');
+    
 }
 
 //create replay body

@@ -206,6 +206,19 @@ if(isset($_POST['addCommentReplay'])){
     return;
 }
 
+//delete comment replay:
+if(isset($_POST['deleteCommentReplay'])){
+    session_start();
+    $replayId = $_POST['replayId'];
+    $headers = array('Authorization: '.$_SESSION['token']);
+    $url = 'http://localhost:3000/posts/replay?replayId=' . $replayId;
+    require('../../classes/utils.php');
+    $res = Utils::deleteRequest($url, $headers);
+
+    echo $res;
+    return;
+}
+
 ?>
 
 <!--html elements-->
