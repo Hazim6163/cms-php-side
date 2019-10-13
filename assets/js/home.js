@@ -522,6 +522,15 @@ function editPostComment(commentId, postId){
 
 //on confirm update comment click
 function onPostUpdateComment(commentId, postId, commentBody){
+    //hide update cancel btn
+    $('#updatePostCommentButton'+commentId).hide();
+    $('#cancelUpdatePostCommentButton'+commentId).hide();
+    //show spinner:
+    const spinner = $('<div>',{
+        id : 'addCommentReplaySpinner'+commentId,
+        class : 'rotate addCommentReplaySpinner'
+    }).html('<i class="fas fa-spinner"></i>');
+    $('#editCommentContainer'+commentId).append(spinner);
     //check if the comments are the same:
     if($('#commentBody'+commentId).html() == commentBody){
         onUpdateCommentFinish(commentId, postId);
