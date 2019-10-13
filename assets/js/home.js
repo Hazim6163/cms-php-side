@@ -10,7 +10,6 @@
 var userLoggedIn = false;
 var userInfo;
 
-
 //urls:
 const userImgBase = 'http://localhost:3000/user/profilePhoto?id=';
 const postImgBase = 'http://localhost:3000/file/uri?uri=';
@@ -28,16 +27,16 @@ fillPostsContainer();
 /*---------------------- support methods : ---------------------*/
 
 //fill posts container with post
-function fillPostsContainer(){
+function fillPostsContainer() {
     //get current user information:
-    $.post('./include/home/posts.php', {userInformation: true}, (res)=>{
+    $.post('./include/home/posts.php', { userInformation: true }, (res) => {
         userLoggedIn = res.loggedIn;
         userInfo = res.user;
 
         //get posts container:
         const postsContainer = $('#p_postsContainer');
         //get last posts array:
-        $.post('./include/home/posts.php', {lastPosts: true}, (lastPosts)=>{
+        $.post('./include/home/posts.php', { lastPosts: true }, (lastPosts) => {
             //loop throw each post and attach each post to posts container
             lastPosts.forEach(post => {
                 postsContainer.append(createPost(post));
@@ -47,9 +46,9 @@ function fillPostsContainer(){
 }
 
 //create post function take post data as parameter:
-function createPost(post){
+function createPost(post) {
     //create post container:
-    var postContainer = $('<div>',{
+    var postContainer = $('<div>', {
         id: 'post' + post._id,
         class: 'post'
     });
@@ -70,50 +69,50 @@ function createPost(post){
 }
 
 //create post header
-function getPostHeader(post){
+function getPostHeader(post) {
     //extract the author info
     const authorInfo = post.authorInfo;
 
     //create the header container:
-    const postHeader = $('<div>',{
-        id: 'postHeader'+post._id,
+    const postHeader = $('<div>', {
+        id: 'postHeader' + post._id,
         class: 'postHeader'
     });
 
     //create the author img container
     var $authorImgContainer = $("<div>", {
-        id: 'authorImgContainer'+post._id,
+        id: 'authorImgContainer' + post._id,
         "class": "authorImgContainer"
     });
 
     //check if the author has an img
-    if(authorInfo.photoUrl){
+    if (authorInfo.photoUrl) {
         var $authorImg = $("<img>", {
-        id: 'authorImg'+post._id,
-        "class": "authorImg"
+            id: 'authorImg' + post._id,
+            "class": "authorImg"
         });
-        $authorImg.attr('src', userImgBase + authorInfo.photoUrl );
+        $authorImg.attr('src', userImgBase + authorInfo.photoUrl);
         $authorImg.appendTo($authorImgContainer);
-    }else{
+    } else {
         $authorImgContainer.html('<div class="authorIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
     }
     $authorImgContainer.appendTo(postHeader);
 
     //header content:
     var $headerContent = $("<div>", {
-        id: 'headerContent'+post._id,
+        id: 'headerContent' + post._id,
         "class": "headerContent"
     });
     //author name:
     var $authorName = $("<div>", {
-        id: 'authorName'+post._id,
+        id: 'authorName' + post._id,
         "class": "authorName"
     });
-    $authorName.html(authorInfo.fname+' '+authorInfo.lname);
+    $authorName.html(authorInfo.fname + ' ' + authorInfo.lname);
     $authorName.appendTo($headerContent);
     //post date:
     var $postDate = $("<div>", {
-        id: 'postDate'+post._id,
+        id: 'postDate' + post._id,
         "class": "postDate"
     }).html(postDateFormate(post.updatedAt));
     $postDate.appendTo($headerContent);
@@ -127,39 +126,39 @@ function getPostHeader(post){
 //create post body
 function getPostBody(post) {
     //post body container
-    const postBody = $('<div>',{
-        id: 'postBody'+post._id,
+    const postBody = $('<div>', {
+        id: 'postBody' + post._id,
         class: 'postBody'
     });
 
     //check if the post has an img: 
-    if(post.imgUrl){
+    if (post.imgUrl) {
         var $postImgContainer = $("<div>", {
-            id : 'postImgContainer'+post._id,
+            id: 'postImgContainer' + post._id,
             "class": "postImgContainer"
         });
         var $postImg = $("<img>", {
-            id : 'postImg'+post._id,
+            id: 'postImg' + post._id,
             "class": "postImg"
         });
-        $postImg.attr('src', postImgBase+post.imgUrl);
+        $postImg.attr('src', postImgBase + post.imgUrl);
         $postImg.appendTo($postImgContainer);
         $postImgContainer.appendTo(postBody);
     }
     //post content
     var $postContent = $("<div>", {
-        id : 'postContent'+post._id,
+        id: 'postContent' + post._id,
         "class": "postContent"
     });
     //post title
     var $postTitle = $("<div>", {
-        id : 'postTitle'+post._id,
+        id: 'postTitle' + post._id,
         "class": "postTitle"
     }).html(post.title);
     $postTitle.appendTo($postContent);
     //post description
     var $postDes = $("<div>", {
-        id : 'postDes'+post._id,
+        id: 'postDes' + post._id,
         "class": "postDes"
     }).html(post.des);
     $postDes.appendTo($postContent);
@@ -170,16 +169,16 @@ function getPostBody(post) {
 }
 
 //create post footer
-function getPostFooter(post){
+function getPostFooter(post) {
     //create post footer container:
-    const postFooter = $('<div>',{
-        id: 'postFooter'+post._id,
+    const postFooter = $('<div>', {
+        id: 'postFooter' + post._id,
         class: 'postFooter'
     });
 
     //post like container
     var $postLikes = $("<div>", {
-        id : 'postLikes'+post._id,
+        id: 'postLikes' + post._id,
         "class": "postLikes"
     }).css('cursor', 'pointer');
     //append post likes to post footer:
@@ -187,42 +186,42 @@ function getPostFooter(post){
 
     //post Like Icon
     var $postLikeIcon = $("<div>", {
-        id : 'postLikeIcon'+post._id,
+        id: 'postLikeIcon' + post._id,
         "class": "postLikeIcon"
     });
     onPostLikeIconClick($postLikeIcon, post._id);
     $postLikeIcon.appendTo($postLikes);
     //check if the user logged in.
     var alreadyLiked = false;
-    if(userLoggedIn){
+    if (userLoggedIn) {
         //check if the user has already likes the post:
-        alreadyLiked = post.likers.find((liker)=>{
+        alreadyLiked = post.likers.find((liker) => {
             return liker.id == userInfo.id;
         });
     }
-    if(alreadyLiked){
+    if (alreadyLiked) {
         $postLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-    }else{
+    } else {
         $postLikeIcon.html('<i class="far fa-thumbs-up"></i>');
     }
 
     //likes count :
     var $postLikesCount = $("<div>", {
-        id: 'postLikesCount'+post._id,
+        id: 'postLikesCount' + post._id,
         "class": "postLikesCount"
     });
     onPostLikesCountClick($postLikesCount, post._id);
     $postLikesCount.appendTo($postLikes);
     //check if the post has likes:
-    if(post.likesCount > 0){
-        $postLikesCount.html(post.likesCount+' Likes');
-    }else{
+    if (post.likesCount > 0) {
+        $postLikesCount.html(post.likesCount + ' Likes');
+    } else {
         $postLikesCount.html(' Like');
     }
 
     //comments replay icon and count:
     var $commentsToggle = $("<div>", {
-        id: 'commentsToggle'+post._id,
+        id: 'commentsToggle' + post._id,
         "class": "commentsToggle"
     }).css('cursor', 'pointer');
     setOnPostFooterReplayClick($commentsToggle, post._id);
@@ -230,22 +229,22 @@ function getPostFooter(post){
 
     //comment icon
     var $postReplayIcon = $("<div>", {
-        id: 'postReplayIcon'+post._id,
+        id: 'postReplayIcon' + post._id,
         "class": "postReplayIcon"
     }).html('<i class="far fa-comments"></i>');
     $postReplayIcon.appendTo($commentsToggle);
 
     //comments count:
     var $postCommentsCount = $("<div>", {
-        id: 'postCommentsCount'+post._id,
+        id: 'postCommentsCount' + post._id,
         "class": "postCommentsCount"
     })
     $postCommentsCount.appendTo($commentsToggle);
 
     //check if post has comments;
-    if(post.commentsCount > 0){
-        $postCommentsCount.html(post.commentsCount+' Comments');
-    }else{
+    if (post.commentsCount > 0) {
+        $postCommentsCount.html(post.commentsCount + ' Comments');
+    } else {
         $postCommentsCount.html(' Comment');
     }
 
@@ -253,22 +252,22 @@ function getPostFooter(post){
 }
 
 //create post comments
-function getPostComments(postId, commentsCount, PostComments){
+function getPostComments(postId, commentsCount, PostComments) {
     //check if we need to update the section or create from scratch:
     var comments;
-    if(!$('#comments'+postId).html()){
-        comments = $('<div>',{
-            id: 'comments'+postId,
+    if (!$('#comments' + postId).html()) {
+        comments = $('<div>', {
+            id: 'comments' + postId,
             class: 'comments'
         }).html('Comments: ').hide();
-    }else{
-        comments = $('#comments'+postId);
+    } else {
+        comments = $('#comments' + postId);
         comments.html('');
         comments.show();
     }
-    
+
     //check if the post has comments:
-    if(!commentsCount > 0){
+    if (!commentsCount > 0) {
         comments.html('there\'s no comments be the first one who comment the post').addClass('postNoComments');
         // add post comment
         addComment = getAddPostComment(postId);
@@ -276,7 +275,7 @@ function getPostComments(postId, commentsCount, PostComments){
         return comments;
     }
 
-    PostComments.forEach((comment)=>{
+    PostComments.forEach((comment) => {
         comments.append(createComment(comment));
     });
 
@@ -288,16 +287,16 @@ function getPostComments(postId, commentsCount, PostComments){
 }
 
 //add post comment:
-function getAddPostComment(postId){
+function getAddPostComment(postId) {
     //create add post comment container
-    const addPostCommentContainer = $('<div>',{
-        id: 'addPostCommentContainer'+postId,
+    const addPostCommentContainer = $('<div>', {
+        id: 'addPostCommentContainer' + postId,
         class: 'addPostCommentContainer'
     });
     //create add post input field
-    const addPostCommentInput = $('<textarea>',{
-        id : 'addPostCommentInput'+postId,
-        class : 'addPostCommentInput'
+    const addPostCommentInput = $('<textarea>', {
+        id: 'addPostCommentInput' + postId,
+        class: 'addPostCommentInput'
     }).attr('rows', 1);
     //append input filed to add comment container
     addPostCommentContainer.append(addPostCommentInput);
@@ -305,8 +304,8 @@ function getAddPostComment(postId){
     autoTextAreaCommentInputHeight(addPostCommentInput, 24);
     //submit comment button
     const addPostCommentInputSubmit = $('<div>', {
-        id: 'addPostCommentInputSubmit'+postId,
-        class : 'addPostCommentInputSubmit'
+        id: 'addPostCommentInputSubmit' + postId,
+        class: 'addPostCommentInputSubmit'
     }).css('cursor', 'pointer').html('comment');
     setOnPostCommentSubmitListener(addPostCommentInputSubmit, postId);
     addPostCommentInputSubmit.addClass('addPostCommentInputSubmit');
@@ -317,11 +316,11 @@ function getAddPostComment(postId){
 }
 
 //create comment function:
-function createComment(comment){
+function createComment(comment) {
     // to show the multi line comments:
-    comment.body = comment.body.replace(/\n/g,'<br>');
-    const commentContainer = $('<div>',{
-        id: 'commentContainer'+comment._id,
+    comment.body = comment.body.replace(/\n/g, '<br>');
+    const commentContainer = $('<div>', {
+        id: 'commentContainer' + comment._id,
         class: 'commentContainer'
     });
 
@@ -342,58 +341,58 @@ function createComment(comment){
 }
 
 //get comment header function;
-function getCommentHeader(comment){
+function getCommentHeader(comment) {
     //extract the commenter info
     const commenter = comment.authorInfo;
 
-    const commentHeader = $('<div>',{
-        id: 'commentHeader'+comment._id,
+    const commentHeader = $('<div>', {
+        id: 'commentHeader' + comment._id,
         class: 'commentHeader'
     });
 
     const $commenterPhoto = $("<div>", {
-        id: 'commenterPhoto'+comment._id,
+        id: 'commenterPhoto' + comment._id,
         "class": "commenterPhoto"
     });
     $commenterPhoto.appendTo(commentHeader);
     //commenter img:
     var $imgCommenterPhoto = $("<img>", {
-        id: 'imgCommenterPhoto'+comment._id,
+        id: 'imgCommenterPhoto' + comment._id,
         "class": "imgCommenterPhoto"
     });
     $imgCommenterPhoto.appendTo($commenterPhoto);
     //check if the commenter has an img
-    if(commenter.photoUrl){
-        $imgCommenterPhoto.attr('src', userImgBase+commenter.photoUrl);
-    }else{
+    if (commenter.photoUrl) {
+        $imgCommenterPhoto.attr('src', userImgBase + commenter.photoUrl);
+    } else {
         $imgCommenterPhoto.html('<div class="userIcon"><i class="fas fa-user" style="color:aquamarine;"></i></div>');
     }
     var $commenterName = $("<div>", {
-        id: 'commenterName'+comment._id,
+        id: 'commenterName' + comment._id,
         "class": "commenterName"
-    }).html(commenter.fname+' '+ commenter.lname);
+    }).html(commenter.fname + ' ' + commenter.lname);
     $commenterName.appendTo(commentHeader);
     //check if the user logged in:
-    if(!userLoggedIn){
+    if (!userLoggedIn) {
         //return the user is not logged in
         return commentHeader;
     }
     //check if the current user is the comment author
-    if(!commenter.id == userInfo._id){
+    if (!commenter.id == userInfo._id) {
         // return the current user is not the comment author
         return commentHeader;
     }
 
     //create comment author edit icon:
-    const tools = $('<div>',{
-        id:'commentAuthorTools'+comment._id,
+    const tools = $('<div>', {
+        id: 'commentAuthorTools' + comment._id,
         class: 'commentAuthorTools'
     }).html('<i class="fas fa-ellipsis-v"></i>');
     tools.appendTo(commentHeader);
     //author edit icon on click menu:
-    tools.click(()=>{
+    tools.click(() => {
         // to stop inflate menu when the edit comment in progress
-        if(commentInEditProgress){
+        if (commentInEditProgress) {
             return;
         }
         createPostCommentAuthorEditIconMenu(tools, comment._id, comment.postId);
@@ -403,12 +402,12 @@ function getCommentHeader(comment){
 }
 
 //Comment author edit icon menu:
-function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
+function createPostCommentAuthorEditIconMenu(icon, commentId, postId) {
     //check if the modal already created to remove the modal
-    if($('#editCommentModal'+commentId).html()){
+    if ($('#editCommentModal' + commentId).html()) {
         //remove close class from the icon
         icon.html('<i class="fas fa-ellipsis-v"></i>');
-        $('#editCommentModal'+commentId).remove();
+        $('#editCommentModal' + commentId).remove();
         return;
     }
     //add close class to the icon
@@ -421,9 +420,9 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
     const modalX = iconX;
     const modalY = iconY + icon.height();
     //create the modal:
-    const editModal = $('<div>',{
-        id:'editCommentModal'+commentId,
-        class:'editCommentModal'
+    const editModal = $('<div>', {
+        id: 'editCommentModal' + commentId,
+        class: 'editCommentModal'
     });
     //style the modal
     editModal.css({
@@ -435,17 +434,17 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
         'width': '70px'
     }, 100)
     //edit comment:
-    const edit = $('<div>',{
-        id:'editCommentButton'+commentId,
+    const edit = $('<div>', {
+        id: 'editCommentButton' + commentId,
         class: 'editCommentButton'
-    }).html('Edit').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
-    edit.click(()=>{
+    }).html('Edit').css({ 'margin': 'auto', 'font-size': '13px', 'padding': '4px', 'cursor': 'pointer' });
+    edit.click(() => {
         commentInEditProgress = true;
         //close the menu
         createPostCommentAuthorEditIconMenu(icon, commentId, postId);
         //change the menu icon 
-        $('#commentAuthorTools'+commentId).html('<i class="fas fa-spinner"></i>');
-        $('#commentAuthorTools'+commentId).toggleClass('rotate');
+        $('#commentAuthorTools' + commentId).html('<i class="fas fa-spinner"></i>');
+        $('#commentAuthorTools' + commentId).toggleClass('rotate');
         //send to edit post comment function
         editPostComment(commentId, postId);
     });
@@ -454,107 +453,107 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
     const line = $('<div>').addClass('editCommentModalLineBreak');
     line.appendTo(editModal);
     //delete  comment:
-    const  deleteComment =  $('<div>',{
-        id: 'deleteCommentButton'+commentId,
+    const deleteComment = $('<div>', {
+        id: 'deleteCommentButton' + commentId,
         class: 'deleteCommentButton'
-    }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
-    deleteComment.click(()=>{
+    }).html('Delete').css({ 'margin': 'auto', 'font-size': '13px', 'padding': '4px', 'cursor': 'pointer' });
+    deleteComment.click(() => {
         commentInEditProgress = true;
         //to close the menu
         createPostCommentAuthorEditIconMenu(icon, commentId, postId);
         //change the icon to in progress
-        $('#commentAuthorTools'+commentId).html('<i class="fas fa-spinner"></i>');
+        $('#commentAuthorTools' + commentId).html('<i class="fas fa-spinner"></i>');
         icon.toggleClass('rotate');
         deletePostComment(commentId, postId);
     })
     deleteComment.appendTo(editModal);
-    
+
 
     //append to body 
     $('body').append(editModal);
 }
 
 //edit post comment request
-function editPostComment(commentId, postId){
+function editPostComment(commentId, postId) {
     //replace <br> with \n
-    var commentBody = $('#commentBody'+commentId).html().replace(/<br>/g, '\n');
+    var commentBody = $('#commentBody' + commentId).html().replace(/<br>/g, '\n');
     //check if multi line comment:
     var linesCount = 1;
-    if(commentBody.match(/\n/g)){
+    if (commentBody.match(/\n/g)) {
         linesCount = commentBody.match(/\n/g).length;
     }
     //hide the comment container form comments container
     //hide the add Post Comment Container
-    $('#addPostCommentContainer'+postId).hide();
+    $('#addPostCommentContainer' + postId).hide();
     //create edit comment container
-    const editCommentContainer = $('<div>',{
-        id: 'editCommentContainer'+commentId,
+    const editCommentContainer = $('<div>', {
+        id: 'editCommentContainer' + commentId,
         class: 'editCommentContainer'
     });
-    const editCommentInput = $('<textarea>',{
-        id:'editCommentInput'+commentId,
+    const editCommentInput = $('<textarea>', {
+        id: 'editCommentInput' + commentId,
         class: 'editCommentInput'
     }).attr('rows', linesCount).html(commentBody);
     editCommentInput.appendTo(editCommentContainer);
     //set one line comment height:
-    if(linesCount == 1){
+    if (linesCount == 1) {
         editCommentInput.css('height', '24px');
     }
     //on comment textarea lines changed:
     autoTextAreaCommentInputHeight(editCommentInput, 24);
     //submit update comment button
     const updatePostCommentButton = $('<div>', {
-        id: 'updatePostCommentButton'+commentId,
-        class : 'updatePostCommentButton'
+        id: 'updatePostCommentButton' + commentId,
+        class: 'updatePostCommentButton'
     }).css('cursor', 'pointer').html('Update');
     //set on confirm update comment click:
-    updatePostCommentButton.click(()=>{
-        const commentBody = $('#editCommentInput'+commentId).val();
+    updatePostCommentButton.click(() => {
+        const commentBody = $('#editCommentInput' + commentId).val();
         onPostUpdateComment(commentId, postId, commentBody);
     })
     updatePostCommentButton.appendTo(editCommentContainer);
     //cancel comment update progress:
-    const cancelUpdatePostCommentButton =  $('<div>', {
-        id: 'cancelUpdatePostCommentButton'+commentId,
-        class : 'cancelUpdatePostCommentButton'
+    const cancelUpdatePostCommentButton = $('<div>', {
+        id: 'cancelUpdatePostCommentButton' + commentId,
+        class: 'cancelUpdatePostCommentButton'
     }).css('cursor', 'pointer').html('Cancel');
     // set on cancel update comment click
-    cancelUpdatePostCommentButton.click(()=>{
+    cancelUpdatePostCommentButton.click(() => {
         onUpdateCommentFinish(commentId, postId);
     })
     cancelUpdatePostCommentButton.appendTo(editCommentContainer);
 
 
     //append update comment container to the post comments container.
-    $('#comments'+postId).append(editCommentContainer);
+    $('#comments' + postId).append(editCommentContainer);
 }
 
 //on confirm update comment click
-function onPostUpdateComment(commentId, postId, commentBody){
+function onPostUpdateComment(commentId, postId, commentBody) {
     //hide update cancel btn
-    $('#updatePostCommentButton'+commentId).hide();
-    $('#cancelUpdatePostCommentButton'+commentId).hide();
+    $('#updatePostCommentButton' + commentId).hide();
+    $('#cancelUpdatePostCommentButton' + commentId).hide();
     //show spinner:
-    const spinner = $('<div>',{
-        id : 'addCommentReplaySpinner'+commentId,
-        class : 'rotate addCommentReplaySpinner'
+    const spinner = $('<div>', {
+        id: 'addCommentReplaySpinner' + commentId,
+        class: 'rotate addCommentReplaySpinner'
     }).html('<i class="fas fa-spinner"></i>');
-    $('#editCommentContainer'+commentId).append(spinner);
+    $('#editCommentContainer' + commentId).append(spinner);
     //check if the comments are the same:
-    if($('#commentBody'+commentId).html() == commentBody){
+    if ($('#commentBody' + commentId).html() == commentBody) {
         onUpdateCommentFinish(commentId, postId);
         return;
     }
     //send update comment request:
-    $.post('./include/home/posts.php', {updatePostComment: true, commentId: commentId, commentBody: commentBody}, (res)=>{
+    $.post('./include/home/posts.php', { updatePostComment: true, commentId: commentId, commentBody: commentBody }, (res) => {
         //update the comments container:
         getPostComments(postId, res.commentsCount, res.postComments);
         //update the comments count in the post footer
         //check if there is comments :
-        if(res.commentsCount > 0){
-            $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
-        }else{
-            $('#postCommentsCount'+postId).html(' Comment');
+        if (res.commentsCount > 0) {
+            $('#postCommentsCount' + postId).html(res.commentsCount + ' Comments');
+        } else {
+            $('#postCommentsCount' + postId).html(' Comment');
         }
         //finish the update comment request:
         onUpdateCommentFinish(commentId, postId);
@@ -562,146 +561,146 @@ function onPostUpdateComment(commentId, postId, commentBody){
 }
 
 //on cancel update comment:
-function onUpdateCommentFinish(commentId, postId){
+function onUpdateCommentFinish(commentId, postId) {
     commentInEditProgress = false;
     //show the comment container in comments container
-    $('#commentContainer'+commentId).show();
+    $('#commentContainer' + commentId).show();
     //show add Post Comment Container
-    $('#addPostCommentContainer'+postId).show();
+    $('#addPostCommentContainer' + postId).show();
     //remove the update comment container:
-    $('#editCommentContainer'+commentId).remove();
+    $('#editCommentContainer' + commentId).remove();
     //remove rotate class from the menu icon and set the default icon
-    $('#commentAuthorTools'+commentId).html('<i class="fas fa-ellipsis-v"></i>');
-    $('#commentAuthorTools'+commentId).removeClass('rotate');
+    $('#commentAuthorTools' + commentId).html('<i class="fas fa-ellipsis-v"></i>');
+    $('#commentAuthorTools' + commentId).removeClass('rotate');
 }
 
 //delete post comment request
-function deletePostComment(commentId, postId){
-    $.post('./include/home/posts.php', {deletePostComment: true, postId: postId, commentId: commentId}, (res)=>{
+function deletePostComment(commentId, postId) {
+    $.post('./include/home/posts.php', { deletePostComment: true, postId: postId, commentId: commentId }, (res) => {
         //update the comments container
         getPostComments(postId, res.commentsCount, res.comments);
         //update the comments count in the post footer
         //check if there is comments :
-        if(res.commentsCount > 0){
-            $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
-        }else{
-            $('#postCommentsCount'+postId).html(' Comment');
+        if (res.commentsCount > 0) {
+            $('#postCommentsCount' + postId).html(res.commentsCount + ' Comments');
+        } else {
+            $('#postCommentsCount' + postId).html(' Comment');
         }
         commentInEditProgress = false;
     }, 'json');
 }
 
 //get comment body function;
-function getCommentBody(comment){
-    const commentBody = $('<div>',{
-        id: 'commentBody'+comment._id,
+function getCommentBody(comment) {
+    const commentBody = $('<div>', {
+        id: 'commentBody' + comment._id,
         class: 'commentBody'
     }).html(comment.body);
 
     return commentBody;
 }
 //get comment footer function;
-function getCommentFooter(comment){
-    const commentFooter = $('<div>',{
-        id: 'commentFooter'+comment._id,
+function getCommentFooter(comment) {
+    const commentFooter = $('<div>', {
+        id: 'commentFooter' + comment._id,
         class: 'commentFooter'
     });
 
     //comment date will show the updated at date:
     const $commentDate = $("<div>", {
-        id: 'commentDate'+comment._id,
+        id: 'commentDate' + comment._id,
         "class": "commentDate"
     }).html(commentDateFormate(comment.updatedAt));
     $commentDate.appendTo(commentFooter);
 
     // comment like icon count container
     const $commentLikes = $("<div>", {
-        id: 'commentLikes'+comment._id,
+        id: 'commentLikes' + comment._id,
         "class": "commentLikes"
     }).css('cursor', 'pointer');
     $commentLikes.appendTo(commentFooter);
 
     //comment like icon
     const $commentLikeIcon = $("<div>", {
-        id: 'commentLikeIcon'+comment._id,
+        id: 'commentLikeIcon' + comment._id,
         "class": "commentLikeIcon"
     });
     //append comment like icon to the comment likes container
     $commentLikeIcon.appendTo($commentLikes);
     //check if the user logged in:
     var alreadyLiked = false;
-    if(userLoggedIn){
+    if (userLoggedIn) {
         //check if the use has already likes the comment:
-        alreadyLiked = comment.likers.find((liker)=>{
+        alreadyLiked = comment.likers.find((liker) => {
             return liker.id == userInfo.id;
         });
     }
     setOnCommentLikeIconClick($commentLikeIcon, comment.postId, comment._id);
-    if(alreadyLiked){
+    if (alreadyLiked) {
         $commentLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-    }else{
+    } else {
         $commentLikeIcon.html('<i class="far fa-thumbs-up"></i>');
     }
     //likes count
     const $commentLikesCount = $("<div>", {
-        id: 'commentLikesCount'+comment._id,
+        id: 'commentLikesCount' + comment._id,
         "class": "commentLikesCount"
     });
     setOnCommentLikesCountClick($commentLikesCount, comment._id);
     //append the likes count to the comment likes container
     $commentLikesCount.appendTo($commentLikes);
     //check if the comment has likes:
-    if(comment.likesCount > 0){
-        $commentLikesCount.html(comment.likesCount+' Likes');
-    }else{
+    if (comment.likesCount > 0) {
+        $commentLikesCount.html(comment.likesCount + ' Likes');
+    } else {
         $commentLikesCount.html(' Like');
     }
 
     //comment replays:
     const $replays = $("<div>", {
-        id: 'replays'+comment._id,
+        id: 'replays' + comment._id,
         "class": "replays"
     }).css('cursor', 'pointer');
     setOnCommentFooterReplayClick($replays, comment._id);
     $replays.appendTo(commentFooter);
     //comment replay Icon
     const $commentReplayIcon = $("<div>", {
-        id: 'commentReplayIcon'+comment._id,
+        id: 'commentReplayIcon' + comment._id,
         "class": "commentReplayIcon"
     }).html('<i class="far fa-comments"></i>');
     $commentReplayIcon.appendTo($replays);
     //comment replays Count:
-    const  $commentReplaysCount = $("<div>", {
-        id: 'commentReplaysCount'+comment._id,
+    const $commentReplaysCount = $("<div>", {
+        id: 'commentReplaysCount' + comment._id,
         "class": "commentReplaysCount"
     });
     $commentReplaysCount.appendTo($replays);
     //check if comment has replays;
-    if(comment.replaysCount > 0){
-        $commentReplaysCount.html(comment.replaysCount+' Replays');
-    }else{
+    if (comment.replaysCount > 0) {
+        $commentReplaysCount.html(comment.replaysCount + ' Replays');
+    } else {
         $commentReplaysCount.html(' Replay');
     }
 
     return commentFooter;
 }
 //get comment replays function;
-function getCommentReplays(comment){
+function getCommentReplays(comment) {
     //check if we need to update the section or create from scratch:
     var commentReplays;
-    if(!$('#replaysContainer'+comment._id).html()){
-        commentReplays = $('<div>',{
-            id: 'replaysContainer'+comment._id,
+    if (!$('#replaysContainer' + comment._id).html()) {
+        commentReplays = $('<div>', {
+            id: 'replaysContainer' + comment._id,
             class: 'replaysContainer'
         }).hide();
-    }else{
-        commentReplays = $('#replaysContainer'+comment._id);
+    } else {
+        commentReplays = $('#replaysContainer' + comment._id);
         commentReplays.html('');
         commentReplays.show();
     }
 
     //check if the comment has replays:
-    if(!comment.replaysCount > 0){
+    if (!comment.replaysCount > 0) {
         commentReplays.html('this comment has no replays be the first one who replay the comment').addClass('postNoComments');
         //add replay
         addReplay = getAddCommentReplay(comment._id, comment.postId);
@@ -709,37 +708,37 @@ function getCommentReplays(comment){
         return commentReplays;
     }
     //then the comment has replays:
-    comment.replays.forEach((replay)=>{
+    comment.replays.forEach((replay) => {
         commentReplays.append(createReplay(replay));
     });
 
     //add replay
     addReplay = getAddCommentReplay(comment._id, comment.postId);
     addReplay.appendTo(commentReplays);
-    
+
 
     return commentReplays;
 }
 
 //add comment replay
-function getAddCommentReplay(commentId, postId){
+function getAddCommentReplay(commentId, postId) {
     //create add replay container
-    const addCommentReplayContainer = $('<div>',{
-        id:'addCommentReplayContainer'+commentId,
+    const addCommentReplayContainer = $('<div>', {
+        id: 'addCommentReplayContainer' + commentId,
         class: 'addCommentReplayContainer'
     });
     //create add comment input field:
-    const addCommentReplayInput = $('<textarea>',{
-        id : 'addCommentReplayInput'+commentId,
-        class : 'addCommentReplayInput'
+    const addCommentReplayInput = $('<textarea>', {
+        id: 'addCommentReplayInput' + commentId,
+        class: 'addCommentReplayInput'
     }).attr('rows', 1);
     addCommentReplayInput.appendTo(addCommentReplayContainer);
     //on replay textarea lines changed:
     autoTextAreaCommentInputHeight(addCommentReplayInput, 24);
     //submit replay button
     const addCommentReplaySubmit = $('<div>', {
-        id: 'addCommentReplaySubmit'+commentId,
-        class : 'addCommentReplaySubmit'
+        id: 'addCommentReplaySubmit' + commentId,
+        class: 'addCommentReplaySubmit'
     }).css('cursor', 'pointer').html('Replay');
     setOnReplaySubmitClickListener(addCommentReplaySubmit, commentId, postId);
     //append submit button to add replay container
@@ -749,61 +748,61 @@ function getAddCommentReplay(commentId, postId){
 }
 
 //on comment replay submit
-function setOnReplaySubmitClickListener(button, commentId, postId){
-    button.click(()=>{
+function setOnReplaySubmitClickListener(button, commentId, postId) {
+    button.click(() => {
         //check if another add replay in progress:
-        if(addCommentReplayInProgress){
+        if (addCommentReplayInProgress) {
             return;
         }
         //check if the user logged in:
-        if(!userLoggedIn){
+        if (!userLoggedIn) {
             alert('please login before leave a Replay');
             //TODO add login modal
             return;
         }
         //extract the replay body
-        const replayBody = $('#addCommentReplayInput'+commentId).val();
-        if(replayBody == '' || replayBody == null){
+        const replayBody = $('#addCommentReplayInput' + commentId).val();
+        if (replayBody == '' || replayBody == null) {
             alert('replay cannot be empty');
             //TODO add alert modal
             return;
         }
         //toggle in progress classes:
         addCommentReplayInProgress = true;
-        $('#addCommentReplaySubmit'+ commentId).hide();
+        $('#addCommentReplaySubmit' + commentId).hide();
         // add spinner :
-        const spinner = $('<div>',{
-            id : 'addCommentReplaySpinner'+commentId,
-            class : 'rotate addCommentReplaySpinner'
+        const spinner = $('<div>', {
+            id: 'addCommentReplaySpinner' + commentId,
+            class: 'rotate addCommentReplaySpinner'
         }).html('<i class="fas fa-spinner"></i>');
-        $('#addCommentReplayContainer'+commentId).append(spinner);
+        $('#addCommentReplayContainer' + commentId).append(spinner);
 
         //send add comment replay request to php
-        $.post('./include/home/posts.php', {addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId}, (res)=>{
+        $.post('./include/home/posts.php', { addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId }, (res) => {
             //update comment replay container
             getCommentReplays(res.comment);
             //update the comment replay count:
-            if(res.comment.replaysCount > 0){
-                $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
-            }else{
-                $('#commentReplaysCount'+res.comment._id).html(' Replay');
+            if (res.comment.replaysCount > 0) {
+                $('#commentReplaysCount' + res.comment._id).html(res.comment.replaysCount + ' Replays');
+            } else {
+                $('#commentReplaysCount' + res.comment._id).html(' Replay');
             }
             //remove progress
             addCommentReplayInProgress = false;
-            $('#addCommentReplaySpinner'+commentId).remove();
-            $('#addCommentReplaySubmit'+ commentId).show();
+            $('#addCommentReplaySpinner' + commentId).remove();
+            $('#addCommentReplaySubmit' + commentId).show();
         }, 'json');
     })
 }
 
 //create replay function
-function createReplay(replay){
+function createReplay(replay) {
     //show multi line replay:
-    replay.body = replay.body.replace(/\n/g,'<br>');
+    replay.body = replay.body.replace(/\n/g, '<br>');
     //create replay Container
     const replayContainer = $('<div>', {
-        id: 'replayContainer'+replay._id,
-        class:'replayContainer'
+        id: 'replayContainer' + replay._id,
+        class: 'replayContainer'
     });
 
     //replay header
@@ -821,9 +820,9 @@ function createReplay(replay){
 }
 
 //create replay header
-function getReplayHeader(replay){
-    const replayHeader = $('<div>',{
-        id: 'replayHeader'+replay._id,
+function getReplayHeader(replay) {
+    const replayHeader = $('<div>', {
+        id: 'replayHeader' + replay._id,
         class: 'replayHeader'
     });
 
@@ -832,41 +831,41 @@ function getReplayHeader(replay){
 
     //replay author img
     const $replayerPhoto = $("<div>", {
-        id: 'replayerPhoto'+replay._id,
+        id: 'replayerPhoto' + replay._id,
         "class": "replayerPhoto"
     });
     $replayerPhoto.appendTo(replayHeader);
     const $imgReplayerPhoto = $("<img>", {
-        id: 'imgReplayerPhoto'+replay._id,
+        id: 'imgReplayerPhoto' + replay._id,
         "class": "imgReplayerPhoto"
-    }).attr('src',userImgBase+replayer.photoUrl);
+    }).attr('src', userImgBase + replayer.photoUrl);
     $imgReplayerPhoto.appendTo($replayerPhoto);
 
     //replay author name
     const $replayerName = $("<div>", {
-        id: 'replayerName'+replay._id,
+        id: 'replayerName' + replay._id,
         "class": "replayerName"
-    }).html(replayer.fname+ ' ' +replayer.lname);
+    }).html(replayer.fname + ' ' + replayer.lname);
     $replayerName.appendTo(replayHeader);
 
     //check if the user logged in
-    if(!userLoggedIn){
+    if (!userLoggedIn) {
         return replayHeader;
     }
     //check if the current user is the author:
-    if(userInfo.id != replayer.id && userInfo.admin != 1){
+    if (userInfo.id != replayer.id && userInfo.admin != 1) {
         return replayHeader;
     }
     // create replay author menu:
-    const commentReplayMenuIcon = $('<div>',{
-        id:'commentReplayMenuIcon'+replay._id,
+    const commentReplayMenuIcon = $('<div>', {
+        id: 'commentReplayMenuIcon' + replay._id,
         class: 'commentReplayMenuIcon'
     }).html('<i class="fas fa-ellipsis-v"></i>');
     commentReplayMenuIcon.appendTo(replayHeader);
     //author edit icon on click menu:
-    commentReplayMenuIcon.click(()=>{
+    commentReplayMenuIcon.click(() => {
         // to stop inflate menu when the edit comment in progress
-        if(commentReplayInUpdateProgress){
+        if (commentReplayInUpdateProgress) {
             return;
         }
         createCommentReplayAuthorMenu(commentReplayMenuIcon, replay._id, replay.commentId);
@@ -876,12 +875,12 @@ function getReplayHeader(replay){
 }
 
 //to create replay author menu
-function createCommentReplayAuthorMenu(icon, id, commentId){
+function createCommentReplayAuthorMenu(icon, id, commentId) {
     //check if the menu already create to close the menu:
-    if($('#replayAuthorMenu'+id).html()){
+    if ($('#replayAuthorMenu' + id).html()) {
         //remove close class from the icon
         icon.html('<i class="fas fa-ellipsis-v"></i>');
-        $('#replayAuthorMenu'+id).remove();
+        $('#replayAuthorMenu' + id).remove();
         return;
     }
 
@@ -889,11 +888,11 @@ function createCommentReplayAuthorMenu(icon, id, commentId){
     icon.html('<i class="fas fa-times"></i>');
 
     //create the modal:
-    const replayAuthorMenu = $('<div>',{
-        id:'replayAuthorMenu'+id,
-        class:'replayAuthorMenu'
+    const replayAuthorMenu = $('<div>', {
+        id: 'replayAuthorMenu' + id,
+        class: 'replayAuthorMenu'
     });
-    
+
     //get positions:
     const iconX = icon.offset().left;
     const iconY = icon.offset().top;
@@ -911,17 +910,17 @@ function createCommentReplayAuthorMenu(icon, id, commentId){
     }, 100)
 
     //edit replay:
-    const editReplay = $('<div>',{
-        id:'editReplayBtn'+id,
+    const editReplay = $('<div>', {
+        id: 'editReplayBtn' + id,
         class: 'editReplayBtn'
-    }).html('Edit').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
-    editReplay.click(()=>{
+    }).html('Edit').css({ 'margin': 'auto', 'font-size': '13px', 'padding': '4px', 'cursor': 'pointer' });
+    editReplay.click(() => {
         commentReplayInUpdateProgress = true;
         //close the menu
         createCommentReplayAuthorMenu(icon, id, commentId);
         //change the icon to in progress
-        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-spinner"></i>');
-        $('#commentReplayMenuIcon'+id).toggleClass('rotate');
+        $('#commentReplayMenuIcon' + id).html('<i class="fas fa-spinner"></i>');
+        $('#commentReplayMenuIcon' + id).toggleClass('rotate');
         //send to edit replay function
         onEditReplay(id, commentId);
     });
@@ -930,16 +929,16 @@ function createCommentReplayAuthorMenu(icon, id, commentId){
     const line = $('<div>').addClass('editCommentModalLineBreak');
     line.appendTo(replayAuthorMenu);
     //delete  replay:
-    const  deleteReplyMenuItem =  $('<div>',{
-        id: 'deleteReplyMenuItem'+id,
+    const deleteReplyMenuItem = $('<div>', {
+        id: 'deleteReplyMenuItem' + id,
         class: 'deleteReplyMenuItem'
-    }).html('Delete').css({'margin':'auto', 'font-size':'13px', 'padding':'4px', 'cursor':'pointer'});
-    deleteReplyMenuItem.click(()=>{
+    }).html('Delete').css({ 'margin': 'auto', 'font-size': '13px', 'padding': '4px', 'cursor': 'pointer' });
+    deleteReplyMenuItem.click(() => {
         commentReplayInUpdateProgress = true;
         //to close the menu
         createCommentReplayAuthorMenu(icon, id, commentId);
         //change the icon to in progress
-        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-spinner"></i>');
+        $('#commentReplayMenuIcon' + id).html('<i class="fas fa-spinner"></i>');
         icon.toggleClass('rotate');
         onDeleteCommentReplay(id);
     })
@@ -950,27 +949,27 @@ function createCommentReplayAuthorMenu(icon, id, commentId){
 }
 
 //edit comment replay:
-function onEditReplay(replayId, commentId){
+function onEditReplay(replayId, commentId) {
     // get original replay body: //replace <br> \n
-    const replayBody = $('#replayBody'+ replayId).html().replace(/<br>/g,'\n');
+    const replayBody = $('#replayBody' + replayId).html().replace(/<br>/g, '\n');
     // get lines count:
     var linesCount = 1;
-    if(replayBody.match(/\n/g)){
+    if (replayBody.match(/\n/g)) {
         linesCount = replayBody.match(/\n/g).length;
     }
     //hide add replay container:
-    $('#addCommentReplayContainer'+commentId).hide();
+    $('#addCommentReplayContainer' + commentId).hide();
     //create edit replay container:
-    const editReplayContainer = $('<div>',{
-        id: 'editReplayContainer'+replayId,
+    const editReplayContainer = $('<div>', {
+        id: 'editReplayContainer' + replayId,
         class: 'editReplayContainer'
     });
-    const editReplayInput = $('<textarea>',{
-        id:'editReplayInput'+replayId,
+    const editReplayInput = $('<textarea>', {
+        id: 'editReplayInput' + replayId,
         class: 'editReplayInput'
     }).attr('rows', linesCount).html(replayBody);
     //set one line input height
-    if(linesCount == 1){
+    if (linesCount == 1) {
         editReplayInput.css('height', '24px');
     }
     editReplayInput.appendTo(editReplayContainer);
@@ -978,96 +977,96 @@ function onEditReplay(replayId, commentId){
     autoTextAreaCommentInputHeight(editReplayInput, 24);
     //submit update replay button
     const editReplaySubmitBtn = $('<div>', {
-        id: 'editReplaySubmitBtn'+replayId,
-        class : 'editReplaySubmitBtn'
+        id: 'editReplaySubmitBtn' + replayId,
+        class: 'editReplaySubmitBtn'
     }).css('cursor', 'pointer').html('Update');
     //set on confirm update replay click:
-    editReplaySubmitBtn.click(()=>{
-        const replayBody = $('#editReplayInput'+replayId).val();
+    editReplaySubmitBtn.click(() => {
+        const replayBody = $('#editReplayInput' + replayId).val();
         onEditCommentReplay(replayId, replayBody);
     });
     editReplaySubmitBtn.appendTo(editReplayContainer);
     //cancel comment update progress:
-    const cancelEditReplayBtn =  $('<div>', {
-        id: 'cancelEditReplayBtn'+replayId,
-        class : 'cancelEditReplayBtn'
+    const cancelEditReplayBtn = $('<div>', {
+        id: 'cancelEditReplayBtn' + replayId,
+        class: 'cancelEditReplayBtn'
     }).css('cursor', 'pointer').html('Cancel');
     // set on cancel update replay click
-    cancelEditReplayBtn.click(()=>{
+    cancelEditReplayBtn.click(() => {
         onEditReplayFinish(replayId, commentId);
     })
     cancelEditReplayBtn.appendTo(editReplayContainer);
 
 
     //append edit replay container to the replays container.
-    $('#replaysContainer'+commentId).append(editReplayContainer);
+    $('#replaysContainer' + commentId).append(editReplayContainer);
 }
 
 //on comment replay finish update
-function onEditReplayFinish(replayId, commentId){
+function onEditReplayFinish(replayId, commentId) {
     //remove from progress and remove classes
     commentReplayInUpdateProgress = false;
     //replay author menu
-    $('#commentReplayMenuIcon'+replayId).html('<i class="fas fa-ellipsis-v"></i>')
-    $('#commentReplayMenuIcon'+replayId).toggleClass('rotate');
+    $('#commentReplayMenuIcon' + replayId).html('<i class="fas fa-ellipsis-v"></i>')
+    $('#commentReplayMenuIcon' + replayId).toggleClass('rotate');
     //comment replays container:
-    $('#editReplayContainer'+replayId).remove();
-    $('#addCommentReplayContainer'+commentId).show();
+    $('#editReplayContainer' + replayId).remove();
+    $('#addCommentReplayContainer' + commentId).show();
 }
 
 //on edit comment replay function:
-function onEditCommentReplay(id, body){
+function onEditCommentReplay(id, body) {
     //hide update cancel btn:
-    $('#editReplaySubmitBtn'+id).hide();
-    $('#cancelEditReplayBtn'+id).hide();
+    $('#editReplaySubmitBtn' + id).hide();
+    $('#cancelEditReplayBtn' + id).hide();
     //show the spinner behind the edit input
-    const spinner = $('<div>',{
-        id : 'addCommentReplaySpinner'+id,
-        class : 'rotate addCommentReplaySpinner'
+    const spinner = $('<div>', {
+        id: 'addCommentReplaySpinner' + id,
+        class: 'rotate addCommentReplaySpinner'
     }).html('<i class="fas fa-spinner"></i>');
-    $('#editReplayContainer'+id).append(spinner);
+    $('#editReplayContainer' + id).append(spinner);
 
-    $.post('./include/home/posts.php', {updateCommentReplay: true, replayId: id, body: body}, (res)=>{
+    $.post('./include/home/posts.php', { updateCommentReplay: true, replayId: id, body: body }, (res) => {
         //update replays container
         getCommentReplays(res.comment);
         //update the replays count in the comment footer:
-        if(res.comment.replaysCount > 0){
-            $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
-        }else{
-            $('#commentReplaysCount'+res.comment._id).html(' Replay');
+        if (res.comment.replaysCount > 0) {
+            $('#commentReplaysCount' + res.comment._id).html(res.comment.replaysCount + ' Replays');
+        } else {
+            $('#commentReplaysCount' + res.comment._id).html(' Replay');
         }
         //remove from progress and remove classes
         commentReplayInUpdateProgress = false;
         //remove the edit container:
-        $('#editReplayContainer'+id).remove();
+        $('#editReplayContainer' + id).remove();
         //remove the spinner
-        $('#addCommentReplaySpinner'+id).remove();
+        $('#addCommentReplaySpinner' + id).remove();
     }, 'json');
 }
 
 //delete comment replay:
-function onDeleteCommentReplay(id){
+function onDeleteCommentReplay(id) {
     //send request to php
-    $.post('./include/home/posts.php', {deleteCommentReplay: true, replayId: id}, (res)=>{
+    $.post('./include/home/posts.php', { deleteCommentReplay: true, replayId: id }, (res) => {
         //update the replays section
         getCommentReplays(res.comment);
         //update the replays count in the comment footer:
-        if(res.comment.replaysCount > 0){
-            $('#commentReplaysCount'+res.comment._id).html(res.comment.replaysCount + ' Replays');
-        }else{
-            $('#commentReplaysCount'+res.comment._id).html(' Replay');
+        if (res.comment.replaysCount > 0) {
+            $('#commentReplaysCount' + res.comment._id).html(res.comment.replaysCount + ' Replays');
+        } else {
+            $('#commentReplaysCount' + res.comment._id).html(' Replay');
         }
         //stop icon animation
         commentReplayInUpdateProgress = false;
-        $('#commentReplayMenuIcon'+id).html('<i class="fas fa-ellipsis-v"></i>');
+        $('#commentReplayMenuIcon' + id).html('<i class="fas fa-ellipsis-v"></i>');
     }, 'json');
-    
+
 }
 
 //create replay body
-function getReplayBody(replay){
-    const replayBody = $('<div>',{
-        id: 'replayBody'+replay._id,
+function getReplayBody(replay) {
+    const replayBody = $('<div>', {
+        id: 'replayBody' + replay._id,
         class: 'replayBody'
     }).html(replay.body);
 
@@ -1075,30 +1074,30 @@ function getReplayBody(replay){
 }
 
 //create replay footer
-function getReplayFooter(replay){
-    const replayLikeIconId = 'replayLikeIcon'+replay._id;
-    const replayLikesCount = 'replayLikesCount'+ replay._id;
+function getReplayFooter(replay) {
+    const replayLikeIconId = 'replayLikeIcon' + replay._id;
+    const replayLikesCount = 'replayLikesCount' + replay._id;
 
-    const replayFooter = $('<div>',{
-        id: 'replayFooter'+replay._id,
+    const replayFooter = $('<div>', {
+        id: 'replayFooter' + replay._id,
         class: 'replayFooter'
     });
     //replay date
     const $replayDate = $("<div>", {
-        id: 'replayDate'+replay._id,
+        id: 'replayDate' + replay._id,
         "class": "replayDate"
     }).html(commentDateFormate(replay.updatedAt));
     replayFooter.append($replayDate);
     var $replayLikes = $("<div>", {
-        id: 'replayLikes'+replay._id,
+        id: 'replayLikes' + replay._id,
         "class": "replayLikes"
     }).css('cursor', 'pointer');
     replayFooter.append($replayLikes);
     //check if the use logged in:
     var alreadyLiked = false;
-    if(userLoggedIn){
+    if (userLoggedIn) {
         //check if the user already liked the replay:
-        alreadyLiked = replay.likers.find((liker)=>{
+        alreadyLiked = replay.likers.find((liker) => {
             return liker.id == userInfo.id;
         });
     }
@@ -1108,9 +1107,9 @@ function getReplayFooter(replay){
     });
     setOnReplayLikeIconClick($replayLikeIcon, replay._id, replay.commentId, replay.postId);
     $replayLikes.append($replayLikeIcon);
-    if(alreadyLiked){
+    if (alreadyLiked) {
         $replayLikeIcon.html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-    }else{
+    } else {
         $replayLikeIcon.html('<i class="far fa-thumbs-up"></i>');
     }
 
@@ -1122,50 +1121,50 @@ function getReplayFooter(replay){
     setOnReplayLikesCountClick($replayLikesCount, replay._id);
     $replayLikes.append($replayLikesCount);
     //check if the comment has likes:
-    if(replay.likesCount > 0){
-        $replayLikesCount.html(replay.likesCount+' Likes');
-    }else{
+    if (replay.likesCount > 0) {
+        $replayLikesCount.html(replay.likesCount + ' Likes');
+    } else {
         $replayLikesCount.html(' Like');
     }
-    
+
 
     return replayFooter;
 }
 
 /** --------------------------- posts reactions: ---------------------------------------*/
 // on post replay Icon click
-function setOnPostFooterReplayClick(icon, postId){
-    icon.click(()=>{
-        $('#comments'+postId).toggle('slow');
+function setOnPostFooterReplayClick(icon, postId) {
+    icon.click(() => {
+        $('#comments' + postId).toggle('slow');
     });
 }
 // on post like icon click
-function onPostLikeIconClick(icon, postId){
-    icon.click(()=>{
+function onPostLikeIconClick(icon, postId) {
+    icon.click(() => {
         //check if the user logged in
-        if(!userLoggedIn){
+        if (!userLoggedIn) {
             alert('please Login before try to like the post');
             //TODO CREATE A LOGIN MODEL
             return;
         }
         //animate the like icon:
-        $('#postLikeIcon'+postId).toggleClass('rotate');
-        $.post('./include/home/posts.php',{postLike: true, postId: postId}, (response)=>{
+        $('#postLikeIcon' + postId).toggleClass('rotate');
+        $.post('./include/home/posts.php', { postLike: true, postId: postId }, (response) => {
             var likesCount = response.likesCount;
             var action = response.action;
             var likersRes = response.likers;
             //check if like or dislike
-            if(action > 0){
-                $('#postLikeIcon'+postId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-            }else{
-                $('#postLikeIcon'+postId).html('<i class="far fa-thumbs-up"></i>');
+            if (action > 0) {
+                $('#postLikeIcon' + postId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            } else {
+                $('#postLikeIcon' + postId).html('<i class="far fa-thumbs-up"></i>');
             }
-            if(likesCount > 0){
-                $('#postLikesCount'+postId).html(likesCount+' Likes');
-            }else{
-                $('#postLikesCount'+postId).html('Like');
+            if (likesCount > 0) {
+                $('#postLikesCount' + postId).html(likesCount + ' Likes');
+            } else {
+                $('#postLikesCount' + postId).html('Like');
             }
-            $('#postLikeIcon'+postId).toggleClass('rotate');
+            $('#postLikeIcon' + postId).toggleClass('rotate');
 
             likers = likersRes;
 
@@ -1173,138 +1172,138 @@ function onPostLikeIconClick(icon, postId){
     });
 }
 //on post likes count click 
-function onPostLikesCountClick(component, postId){
-    component.click(()=>{
+function onPostLikesCountClick(component, postId) {
+    component.click(() => {
         //send to php server ger likers and like count request 
-        $.post('./include/home/posts.php', {postLikers: true, postId: postId}, (res)=>{
+        $.post('./include/home/posts.php', { postLikers: true, postId: postId }, (res) => {
             //likers name list to show it in the alert for this time
-            likersNameList='';
-            res.likers.forEach((liker)=>{
-                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            likersNameList = '';
+            res.likers.forEach((liker) => {
+                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
             })
             //alert to show the name list:
             alert(likersNameList);
             //update the likes count
-            if(res.likesCount > 0){
-                $('#postLikesCount'+postId).html(res.likesCount+' Likes');
-            }else{
-                $('#postLikersCount'+postId).html(' Like');
+            if (res.likesCount > 0) {
+                $('#postLikesCount' + postId).html(res.likesCount + ' Likes');
+            } else {
+                $('#postLikersCount' + postId).html(' Like');
             }
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
 }
 //on comment textarea lines changed:
-function autoTextAreaCommentInputHeight(textarea, defaultHeight){
+function autoTextAreaCommentInputHeight(textarea, defaultHeight) {
     //create on new line event 
-    textarea.keyup(()=>{
+    textarea.keyup(() => {
         textarea.height(defaultHeight);
-        textarea.height(textarea.prop('scrollHeight')-8);
+        textarea.height(textarea.prop('scrollHeight') - 8);
     });
 }
 //on post comment submit
-function setOnPostCommentSubmitListener(button, postId){
-    button.click(()=>{
+function setOnPostCommentSubmitListener(button, postId) {
+    button.click(() => {
         //check if other add comment in progress and return:
-        if(addPostCommentInProgress){
+        if (addPostCommentInProgress) {
             return;
         }
         //check if the user logged in:
-        if(!userLoggedIn){
+        if (!userLoggedIn) {
             alert('please login before comment');
             //TODO add login modal
             return;
         }
         //extract the comment body
-        const commentBody = $('#addPostCommentInput'+postId).val();
-        if(commentBody == '' || commentBody == null){
+        const commentBody = $('#addPostCommentInput' + postId).val();
+        if (commentBody == '' || commentBody == null) {
             alert('comment cannot be empty');
             //TODO add alert modal
             return;
         }
         //add in progress icon to the submit btn:
         addPostCommentInProgress = true;
-        $('#addPostCommentInputSubmit'+ postId).hide();
+        $('#addPostCommentInputSubmit' + postId).hide();
         // add spinner :
-        const spinner = $('<div>',{
-            id : 'addCommentReplaySpinner'+postId,
-            class : 'rotate addCommentReplaySpinner'
+        const spinner = $('<div>', {
+            id: 'addCommentReplaySpinner' + postId,
+            class: 'rotate addCommentReplaySpinner'
         }).html('<i class="fas fa-spinner"></i>');
-        $('#addPostCommentContainer'+postId).append(spinner);
+        $('#addPostCommentContainer' + postId).append(spinner);
         //send add post comment request to php
-        $.post('./include/home/posts.php', {addPostComment: true, postId: postId, commentBody: commentBody}, (res)=>{
+        $.post('./include/home/posts.php', { addPostComment: true, postId: postId, commentBody: commentBody }, (res) => {
             //recreate the post comments container:
             getPostComments(postId, res.commentsCount, res.comments);
             //update the post comments count in the comment footer:
-            if(res.commentsCount > 0){
-                $('#postCommentsCount'+postId).html(res.commentsCount + ' Comments');
+            if (res.commentsCount > 0) {
+                $('#postCommentsCount' + postId).html(res.commentsCount + ' Comments');
                 //remove no comments class from the post comment container
-                $('#comments'+postId).removeClass('postNoComments');
-            }else{
-                $('#postCommentsCount'+postId).html(' Comment')
+                $('#comments' + postId).removeClass('postNoComments');
+            } else {
+                $('#postCommentsCount' + postId).html(' Comment')
             }
             //remove in progress classes:
             addPostCommentInProgress = false;
-            $('#addCommentReplaySpinner'+postId).remove();
-            $('#addPostCommentInputSubmit'+ postId).show();
+            $('#addCommentReplaySpinner' + postId).remove();
+            $('#addPostCommentInputSubmit' + postId).show();
         }, 'json');
     })
 }
 
 /** --------------------------- comments reactions: ---------------------------------------*/
 //set on comment footer replays click
-function setOnCommentFooterReplayClick(icon, commentId){
-    icon.click(()=>{
-        $('#replaysContainer'+commentId).toggle('slow');
+function setOnCommentFooterReplayClick(icon, commentId) {
+    icon.click(() => {
+        $('#replaysContainer' + commentId).toggle('slow');
     });
 }
 //set on comment like icon click
-function setOnCommentLikeIconClick(icon, postId, commentId){
-    icon.click(()=>{
+function setOnCommentLikeIconClick(icon, postId, commentId) {
+    icon.click(() => {
         //check if the user logged in
-        if(!userLoggedIn){
+        if (!userLoggedIn) {
             alert('please Login before try to like the comment');
             //TODO CREATE A LOGIN MODEL
             return;
         }
         //animate the like icon:
-        $('#commentLikeIcon'+commentId).toggleClass('rotate');
-        $.post('./include/home/posts.php',{commentLike: true, commentId: commentId, postId: postId}, (response)=>{
+        $('#commentLikeIcon' + commentId).toggleClass('rotate');
+        $.post('./include/home/posts.php', { commentLike: true, commentId: commentId, postId: postId }, (response) => {
             var likesCount = response.likesCount;
             var action = response.action;
             var likersRes = response.likers;
             //check if like or dislike
-            if(action > 0){
-                $('#commentLikeIcon'+commentId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-            }else{
-                $('#commentLikeIcon'+commentId).html('<i class="far fa-thumbs-up"></i>');
+            if (action > 0) {
+                $('#commentLikeIcon' + commentId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            } else {
+                $('#commentLikeIcon' + commentId).html('<i class="far fa-thumbs-up"></i>');
             }
-            if(likesCount > 0){
-                $('#commentLikesCount'+commentId).html(likesCount+' Likes');
-            }else{
-                $('#commentLikesCount'+commentId).html('Like');
+            if (likesCount > 0) {
+                $('#commentLikesCount' + commentId).html(likesCount + ' Likes');
+            } else {
+                $('#commentLikesCount' + commentId).html('Like');
             }
-            $('#commentLikeIcon'+commentId).toggleClass('rotate');
+            $('#commentLikeIcon' + commentId).toggleClass('rotate');
         }, 'json');
     });
 }
 //set on comments likes count click
-function setOnCommentLikesCountClick(icon, commentId){
-    icon.click(()=>{
+function setOnCommentLikesCountClick(icon, commentId) {
+    icon.click(() => {
         //send to php server the likers and like count request 
-        $.post('./include/home/posts.php', {commentLikers: true, commentId: commentId}, (res)=>{
+        $.post('./include/home/posts.php', { commentLikers: true, commentId: commentId }, (res) => {
             //likers name list to show it in the alert for this time
-            likersNameList='';
-            res.likers.forEach((liker)=>{
-                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            likersNameList = '';
+            res.likers.forEach((liker) => {
+                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
             })
             //alert to show the name list:
             alert(likersNameList);
             //update the likes count
-            if(res.likesCount > 0){
-                $('#commentLikesCount'+commentId).html(res.likesCount+' Likes');
-            }else{
-                $('#commentLikesCount'+commentId).html(' Like');
+            if (res.likesCount > 0) {
+                $('#commentLikesCount' + commentId).html(res.likesCount + ' Likes');
+            } else {
+                $('#commentLikesCount' + commentId).html(' Like');
             }
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
@@ -1313,56 +1312,56 @@ function setOnCommentLikesCountClick(icon, commentId){
 
 /** --------------------------- replays reactions: ---------------------------------------*/
 //set on replay like icon click:
-function setOnReplayLikeIconClick(icon, replayId, commentId, postId){
-    icon.click(()=>{
+function setOnReplayLikeIconClick(icon, replayId, commentId, postId) {
+    icon.click(() => {
         //check if the user logged in
-        if(!userLoggedIn){
+        if (!userLoggedIn) {
             alert('please Login before try to like the replay');
             //TODO CREATE A LOGIN MODEL
             return;
         }
         //animate the like icon:
-        $('#replayLikeIcon'+replayId).toggleClass('rotate');
-        $.post('./include/home/posts.php',{replayLike: true,replayId: replayId, commentId: commentId, postId: postId}, (response)=>{
+        $('#replayLikeIcon' + replayId).toggleClass('rotate');
+        $.post('./include/home/posts.php', { replayLike: true, replayId: replayId, commentId: commentId, postId: postId }, (response) => {
             var likesCount = response.likesCount;
             var action = response.action;
             //check if like or dislike
-            if(action > 0){
-                $('#replayLikeIcon'+replayId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
-            }else{
-                $('#replayLikeIcon'+replayId).html('<i class="far fa-thumbs-up"></i>');
+            if (action > 0) {
+                $('#replayLikeIcon' + replayId).html('<i class="fas fa-heart alreadyLikedIcon "> </i>');
+            } else {
+                $('#replayLikeIcon' + replayId).html('<i class="far fa-thumbs-up"></i>');
             }
-            if(likesCount > 0){
-                $('#replayLikesCount'+replayId).html(likesCount+' Likes');
-            }else{
-                $('#replayLikesCount'+replayId).html('Like');
+            if (likesCount > 0) {
+                $('#replayLikesCount' + replayId).html(likesCount + ' Likes');
+            } else {
+                $('#replayLikesCount' + replayId).html('Like');
             }
-            $('#replayLikeIcon'+replayId).toggleClass('rotate');
+            $('#replayLikeIcon' + replayId).toggleClass('rotate');
         }, 'json');
     });
 }
 // set on replay likes count click
-function setOnReplayLikesCountClick(icon, replayId){
-    icon.click(()=>{
+function setOnReplayLikesCountClick(icon, replayId) {
+    icon.click(() => {
         //send to php server the likers and like count request 
-        $.post('./include/home/posts.php', {replayLikers: true, replayId: replayId}, (res)=>{
+        $.post('./include/home/posts.php', { replayLikers: true, replayId: replayId }, (res) => {
             //likers name list to show it in the alert for this time
-            likersNameList='';
-            res.likers.forEach((liker)=>{
-                likersNameList += (liker.fname +' '+liker.lname+'\n')
+            likersNameList = '';
+            res.likers.forEach((liker) => {
+                likersNameList += (liker.fname + ' ' + liker.lname + '\n')
             })
             //alert to show the name list:
             alert(likersNameList);
             //update the likes count
-            if(res.likesCount > 0){
-                $('#replayLikesCount'+replayId).html(res.likesCount+' Likes');
-            }else{
-                $('#replayLikesCount'+replayId).html(' Like');
+            if (res.likesCount > 0) {
+                $('#replayLikesCount' + replayId).html(res.likesCount + ' Likes');
+            } else {
+                $('#replayLikesCount' + replayId).html(' Like');
             }
         }, 'json');
         //TODO CREATE LIKERS LIST MODEL INSTEAD OF ALERT
     });
-} 
+}
 
 //log message:
 function log(des, msg) {
@@ -1375,70 +1374,70 @@ function log(des, msg) {
     );
 }
 
-function postDateFormate(date){
+function postDateFormate(date) {
     date = new Date(date);
-    var day  = date.getDate();
-    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
     var year = date.getFullYear();
 
-    return day+'.'+month+'.'+year;
+    return day + '.' + month + '.' + year;
 }
 
-function commentDateFormate(date){
+function commentDateFormate(date) {
     date = new Date(date);
-    var day  = date.getDate();
-    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
     var year = date.getFullYear();
     var minute = date.getMinutes();
     var hour = date.getHours();
 
 
-    if(hour<10){
-        hour = 0+''+hour;
+    if (hour < 10) {
+        hour = 0 + '' + hour;
     }
-    if(minute< 10){
-        minute = 0+''+minute;
+    if (minute < 10) {
+        minute = 0 + '' + minute;
     }
 
-    switch(date.getMonth()){
-        case 0 :
+    switch (date.getMonth()) {
+        case 0:
             month = 'January';
             break;
-        case 1 :
+        case 1:
             month = 'February';
             break;
-        case 2 :
+        case 2:
             month = 'March';
             break;
-        case 3 :
+        case 3:
             month = 'April';
             break;
-        case 4 :
+        case 4:
             month = 'May';
             break;
-        case 5 :
+        case 5:
             month = 'June';
             break;
-        case 6 :
+        case 6:
             month = 'July';
             break;
-        case 7 :
+        case 7:
             month = 'August';
             break;
-        case 8 :
+        case 8:
             month = 'September';
             break;
-        case 9 :
+        case 9:
             month = 'October';
             break;
-        case 10 :
+        case 10:
             month = 'November';
             break;
-        case 11 :
+        case 11:
             month = 'December';
             break;
     }
     // 15:30 01.October.20118
 
-    return day+'.'+month+'.'+year+'&nbsp;&nbsp;&nbsp;'+hour+':'+minute+'&nbsp;&nbsp;&nbsp;';
+    return day + '.' + month + '.' + year + '&nbsp;&nbsp;&nbsp;' + hour + ':' + minute + '&nbsp;&nbsp;&nbsp;';
 }
