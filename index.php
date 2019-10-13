@@ -8,7 +8,7 @@ $custom_head = '
 ';
 
 session_start();
-
+echo '<div class="pageWrapper" id="pageWrapper">';
 include('./include/header.php');
 include('./include/navbar.php');
 ?>
@@ -27,7 +27,8 @@ include('./include/navbar.php');
         </div>
         <?php include('./include/home/posts.php'); ?>
     </div>
-</div>
+</div><!--container-->
+</div><!--page wrapper-->
 <script src="./assets/js/home.js"></script>
 <?php 
 include('./include/footer.php');

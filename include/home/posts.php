@@ -241,6 +241,43 @@ if(isset($_POST['updateCommentReplay'])){
     return;
 }
 
+if(isset($_POST['login'])){
+    $requestBody = array(
+        'usernameOrEmail' => $_POST['username'],
+        'password' => $_POST['password']
+    );
+    $requestBody = json_encode($requestBody);
+
+   $url = 'http://localhost:3000/users/login';
+   $options = array(
+    CURLOPT_RETURNTRANSFER => TRUE,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => $requestBody,
+    CURLOPT_HTTPHEADER => array('Content-type: application/json')
+   );
+   $ch = curl_init($url);
+   curl_setopt_array($ch, $options);
+
+   $result = curl_exec($ch);
+   $result = json_decode($result);
+   $info = curl_getinfo($ch);
+   $responseCode = $info['http_code'];
+   curl_close($ch);
+
+   if(!($responseCode == 200)){
+        echo('{"loggedIn": false, "errorMsg": '.json_encode($result->error).'}');
+        return;
+    }else {
+        session_start();
+        $_SESSION['token'] = $result->token;
+        $userInfo = $result->userCard;
+        $_SESSION['userInfo'] = $userInfo;
+        session_write_close();
+        echo('{"user":'.json_encode($_SESSION['userInfo']).', "loggedIn": true}');
+        return;
+   }
+}
+
 ?>
 
 <!--html elements-->

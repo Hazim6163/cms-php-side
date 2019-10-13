@@ -756,8 +756,7 @@ function setOnReplaySubmitClickListener(button, commentId, postId) {
         }
         //check if the user logged in:
         if (!userLoggedIn) {
-            alert('please login before leave a Replay');
-            //TODO add login modal
+            createLoginModal();
             return;
         }
         //extract the replay body
@@ -1143,8 +1142,7 @@ function onPostLikeIconClick(icon, postId) {
     icon.click(() => {
         //check if the user logged in
         if (!userLoggedIn) {
-            alert('please Login before try to like the post');
-            //TODO CREATE A LOGIN MODEL
+            createLoginModal();
             return;
         }
         //animate the like icon:
@@ -1210,8 +1208,7 @@ function setOnPostCommentSubmitListener(button, postId) {
         }
         //check if the user logged in:
         if (!userLoggedIn) {
-            alert('please login before comment');
-            //TODO add login modal
+            createLoginModal();
             return;
         }
         //extract the comment body
@@ -1262,8 +1259,7 @@ function setOnCommentLikeIconClick(icon, postId, commentId) {
     icon.click(() => {
         //check if the user logged in
         if (!userLoggedIn) {
-            alert('please Login before try to like the comment');
-            //TODO CREATE A LOGIN MODEL
+            createLoginModal();
             return;
         }
         //animate the like icon:
@@ -1316,8 +1312,7 @@ function setOnReplayLikeIconClick(icon, replayId, commentId, postId) {
     icon.click(() => {
         //check if the user logged in
         if (!userLoggedIn) {
-            alert('please Login before try to like the replay');
-            //TODO CREATE A LOGIN MODEL
+            createLoginModal();
             return;
         }
         //animate the like icon:
@@ -1440,4 +1435,117 @@ function commentDateFormate(date) {
     // 15:30 01.October.20118
 
     return day + '.' + month + '.' + year + '&nbsp;&nbsp;&nbsp;' + hour + ':' + minute + '&nbsp;&nbsp;&nbsp;';
+}
+
+/** --------------------------- login modal ---------------------------------------*/
+function createLoginModal(){
+    //parent modal
+    const loginModal = $('<div>',{
+        id:'loginModal',
+        class: 'loginModal'
+    });
+    //modal container
+    const loginModalContainer = $('<div>',{
+        id:'loginModalContainer',
+        class: 'loginModalContainer'
+    });
+    loginModalContainer.appendTo(loginModal);
+    //modal title:
+    const title = $('<div>', {
+        id: 'loginModalTitle',
+        class: 'loginModalTitle'
+    }).html('Login');
+    title.appendTo(loginModalContainer);
+    //form
+    const form = $('<div>', {
+        id : 'LoginModalForm',
+        class : 'LoginModalForm'
+    });
+    form.appendTo(loginModalContainer);
+    //username des
+    const usernameD = $('<div>', {
+        id:'LoginFormUsernameD',
+        class:'LoginFormUsernameD'
+    }).html('Username or E-mail address :');
+    usernameD.appendTo(form);
+    //username input:
+    const userNameI = $('<input>', {
+        id: 'LoginFormUserNameI',
+        class: 'LoginFormUserNameI'
+    });
+    userNameI.appendTo(form);
+    //password des
+    const passD = $('<div>', {
+        id:'loginFormPasswordD',
+        class:'loginFormPasswordD'
+    }).html('password :');
+    passD.appendTo(form);
+    //password input:
+    const passwordI = $('<input>', {
+        id: 'LoginFormPasswordI',
+        class: 'LoginFormPasswordI'
+    }).attr('type', 'password');
+    passwordI.appendTo(form);
+    //error message:
+    const errorMessage = $('<div>', {
+        id: 'loginModalErrorMessage',
+        class: 'loginModalErrorMessage'
+    }).html('error message').appendTo(form).hide();
+    //submit form container 
+    const submitContainer = $('<div>',{
+        id: 'loginModalSubmitContainer',
+        class: 'loginModalSubmitContainer'
+    }).appendTo(loginModalContainer);
+    //login btn:
+    const loginBtn = $('<div>',{
+        id: 'LoginModalLoginBtn',
+        class: 'LoginModalLoginBtn'
+    }).html('Login').appendTo(submitContainer);
+    loginBtn.click(()=>{
+        const username = userNameI.val();
+        const password = passwordI.val();
+        //check if the fields not empty
+        if(username == '' || password == ''){
+            return;
+        }
+        $.post('./include/home/posts.php', {login: true, username: username, password: password}, (res)=>{
+            userLoggedIn = res.loggedIn;
+            if(userLoggedIn){
+                userInfo = res.user;
+                closeModalBtn.trigger('click');
+            }else{
+                errorMessage.html(res.errorMsg).show();
+            }
+        }, 'json')
+    });
+    //password forget
+    const passForget = $('<div>',{
+        id:'LoginFormPasswordForget',
+        class: 'LoginFormPasswordForget'
+    }).html('Did you forget your Password or Username <a href="http://localhost/html/cms">Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
+    passForget.appendTo(loginModalContainer);
+    //account register:
+    const accountRegister = $('<div>',{
+        id:'LoginModalRegisterAccount',
+        class:'LoginModalRegisterAccount'
+    }).html('Or create a new Account <a href="http://localhost/html/CMS/signup.php">register</a>');
+    accountRegister.appendTo(loginModalContainer);
+    //modal footer:
+    const footer = $('<div>', {
+        id: 'LoginModalFooter',
+        class: 'LoginModalFooter'
+    });
+    footer.appendTo(loginModalContainer);
+    //close btn
+    const closeModalBtn = $('<div>',{
+        id: 'closeLoginModalBtn',
+        class : 'closeLoginModalBtn'
+    }).html('close');
+    closeModalBtn.click(()=>{
+        loginModal.remove();
+    });
+    footer.append(closeModalBtn);
+
+    //append modal to body
+    $('body').append(loginModal);
 }

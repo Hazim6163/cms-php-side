@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
     }else {
         //done
         $_SESSION['token'] = $result->token;
-        $userInfo = getUserInfo($result->token);
+        $userInfo = $result->userCard;
         $_SESSION['userInfo'] = $userInfo;
         session_write_close();
         header('Location: ./index.php');
