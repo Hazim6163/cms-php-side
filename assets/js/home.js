@@ -467,7 +467,13 @@ function createPostCommentAuthorEditIconMenu(icon, commentId, postId){
 
 //edit post comment request
 function editPostComment(commentId, postId){
-    const commentBody = $('#commentBody'+commentId).html();
+    //replace <br> with \n
+    var commentBody = $('#commentBody'+commentId).html().replace(/<br>/g, '\n');
+    //check if multi line comment:
+    var linesCount = 1;
+    if(commentBody.match(/\n/g)){
+        linesCount = commentBody.match(/\n/g).length;
+    }
     //hide the comment container form comments container
     //hide the add Post Comment Container
     $('#addPostCommentContainer'+postId).hide();
@@ -479,8 +485,12 @@ function editPostComment(commentId, postId){
     const editCommentInput = $('<textarea>',{
         id:'editCommentInput'+commentId,
         class: 'editCommentInput'
-    }).attr('rows', 1).html(commentBody);
+    }).attr('rows', linesCount).html(commentBody);
     editCommentInput.appendTo(editCommentContainer);
+    //set one line comment height:
+    if(linesCount == 1){
+        editCommentInput.css('height', '24px');
+    }
     //on comment textarea lines changed:
     autoTextAreaCommentInputHeight(editCommentInput, 24);
     //submit update comment button
