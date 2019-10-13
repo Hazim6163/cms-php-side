@@ -20,6 +20,7 @@ const postImgBase = 'http://localhost:3000/file/uri?uri=';
 var commentInEditProgress = false;
 var commentReplayInUpdateProgress = false;
 var addPostCommentInProgress = false;
+var addCommentReplayInProgress = false;
 
 
 //get posts container:
@@ -720,6 +721,10 @@ function getAddCommentReplay(commentId, postId){
 //on comment replay submit
 function setOnReplaySubmitClickListener(button, commentId, postId){
     button.click(()=>{
+        //check if another add replay in progress:
+        if(addCommentReplayInProgress){
+            return;
+        }
         //check if the user logged in:
         if(!userLoggedIn){
             alert('please login before leave a Replay');
@@ -733,6 +738,16 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
             //TODO add alert modal
             return;
         }
+        //toggle in progress classes:
+        addCommentReplayInProgress = true;
+        $('#addCommentReplaySubmit'+ commentId).hide();
+        // add spinner :
+        const spinner = $('<div>',{
+            id : 'addCommentReplaySpinner'+commentId,
+            class : 'rotate addCommentReplaySpinner'
+        }).html('<i class="fas fa-spinner"></i>');
+        $('#addCommentReplayContainer'+commentId).append(spinner);
+
         //send add comment replay request to php
         $.post('./include/home/posts.php', {addCommentReplay: true, postId: postId, replayBody: replayBody, commentId: commentId}, (res)=>{
             //update comment replay container
@@ -743,6 +758,10 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
             }else{
                 $('#commentReplaysCount'+res.comment._id).html(' Replay');
             }
+            //remove progress
+            addCommentReplayInProgress = false;
+            $('#addCommentReplaySpinner'+commentId).remove();
+            $('#addCommentReplaySubmit'+ commentId).show();
         }, 'json');
     })
 }
