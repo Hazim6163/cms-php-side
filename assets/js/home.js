@@ -297,7 +297,7 @@ function getAddPostComment(postId) {
     const addPostCommentInput = $('<textarea>', {
         id: 'addPostCommentInput' + postId,
         class: 'addPostCommentInput'
-    }).attr('rows', 1);
+    }).attr('rows', 1).css('height', '34px');
     //append input filed to add comment container
     addPostCommentContainer.append(addPostCommentInput);
     //on comment textarea lines changed:
@@ -497,7 +497,7 @@ function editPostComment(commentId, postId) {
     editCommentInput.appendTo(editCommentContainer);
     //set one line comment height:
     if (linesCount == 1) {
-        editCommentInput.css('height', '24px');
+        editCommentInput.css('height', '34px');
     }
     //on comment textarea lines changed:
     autoTextAreaCommentInputHeight(editCommentInput, 24);
@@ -695,7 +695,7 @@ function getCommentReplays(comment) {
         }).hide();
     } else {
         commentReplays = $('#replaysContainer' + comment._id);
-        commentReplays.html('');
+        commentReplays.html('').removeClass('postNoComments');
         commentReplays.show();
     }
 
@@ -731,7 +731,7 @@ function getAddCommentReplay(commentId, postId) {
     const addCommentReplayInput = $('<textarea>', {
         id: 'addCommentReplayInput' + commentId,
         class: 'addCommentReplayInput'
-    }).attr('rows', 1);
+    }).attr('rows', 1).css('height','34px');
     addCommentReplayInput.appendTo(addCommentReplayContainer);
     //on replay textarea lines changed:
     autoTextAreaCommentInputHeight(addCommentReplayInput, 24);
@@ -968,7 +968,7 @@ function onEditReplay(replayId, commentId) {
     }).attr('rows', linesCount).html(replayBody);
     //set one line input height
     if (linesCount == 1) {
-        editReplayInput.css('height', '24px');
+        editReplayInput.css('height', '34px');
     }
     editReplayInput.appendTo(editReplayContainer);
     //on replay textarea lines changed:
