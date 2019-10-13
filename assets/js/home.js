@@ -770,6 +770,8 @@ function setOnReplaySubmitClickListener(button, commentId, postId){
 
 //create replay function
 function createReplay(replay){
+    //show multi line replay:
+    replay.body = replay.body.replace(/\n/g,'<br>');
     //create replay Container
     const replayContainer = $('<div>', {
         id: 'replayContainer'+replay._id,
