@@ -1436,15 +1436,15 @@ function commentDateFormate(date) {
 }
 
 /** --------------------------- login modal ---------------------------------------*/
-function createLoginModal(){
+function createLoginModal() {
     //parent modal
-    const loginModal = $('<div>',{
-        id:'loginModal',
+    const loginModal = $('<div>', {
+        id: 'loginModal',
         class: 'loginModal'
     });
     //modal container
-    const loginModalContainer = $('<div>',{
-        id:'loginModalContainer',
+    const loginModalContainer = $('<div>', {
+        id: 'loginModalContainer',
         class: 'loginModalContainer'
     });
     loginModalContainer.appendTo(loginModal);
@@ -1456,14 +1456,14 @@ function createLoginModal(){
     title.appendTo(loginModalContainer);
     //form
     const form = $('<div>', {
-        id : 'LoginModalForm',
-        class : 'LoginModalForm'
+        id: 'LoginModalForm',
+        class: 'LoginModalForm'
     });
     form.appendTo(loginModalContainer);
     //username des
     const usernameD = $('<div>', {
-        id:'LoginFormUsernameD',
-        class:'LoginFormUsernameD'
+        id: 'LoginFormUsernameD',
+        class: 'LoginFormUsernameD'
     }).html('Username or E-mail address :');
     usernameD.appendTo(form);
     //username input:
@@ -1474,8 +1474,8 @@ function createLoginModal(){
     userNameI.appendTo(form);
     //password des
     const passD = $('<div>', {
-        id:'loginFormPasswordD',
-        class:'loginFormPasswordD'
+        id: 'loginFormPasswordD',
+        class: 'loginFormPasswordD'
     }).html('password :');
     passD.appendTo(form);
     //password input:
@@ -1490,42 +1490,42 @@ function createLoginModal(){
         class: 'loginModalErrorMessage'
     }).html('error message').appendTo(form).hide();
     //submit form container 
-    const submitContainer = $('<div>',{
+    const submitContainer = $('<div>', {
         id: 'loginModalSubmitContainer',
         class: 'loginModalSubmitContainer'
     }).appendTo(loginModalContainer);
     //login btn:
-    const loginBtn = $('<div>',{
+    const loginBtn = $('<div>', {
         id: 'LoginModalLoginBtn',
         class: 'LoginModalLoginBtn'
     }).html('Login').appendTo(submitContainer);
-    loginBtn.click(()=>{
+    loginBtn.click(() => {
         const username = userNameI.val();
         const password = passwordI.val();
         //check if the fields not empty
-        if(username == '' || password == ''){
+        if (username == '' || password == '') {
             return;
         }
-        $.post('./include/home/posts.php', {login: true, username: username, password: password}, (res)=>{
+        $.post('./include/home/posts.php', { login: true, username: username, password: password }, (res) => {
             userLoggedIn = res.loggedIn;
-            if(userLoggedIn){
+            if (userLoggedIn) {
                 userInfo = res.user;
                 closeModalBtn.trigger('click');
-            }else{
+            } else {
                 errorMessage.html(res.errorMsg).show();
             }
         }, 'json')
     });
     //password forget
-    const passForget = $('<div>',{
-        id:'LoginFormPasswordForget',
+    const passForget = $('<div>', {
+        id: 'LoginFormPasswordForget',
         class: 'LoginFormPasswordForget'
     }).html('Did you forget your Password or Username <a href="http://localhost/html/cms">Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
     passForget.appendTo(loginModalContainer);
     //account register:
-    const accountRegister = $('<div>',{
-        id:'LoginModalRegisterAccount',
-        class:'LoginModalRegisterAccount'
+    const accountRegister = $('<div>', {
+        id: 'LoginModalRegisterAccount',
+        class: 'LoginModalRegisterAccount'
     }).html('Or create a new Account <a href="http://localhost/html/CMS/signup.php">register</a>');
     accountRegister.appendTo(loginModalContainer);
     //modal footer:
@@ -1535,11 +1535,11 @@ function createLoginModal(){
     });
     footer.appendTo(loginModalContainer);
     //close btn
-    const closeModalBtn = $('<div>',{
+    const closeModalBtn = $('<div>', {
         id: 'closeLoginModalBtn',
-        class : 'closeLoginModalBtn'
+        class: 'closeLoginModalBtn'
     }).html('close');
-    closeModalBtn.click(()=>{
+    closeModalBtn.click(() => {
         loginModal.remove();
     });
     footer.append(closeModalBtn);
@@ -1549,7 +1549,7 @@ function createLoginModal(){
 }
 
 /** --------------------------- alert modal ---------------------------------------*/
-function createAlertModal(message){
+function createAlertModal(message) {
     //alert modal
     const alertModal = $('<div>', {
         class: 'alertModal'
@@ -1565,26 +1565,26 @@ function createAlertModal(message){
         class: 'alertModalIconMsgWrapper'
     }).appendTo(alertModalContainer);
     //alert icon
-    const alertIcon = $('<div>',{
+    const alertIcon = $('<div>', {
         id: 'alertModalIcon',
         class: 'alertModalIcon'
     }).html('<i class="fas fa-exclamation-circle"></i>').appendTo(wrapper);
     // alert message
-    const msg = $('<div>',{
+    const msg = $('<div>', {
         id: 'alertModalMessage',
         class: 'alertModalMessage'
     }).appendTo(wrapper).html(message);
     // alert footer 
-    const footer = $('<div>',{
+    const footer = $('<div>', {
         id: 'alertModalFooter',
         class: 'alertModalFooter'
     }).appendTo(alertModalContainer);
     // close alert btn
-    const closeBtn = $('<div>',{
+    const closeBtn = $('<div>', {
         id: 'alertModalCloseBtn',
         class: 'alertModalCloseBtn'
     }).html('OK').appendTo(footer);
-    closeBtn.click(()=>{
+    closeBtn.click(() => {
         alertModal.remove()
     })
 }
