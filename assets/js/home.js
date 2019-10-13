@@ -8,7 +8,7 @@
 
 //get user information:
 var userLoggedIn = false;
-var userInfo = getUserInfo();
+var userInfo;
 
 
 //urls:
@@ -22,20 +22,29 @@ var commentReplayInUpdateProgress = false;
 var addPostCommentInProgress = false;
 var addCommentReplayInProgress = false;
 
-
-//get posts container:
-const postsContainer = $('#p_postsContainer');
-
-//attach the post item to posts container:
-$.post('./include/home/posts.php', {lastPosts: true}, (lastPosts)=>{
-    //loop throw each post
-    lastPosts.forEach(post => {
-        postsContainer.append(createPost(post));
-    });
-}, 'json')
-
+//fill the last Posts Container:
+fillPostsContainer();
 
 /*---------------------- support methods : ---------------------*/
+
+//fill posts container with post
+function fillPostsContainer(){
+    //get current user information:
+    $.post('./include/home/posts.php', {userInformation: true}, (res)=>{
+        userLoggedIn = res.loggedIn;
+        userInfo = res.user;
+
+        //get posts container:
+        const postsContainer = $('#p_postsContainer');
+        //get last posts array:
+        $.post('./include/home/posts.php', {lastPosts: true}, (lastPosts)=>{
+            //loop throw each post and attach each post to posts container
+            lastPosts.forEach(post => {
+                postsContainer.append(createPost(post));
+            });
+        }, 'json');
+    }, 'json')
+}
 
 //create post function take post data as parameter:
 function createPost(post){
@@ -1365,23 +1374,6 @@ function log(des, msg) {
         msg +
         '\n--------------------------'
     );
-}
-
-//get User Information:
-function getUserInfo(){
-    var userInfo;
-    $.ajax({
-        async: false,
-        type:'POST',
-        url: './include/home/posts.php',
-        data: {userInformation: true},
-        success: (res)=>{
-            userInfo = res;
-            userLoggedIn = true;
-        },
-        dataType: 'json'
-    });
-    return userInfo;
 }
 
 function postDateFormate(date){

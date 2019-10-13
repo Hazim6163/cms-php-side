@@ -19,8 +19,10 @@ if(isset($_POST['userInformation'])){
     if(isset($_SESSION['token'])){
         global $userInfo; 
         $userInfo = $_SESSION['userInfo'];
-        echo(json_encode($_SESSION['userInfo']));
+        echo('{"user":'.json_encode($_SESSION['userInfo']).', "loggedIn": true}');
+        return;
     }
+    echo('{"loggedIn": false}');
     return;
 }
 
