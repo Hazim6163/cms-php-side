@@ -1,9 +1,5 @@
 /**
  * in this file we will manage the home page exactly the posts section.
- * 
- * User Information:
- * get user information userLoggedIn bool and userInfo content userCard.
- * //TODO fix search problem
  */
 
 //get user information:
