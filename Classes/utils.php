@@ -1,4 +1,35 @@
 <?php
+
+/*********************************** check js requests ************************************/
+//get user info:
+if(isset($_POST['getUserInfo'])){
+    session_start();
+    //check if the user logged in . 
+    if(!(isset($_SESSION['userInfo']))){
+        $res = '{"loggedIn": false}';
+        echo $res;
+        return ;
+    }
+
+    //get user Info:
+    $userInfo = $_SESSION['userInfo'];
+    $res = json_encode($userInfo);
+    echo $res;
+    return;
+}
+
+//logout request:
+if(isset($_POST['logoutRequest'])){
+    session_start();
+    //remove token:
+    unset($_SESSION['token']);
+    //remove user info
+    unset($_SESSION['userInfo']);
+    //send the user to home screen:
+    echo '{"result": true}';
+    return;
+}
+
 //./classes/utils.php 
 class Utils{
 
