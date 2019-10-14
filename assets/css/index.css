@@ -714,7 +714,7 @@ text-align: center;
 .likersModalCloseBtn{
     display: inline-block;
 	cursor: pointer;
-	background-color: #032a57;
+	background-color: #512679;
 	padding: 8px 24px;
 	color: white;
 	border-radius: 10px;
@@ -750,7 +750,7 @@ text-align: center;
 }
 .likersModalLikerName a {
     text-decoration: none;
-    color: #292193;
+    color: #512679;
 }
 .likersModalFooter{
     display: flex;
