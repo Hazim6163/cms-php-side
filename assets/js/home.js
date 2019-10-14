@@ -383,6 +383,10 @@ function getCommentHeader(comment) {
         return commentHeader;
     }
 
+    //check if the current user is the comment author:
+    if(comment.authorInfo.id != userInfo.id && userInfo.admin != 1){
+        return commentHeader;
+    }
     //create comment author edit icon:
     const tools = $('<div>', {
         id: 'commentAuthorTools' + comment._id,
