@@ -6,7 +6,6 @@ getUserInfo((userInfo) => {
 
 
 //post body editor vars:
-var bodyArr = new Array();
 var fontColor = '';
 var fontSize = '40';
 var type = 'span';
@@ -201,7 +200,7 @@ function createToolbar(postBody){
     }).appendTo(toolbarContainer);
 
     //font size:
-    toolbarFontSizeTool(postBody).appendTo(toolsContainer);
+    toolbarFontSizeTool().appendTo(toolsContainer);
 
     //on long press move:
     onLongPress(toolbarContainer);
@@ -210,7 +209,7 @@ function createToolbar(postBody){
 }
 
 //toolbarFontSizeTool
-function toolbarFontSizeTool(postBody){
+function toolbarFontSizeTool(){
     const fontSizeContainer = $('<div>',{
         class: 'toolbarFontSizeTool toolbar-tool',
         id: 'toolbarFontSizeTool'
@@ -227,6 +226,12 @@ function toolbarFontSizeTool(postBody){
             class: 'fontSizeMenuItem',
             id: 'fontSizeMenuItem'+index
         }).css('font-size', index+'px').html(index+'px');
+
+        //on the list item click
+        temp.click(()=>{
+           onFontPropClick(index);
+        });
+
         itemsArray.push(
             $('<div>',{
                 class: 'fontSizeMenuItemContainer',
@@ -252,6 +257,9 @@ function toolbarFontSizeTool(postBody){
         class: 'customFontSizeSubmit',
         id: 'customFontSizeSubmit'
     }).html('Submit').appendTo(customFontSizeContainer);
+    customFontSizeSubmit.click(()=>{
+        setCustomFontSize();
+    });
     itemsArray.push(customFontSizeContainer);
 
     fontSizeContainer.click(()=>{
@@ -259,6 +267,56 @@ function toolbarFontSizeTool(postBody){
     })
     
     return fontSizeContainer;
+}
+
+//set custom font size:
+function setCustomFontSize(){
+    const val = parseInt($('#customFontSizeI').val(), 10);
+    if(!Number.isInteger(val)){
+        return;
+    }
+    //set font size:
+    fontSize = val;
+    onFontPropClick(fontSize);
+}
+
+//set font size property item clicked:
+function onFontPropClick(fontSize){
+    //element will append to post body
+    type = 'span';
+
+    //get post Body
+    const postBody = $('#postBody');
+    
+    //remove <br>
+    const newHtml = postBody.html();
+    postBody.html(newHtml.replace(/<br>/g , ''));
+            
+    postBody.html(postBody.html()+'<'+type+' style="font-size:'+fontSize+'px;">&zwnj;');
+    
+    closeCustomizeMenu();
+}
+
+//cursor at end setter:
+function cursorEndSetter(){
+    //get the last Element :
+    var lastElement = $(type).last();
+    var p;
+    //check if there is new element : 
+    if(!lastElement.html()){
+        //there is no new item just move the cursor to the end of the post body:
+        lastElement = $('#postBody');
+        p = $('#postBody').html().length;
+    }else{
+        lastElement = $(type).last();
+        p = lastElement.html().length;
+    }
+    const range = new Range();
+    range.setStart(lastElement.get(0).firstChild, p);
+    range.setEnd(lastElement.get(0).firstChild, p);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
 }
 
 //menu inflater: 
@@ -281,10 +339,7 @@ function customizeMenuInflater(items, menuType){
         if(menuType === openedCustomizeMenuType){
             //opened menu is the same of the requested menu:
             //hide the menu:
-            $('#customizeMenu').toggle('fast');
-            $('#customizeMenu').remove();
-            openedCustomizeMenuType = 'none';
-            customizeMenuInflaterOpened = false;
+            closeCustomizeMenu();
             return;
         }
         //opened menu is other than requested menu:
@@ -295,12 +350,22 @@ function customizeMenuInflater(items, menuType){
         return;
     }
     items.forEach((item)=>{
-        $('#customizeMenu').append(item);
+        $('#customizeMenu').append(item.clone(true));
     });
     openedCustomizeMenuType = menuType;
     customizeMenuInflaterOpened = true;
 
     
+}
+
+//to close the customize menu:
+function closeCustomizeMenu(){
+    $('#customizeMenu').toggle('fast');
+    $('#customizeMenu').remove();
+    openedCustomizeMenuType = 'none';
+    customizeMenuInflaterOpened = false;
+    //set cursor inside the Post Body after hide the menu:
+    cursorEndSetter();
 }
 
 //long muse click listener on toolbar to move:
