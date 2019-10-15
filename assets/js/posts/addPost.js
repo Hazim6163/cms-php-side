@@ -282,17 +282,34 @@ function setCustomFontSize(){
 
 //set font size property item clicked:
 function onFontPropClick(fontSize){
-    //element will append to post body
-    type = 'span';
-
-    //get post Body
+    //get post body obj:
     const postBody = $('#postBody');
+
+    //get the selections if founded
+    const selection = document.getSelection(postBody.get(0));
     
+    const selectionText = selection.toString();
+    const selectionRange = selection.getRangeAt(0);
+    const start = selectionRange.startOffset;
+    const end = selectionRange.endOffset;
+
+    if(start != end){
+        
+        const newElement = $('<span>').css('font-size', fontSize).html(selectionText);
+        selection.deleteFromDocument();
+        selectionRange.insertNode(newElement.get(0));
+
+        //close the menu:
+        closeCustomizeMenuWithoutMoveCursor();
+        return;
+    }
+    
+    // no selection text add new span to post body:
+    postBody.html(postBody.html()+'<span style="font-size:'+fontSize+'px;">&zwnj;');
+
     //remove <br>
     const newHtml = postBody.html();
     postBody.html(newHtml.replace(/<br>/g , ''));
-            
-    postBody.html(postBody.html()+'<'+type+' style="font-size:'+fontSize+'px;">&zwnj;');
     
     closeCustomizeMenu();
 }
@@ -368,6 +385,14 @@ function closeCustomizeMenu(){
     cursorEndSetter();
 }
 
+//close the customize menu without move the cursor:
+function closeCustomizeMenuWithoutMoveCursor(){
+    $('#customizeMenu').toggle('fast');
+    $('#customizeMenu').remove();
+    openedCustomizeMenuType = 'none';
+    customizeMenuInflaterOpened = false;
+}
+
 //long muse click listener on toolbar to move:
 function onLongPress(element) { 
 
@@ -393,12 +418,9 @@ function onLongPress(element) {
     document.addEventListener('mousemove', onMouseUpdate, false);
     function onMouseUpdate(e){
         if(menuIsClicked){
-            element.on('mouseup', ()=>{
-                menuIsClicked = false;
-            })
             element.css({
-                'left': e.pageX-25,
-                'top': e.pageY-25
+                'left': e.pageX+(element.width()/2)-15,
+                'top': e.pageY-15
             });
         }
     }
