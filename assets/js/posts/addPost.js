@@ -185,16 +185,16 @@ function createPostBody() {
 }
 
 //create toolbar
-function createToolbar(postBody){
-    const toolbarContainer = $('<div>',{
+function createToolbar(postBody) {
+    const toolbarContainer = $('<div>', {
         class: 'toolbarContainer',
         id: 'toolbarContainer'
     });
-    const toolsContainer = $('<div>',{
+    const toolsContainer = $('<div>', {
         class: 'toolsContainer',
         id: 'toolsContainer'
     }).appendTo(toolbarContainer);
-    const menuContainer = $('<div>',{
+    const menuContainer = $('<div>', {
         class: 'menuContainer',
         id: 'menuContainer'
     }).appendTo(toolbarContainer);
@@ -209,70 +209,70 @@ function createToolbar(postBody){
 }
 
 //toolbarFontSizeTool
-function toolbarFontSizeTool(){
-    const fontSizeContainer = $('<div>',{
+function toolbarFontSizeTool() {
+    const fontSizeContainer = $('<div>', {
         class: 'toolbarFontSizeTool toolbar-tool',
         id: 'toolbarFontSizeTool'
     }).html('<i class="material-icons">format_size</i>');
 
     //inflate list 8-32: 
     const itemsArray = new Array();
-    for (let index = 12; index <= 32; index+=2) {
-        if(index > 12){
-            index+=2;
+    for (let index = 12; index <= 32; index += 2) {
+        if (index > 12) {
+            index += 2;
         }
         //create list item: 
-        const temp = $('<span>',{
+        const temp = $('<span>', {
             class: 'fontSizeMenuItem',
-            id: 'fontSizeMenuItem'+index
-        }).css('font-size', index+'px').html(index+'px');
+            id: 'fontSizeMenuItem' + index
+        }).css('font-size', index + 'px').html(index + 'px');
 
         //on the list item click
-        temp.click(()=>{
-           onFontPropClick(index);
+        temp.click(() => {
+            onFontPropClick(index);
         });
 
         itemsArray.push(
-            $('<div>',{
+            $('<div>', {
                 class: 'fontSizeMenuItemContainer',
-                id: 'fontSizeMenuItemContainer'+index
+                id: 'fontSizeMenuItemContainer' + index
             }).html(temp)
         );
     }
 
     //custom font size:
-    const customFontSizeContainer = $('<div>',{
+    const customFontSizeContainer = $('<div>', {
         class: 'customFontSizeContainer',
         id: 'customFontSizeContainer'
     });
-    const customFontSizeI = $('<input>',{
+    const customFontSizeI = $('<input>', {
         class: 'customFontSizeI',
         id: 'customFontSizeI'
     }).attr('placeholder', '18').appendTo(customFontSizeContainer);
-    const customFontSizeIPx = $('<div>',{
+    const customFontSizeIPx = $('<div>', {
         class: 'customFontSizeIPx',
         id: 'customFontSizeIPx'
     }).html('px').appendTo(customFontSizeContainer);
-    const customFontSizeSubmit = $('<div>',{
+    const customFontSizeSubmit = $('<div>', {
         class: 'customFontSizeSubmit',
         id: 'customFontSizeSubmit'
     }).html('Submit').appendTo(customFontSizeContainer);
-    customFontSizeSubmit.click(()=>{
+    customFontSizeSubmit.click(() => {
         setCustomFontSize();
     });
     itemsArray.push(customFontSizeContainer);
 
-    fontSizeContainer.click(()=>{
+    fontSizeContainer.click(() => {
         customizeMenuInflater(itemsArray, 'font-size');
     })
-    
+
     return fontSizeContainer;
 }
 
 //set custom font size:
-function setCustomFontSize(){
+function setCustomFontSize() {
     const val = parseInt($('#customFontSizeI').val(), 10);
-    if(!Number.isInteger(val)){
+    if (!Number.isInteger(val)) {
         return;
     }
     //set font size:
@@ -281,20 +281,20 @@ function setCustomFontSize(){
 }
 
 //set font size property item clicked:
-function onFontPropClick(fontSize){
+function onFontPropClick(fontSize) {
     //get post body obj:
     const postBody = $('#postBody');
 
     //get the selections if founded
     const selection = document.getSelection(postBody.get(0));
-    
+
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
-    if(start != end){
-        
+    if (start != end) {
+
         const newElement = $('<span>').css('font-size', fontSize).html(selectionText);
         selection.deleteFromDocument();
         selectionRange.insertNode(newElement.get(0));
@@ -303,28 +303,28 @@ function onFontPropClick(fontSize){
         closeCustomizeMenuWithoutMoveCursor();
         return;
     }
-    
+
     // no selection text add new span to post body:
-    postBody.html(postBody.html()+'<span style="font-size:'+fontSize+'px;">&zwnj;');
+    postBody.html(postBody.html() + '<span style="font-size:' + fontSize + 'px;">&zwnj;');
 
     //remove <br>
     const newHtml = postBody.html();
-    postBody.html(newHtml.replace(/<br>/g , ''));
-    
+    postBody.html(newHtml.replace(/<br>/g, ''));
+
     closeCustomizeMenu();
 }
 
 //cursor at end setter:
-function cursorEndSetter(){
+function cursorEndSetter() {
     //get the last Element :
     var lastElement = $(type).last();
     var p;
     //check if there is new element : 
-    if(!lastElement.html()){
+    if (!lastElement.html()) {
         //there is no new item just move the cursor to the end of the post body:
         lastElement = $('#postBody');
         p = $('#postBody').html().length;
-    }else{
+    } else {
         lastElement = $(type).last();
         p = lastElement.html().length;
     }
@@ -337,23 +337,23 @@ function cursorEndSetter(){
 }
 
 //menu inflater: 
-function customizeMenuInflater(items, menuType){
+function customizeMenuInflater(items, menuType) {
 
     //check if the menu obj already created:
-    if(!$('#customizeMenu').html()){
+    if (!$('#customizeMenu').html()) {
         //inflate menu for first time:
         $('#menuContainer').append(
-            $('<div>',{
+            $('<div>', {
                 class: 'customizeMenu',
                 id: 'customizeMenu'
             })
         );
     }
 
-    if(customizeMenuInflaterOpened){
+    if (customizeMenuInflaterOpened) {
         //menu already opened:
         //check if the opened menu is the same:
-        if(menuType === openedCustomizeMenuType){
+        if (menuType === openedCustomizeMenuType) {
             //opened menu is the same of the requested menu:
             //hide the menu:
             closeCustomizeMenu();
@@ -366,17 +366,17 @@ function customizeMenuInflater(items, menuType){
         customizeMenuInflater(items, menuType);
         return;
     }
-    items.forEach((item)=>{
+    items.forEach((item) => {
         $('#customizeMenu').append(item.clone(true));
     });
     openedCustomizeMenuType = menuType;
     customizeMenuInflaterOpened = true;
 
-    
+
 }
 
 //to close the customize menu:
-function closeCustomizeMenu(){
+function closeCustomizeMenu() {
     $('#customizeMenu').toggle('fast');
     $('#customizeMenu').remove();
     openedCustomizeMenuType = 'none';
@@ -386,7 +386,7 @@ function closeCustomizeMenu(){
 }
 
 //close the customize menu without move the cursor:
-function closeCustomizeMenuWithoutMoveCursor(){
+function closeCustomizeMenuWithoutMoveCursor() {
     $('#customizeMenu').toggle('fast');
     $('#customizeMenu').remove();
     openedCustomizeMenuType = 'none';
@@ -394,33 +394,33 @@ function closeCustomizeMenuWithoutMoveCursor(){
 }
 
 //long muse click listener on toolbar to move:
-function onLongPress(element) { 
+function onLongPress(element) {
 
 
     //set mouse click timeout to move
-    element.mousedown(function(e) {
+    element.mousedown(function (e) {
         mousedown = true;
-        mousedown_timer = setTimeout(function() {
-            if(mousedown) {
+        mousedown_timer = setTimeout(function () {
+            if (mousedown) {
                 menuIsClicked = true;
             }
         }, 200);
-    }).mouseup(function(e) {
+    }).mouseup(function (e) {
         mousedown = false;
         clearTimeout(mousedown_timer);
     });
 
     //remove menu clicked on mouse up:
-    element.on('mouseup',()=>{
+    element.on('mouseup', () => {
         menuIsClicked = false;
     })
 
     document.addEventListener('mousemove', onMouseUpdate, false);
-    function onMouseUpdate(e){
-        if(menuIsClicked){
+    function onMouseUpdate(e) {
+        if (menuIsClicked) {
             element.css({
-                'left': e.pageX+(element.width()/2)-15,
-                'top': e.pageY-15
+                'left': e.pageX + (element.width() / 2) - 15,
+                'top': e.pageY - 15
             });
         }
     }
