@@ -4,12 +4,29 @@ getUserInfo((userInfo) => {
     createPage(userInfo)
 });
 
+
+//post body editor vars:
+var bodyArr = new Array();
+var fontColor = '';
+var fontSize = '40';
+var type = 'span';
+var customizeMenuInflaterOpened = false;
+var openedCustomizeMenuType = 'none';
+//change the menu position on drag
+var menuIsClicked = false;
+var mousedown = false;
+var mousedown_timer = '';
+
 /******************* functions  *************/
 
 //main page:
 const createPage = (userInfo) => {
     //page
     const page = $('#pageContainer');
+
+    const postBody = createPostBody();
+    //createToolBar
+    createToolbar(postBody).appendTo(page);
     //post container
     const postContainer = $('<div>', {
         class: 'postContainer',
@@ -18,7 +35,7 @@ const createPage = (userInfo) => {
     //create post header 
     postContainer.append(postHeader());
     //post Body:
-    createPostBody().appendTo(postContainer)
+    postBody.appendTo(postContainer)
 }
 
 //create post header
@@ -146,6 +163,7 @@ function createPostBody() {
 
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);
+            return;
         }
     });
 
@@ -165,4 +183,158 @@ function createPostBody() {
     })
 
     return postBody;
+}
+
+//create toolbar
+function createToolbar(postBody){
+    const toolbarContainer = $('<div>',{
+        class: 'toolbarContainer',
+        id: 'toolbarContainer'
+    });
+    const toolsContainer = $('<div>',{
+        class: 'toolsContainer',
+        id: 'toolsContainer'
+    }).appendTo(toolbarContainer);
+    const menuContainer = $('<div>',{
+        class: 'menuContainer',
+        id: 'menuContainer'
+    }).appendTo(toolbarContainer);
+
+    //font size:
+    toolbarFontSizeTool(postBody).appendTo(toolsContainer);
+
+    //on long press move:
+    onLongPress(toolbarContainer);
+
+    return toolbarContainer;
+}
+
+//toolbarFontSizeTool
+function toolbarFontSizeTool(postBody){
+    const fontSizeContainer = $('<div>',{
+        class: 'toolbarFontSizeTool toolbar-tool',
+        id: 'toolbarFontSizeTool'
+    }).html('<i class="material-icons">format_size</i>');
+
+    //inflate list 8-32: 
+    const itemsArray = new Array();
+    for (let index = 12; index <= 32; index+=2) {
+        if(index > 12){
+            index+=2;
+        }
+        //create list item: 
+        const temp = $('<span>',{
+            class: 'fontSizeMenuItem',
+            id: 'fontSizeMenuItem'+index
+        }).css('font-size', index+'px').html(index+'px');
+        itemsArray.push(
+            $('<div>',{
+                class: 'fontSizeMenuItemContainer',
+                id: 'fontSizeMenuItemContainer'+index
+            }).html(temp)
+        );
+    }
+
+    //custom font size:
+    const customFontSizeContainer = $('<div>',{
+        class: 'customFontSizeContainer',
+        id: 'customFontSizeContainer'
+    });
+    const customFontSizeI = $('<input>',{
+        class: 'customFontSizeI',
+        id: 'customFontSizeI'
+    }).attr('placeholder', '18').appendTo(customFontSizeContainer);
+    const customFontSizeIPx = $('<div>',{
+        class: 'customFontSizeIPx',
+        id: 'customFontSizeIPx'
+    }).html('px').appendTo(customFontSizeContainer);
+    const customFontSizeSubmit = $('<div>',{
+        class: 'customFontSizeSubmit',
+        id: 'customFontSizeSubmit'
+    }).html('Submit').appendTo(customFontSizeContainer);
+    itemsArray.push(customFontSizeContainer);
+
+    fontSizeContainer.click(()=>{
+        customizeMenuInflater(itemsArray, 'font-size');
+    })
+    
+    return fontSizeContainer;
+}
+
+//menu inflater: 
+function customizeMenuInflater(items, menuType){
+
+    //check if the menu obj already created:
+    if(!$('#customizeMenu').html()){
+        //inflate menu for first time:
+        $('#menuContainer').append(
+            $('<div>',{
+                class: 'customizeMenu',
+                id: 'customizeMenu'
+            })
+        );
+    }
+
+    if(customizeMenuInflaterOpened){
+        //menu already opened:
+        //check if the opened menu is the same:
+        if(menuType === openedCustomizeMenuType){
+            //opened menu is the same of the requested menu:
+            //hide the menu:
+            $('#customizeMenu').toggle('fast');
+            $('#customizeMenu').remove();
+            openedCustomizeMenuType = 'none';
+            customizeMenuInflaterOpened = false;
+            return;
+        }
+        //opened menu is other than requested menu:
+        //clean up the menu container:
+        $('#customizeMenu').remove();
+        //inflate new menu 
+        customizeMenuInflater(items, menuType);
+        return;
+    }
+    items.forEach((item)=>{
+        $('#customizeMenu').append(item);
+    });
+    openedCustomizeMenuType = menuType;
+    customizeMenuInflaterOpened = true;
+
+    
+}
+
+//long muse click listener on toolbar to move:
+function onLongPress(element) { 
+
+
+    //set mouse click timeout to move
+    element.mousedown(function(e) {
+        mousedown = true;
+        mousedown_timer = setTimeout(function() {
+            if(mousedown) {
+                menuIsClicked = true;
+            }
+        }, 200);
+    }).mouseup(function(e) {
+        mousedown = false;
+        clearTimeout(mousedown_timer);
+    });
+
+    //remove menu clicked on mouse up:
+    element.on('mouseup',()=>{
+        menuIsClicked = false;
+    })
+
+    document.addEventListener('mousemove', onMouseUpdate, false);
+    function onMouseUpdate(e){
+        if(menuIsClicked){
+            element.on('mouseup', ()=>{
+                menuIsClicked = false;
+            })
+            element.css({
+                'left': e.pageX-25,
+                'top': e.pageY-25
+            });
+        }
+    }
 }

@@ -114,6 +114,7 @@ const createNavBar = (userInfo) => {
             sideNavigateOpened = !sideNavigateOpened;
             //change page wrapper margin:
             $('#pageWrapper').css('margin-top', '150px');
+            $('#pageContainer').toggle('fast');
             return;
         }
         /************** open the nav**************/
@@ -122,10 +123,11 @@ const createNavBar = (userInfo) => {
         sideToggleIcon.html('<i class="fas fa-times"></i>');
         //add the menu to side nav:
         sideNav.toggle('fast');
-        //change page wrapper margin
-        $('#pageWrapper').css('margin-top', '125px');
         //toggle bool
         sideNavigateOpened = !sideNavigateOpened;
+        //change page wrapper margin
+        $('#pageWrapper').css('margin-top', '125px');
+        $('#pageContainer').toggle('fast');
 
     });
 
@@ -143,8 +145,10 @@ const createNavBar = (userInfo) => {
             toggleNav.toggleClass('navbarTogglerActive');
             //change to open icon:
             toggleNav.html('<i class="fas fa-chevron-down"></i>');
+            //changes to add when the nav is closed
             $('#pageWrapper').toggleClass('navbarToggleActivePageWrapper');
             sideNav.css('margin-top', '-40px');
+            $('#toolbarContainer').toggleClass('navbarToggleActiveToolbar')//.css('top', '76px');
             return;
         }
         //open
@@ -152,9 +156,12 @@ const createNavBar = (userInfo) => {
         navbarOpened = true;
         //change to close icon
         toggleNav.html('<i class="fas fa-chevron-up"></i>')
+        //changes to add when the nav is opened
         toggleNav.toggleClass('navbarTogglerActive');
         $('#pageWrapper').toggleClass('navbarToggleActivePageWrapper');
         sideNav.css('margin-top', '0px');
+        $('#toolbarContainer').toggleClass('navbarToggleActiveToolbar')//.css('top', '196px');
+
 
     });
 }
