@@ -263,7 +263,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat_1);
@@ -286,7 +286,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat1);
@@ -309,7 +309,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat2);
@@ -332,7 +332,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat3);
@@ -355,7 +355,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat5);
@@ -378,7 +378,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat7);
@@ -401,7 +401,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat8);
@@ -424,7 +424,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat9);
@@ -447,7 +447,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat10);
@@ -470,7 +470,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat11);
@@ -493,7 +493,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat12);
@@ -516,7 +516,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat13);
@@ -539,7 +539,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat14);
@@ -563,7 +563,7 @@ function extractColors(){
             class: 'colorIcon'
         }).css({'background-color': color}).click(()=>{
             fontColor = color;
-            onColorIconClick(color);
+            onColorIconClick();
         }));
     });
     colors.push(plat15);
@@ -572,8 +572,17 @@ function extractColors(){
 }
 
 //on color icon click
-function onColorIconClick(color){
-    console.log(color);
+function onColorIconClick(){
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection);
+    }else{
+        // no selected text insert new item to post body
+        insertNewItem('span');
+    }
 }
 
 //toolbarFontSizeTool
@@ -597,7 +606,8 @@ function toolbarFontSizeTool() {
 
         //on the list item click
         temp.click(() => {
-            onFontPropClick(index);
+            fontSize = index;
+            onFontPropClick();
         });
 
         itemsArray.push(
@@ -645,41 +655,21 @@ function setCustomFontSize() {
     }
     //set font size:
     fontSize = val;
-    onFontPropClick(fontSize);
+    onFontPropClick();
 }
 
 //set font size property item clicked:
-function onFontPropClick(fontSize) {
-    //get post body obj:
-    const postBody = $('#postBody');
+function onFontPropClick() {
+    //check if there is selected text
+    const selection = checkIfSelection();
 
-    //get the selections if founded
-    const selection = document.getSelection(postBody.get(0));
-
-    const selectionText = selection.toString();
-    const selectionRange = selection.getRangeAt(0);
-    const start = selectionRange.startOffset;
-    const end = selectionRange.endOffset;
-
-    if (start != end) {
-
-        const newElement = $('<span>').css('font-size', fontSize).html(selectionText);
-        selection.deleteFromDocument();
-        selectionRange.insertNode(newElement.get(0));
-
-        //close the menu:
-        closeCustomizeMenuWithoutMoveCursor();
-        return;
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection);
+    }else{
+        // no selected text insert new item to post body
+        insertNewItem('span');
     }
-
-    // no selection text add new span to post body:
-    postBody.html(postBody.html() + '<span style="font-size:' + fontSize + 'px;">&zwnj;');
-
-    //remove <br>
-    const newHtml = postBody.html();
-    postBody.html(newHtml.replace(/<br>/g, ''));
-
-    closeCustomizeMenu();
 }
 
 //cursor at end setter:
@@ -793,4 +783,52 @@ function onLongPress(element) {
             });
         }
     }
+}
+
+//insert new Item to post body:
+function insertNewItem(_type){
+    type = _type;
+    //get post body obj:
+    const postBody = $('#postBody');
+    //set type:
+    // no selection text add new span to post body:
+    postBody.html(postBody.html() + '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+';">&zwnj;');
+
+    //remove <br>
+    const newHtml = postBody.html();
+    postBody.html(newHtml.replace(/<br>/g, ''));
+
+    closeCustomizeMenu();
+}
+
+//check if there is selection:
+function checkIfSelection(){
+    //get post body obj:
+    const postBody = $('#postBody');
+
+    //get the selections if founded
+    const selection = document.getSelection(postBody.get(0));
+
+    const selectionRange = selection.getRangeAt(0);
+    const start = selectionRange.startOffset;
+    const end = selectionRange.endOffset;
+
+    return {isSelected: start != end, selection: selection};
+}
+
+//update the selection:
+function updateSelection(selection){
+    //extract selection text, range
+    const selectionText = selection.toString();
+    const selectionRange = selection.getRangeAt(0);
+    //create new element
+    const newElement = $('<span>').css('font-size', fontSize).css('color', fontColor).html(selectionText);
+    //delete selection from post body
+    selection.deleteFromDocument();
+    //insert new element place the deleted selection
+    selectionRange.insertNode(newElement.get(0));
+
+    //close the menu:
+    closeCustomizeMenuWithoutMoveCursor();
+    return;
 }
