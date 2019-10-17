@@ -11,6 +11,7 @@ var fontSize = '20';
 var backgroundColor = '#ffffff';
 var type = 'span';
 var bold = false;
+var italic = false;
 var header = false;
 var headerLevel = 1;
 var customizeMenuInflaterOpened = false;
@@ -218,10 +219,43 @@ function createToolbar(postBody) {
     //bolding:
     toolbarBoldingTool().appendTo(toolsContainer);
 
+    //italic:
+    toolbarItalicTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//toolbar italic tool:
+function toolbarItalicTool(){
+    const italicContainer = $('<div>', {
+        class: 'toolbarItalicTool toolbar-tool',
+        id: 'toolbarItalicTool'
+    }).html('<i class="fas fa-italic"></i>');
+
+    italicContainer.click(()=>{
+        toggleItalic();
+        italicContainer.toggleClass('toggleTool');
+    })
+    
+    return italicContainer;
+}
+
+//toggle italic:
+function toggleItalic(){
+    italic = !italic;
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'italic', {italic: italic});
+    }else{
+        //insert new item to post body
+        insertNewItem('span');
+    }
 }
 
 //toolbar bolding tool
@@ -233,7 +267,7 @@ function toolbarBoldingTool(){
 
     boldingContainer.click(()=>{
         toggleBold();
-        boldingContainer.toggleClass('toggleBold');
+        boldingContainer.toggleClass('toggleTool');
     })
     
     return boldingContainer;
@@ -884,8 +918,12 @@ function insertNewItem(_type){
         newElement = '<'+type+'>&zwnj;';
         header = false;
     }else if(type == 'span'){
-        if(bold){
-            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold;">&zwnj;'
+        if(bold && italic){
+            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold; font-style: italic">&zwnj;'
+        }else if(bold){
+            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold">&zwnj;'
+        }else if(italic){
+            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';font-style: italic">&zwnj;'
         }else{
             newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
         }
@@ -948,11 +986,16 @@ function createUpdatedItem(changeType, selectionText, extraData){
             newElement = $('<h'+extraData.level+'>').html(selectionText);
             header = false;
             break;
+        case 'italic':
         case 'bolding':
-            if(bold){
+            if(bold & italic){
+                newElement = $('<span>').css('font-weight', 'bold').css('font-style', 'italic').html(selectionText);
+            }else if(bold){
                 newElement = $('<span>').css('font-weight', 'bold').html(selectionText);
+            }else if(italic){
+                newElement = $('<span>').css('font-style', 'italic').html(selectionText);
             }else{
-                newElement = $('<span>').css('font-weight', 'normal').html(selectionText);
+                newElement = $('<span>').html(selectionText);
             }
             break;
         default:
