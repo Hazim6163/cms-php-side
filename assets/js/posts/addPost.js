@@ -10,6 +10,8 @@ var fontColor = '#000000';
 var fontSize = '20';
 var backgroundColor = '#ffffff';
 var type = 'span';
+var header = false;
+var headerLevel = 1;
 var customizeMenuInflaterOpened = false;
 var openedCustomizeMenuType = 'none';
 //change the menu position on drag
@@ -209,10 +211,53 @@ function createToolbar(postBody) {
     //background color:
     toolbarBackgroundColorTool().appendTo(toolsContainer);
 
+    //Heading:
+    toolbarHeadingTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//toolbar heading tool:
+function toolbarHeadingTool(){
+    const headingContainer = $('<div>', {
+        class: 'toolbarHeadingTool toolbar-tool',
+        id: 'toolbarHeadingTool'
+    }).html('<i class="fas fa-heading"></i>');
+
+    const itemsArray = new Array();
+
+    for (let index = 6; index >= 1; index--) {
+       itemsArray.push($('<h'+index+'>',{
+           class: 'headerTool'
+       }).click(()=>{
+            header = true;
+            headerLevel = index;
+            onHeaderItemClick(headerLevel);
+       }).html('H'+index).css('text-align', 'center'));
+    }
+
+    headingContainer.click(()=>{
+        customizeMenuInflater(itemsArray, 'heading');
+    })
+
+    return headingContainer;
+}
+
+//on header item click:
+function onHeaderItemClick(lvl){
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'heading', {level: lvl});
+    }else{
+        // no selected text insert new item to post body
+        insertNewItem('h'+lvl);
+    }
 }
 
 //toolbar Font color tool
@@ -798,8 +843,15 @@ function insertNewItem(_type){
     //get post body obj:
     const postBody = $('#postBody');
     //set type:
-    // no selection text add new span to post body:
-    postBody.html(postBody.html() + '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;');
+    //add new element to post body:
+    var newElement;
+    if(header){
+        newElement = '<'+type+'>&zwnj;';
+        header = false;
+    }else if(type == 'span'){
+        newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
+    }
+    postBody.html(postBody.html() + newElement);
 
     //remove <br>
     const newHtml = postBody.html();
@@ -824,12 +876,12 @@ function checkIfSelection(){
 }
 
 //update the selection:
-function updateSelection(selection, changeType){
+function updateSelection(selection, changeType, data){
     //extract selection text, range
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
     //create new element
-    var newElement = createUpdatedItem(changeType, selectionText);
+    var newElement = createUpdatedItem(changeType, selectionText, data);
     //delete selection from post body
     selection.deleteFromDocument();
     //insert new element place the deleted selection
@@ -841,7 +893,7 @@ function updateSelection(selection, changeType){
 }
 
 //create updated item 
-function createUpdatedItem(changeType, selectionText){
+function createUpdatedItem(changeType, selectionText, extraData){
     var newElement = null;
     switch (changeType) {
         case 'font-size':
@@ -852,6 +904,10 @@ function createUpdatedItem(changeType, selectionText){
             break;
         case 'background-color':
             newElement = $('<span>').css('background-color', backgroundColor).html(selectionText);
+            break;
+        case 'heading':
+            newElement = $('<h'+extraData.level+'>').html(selectionText);
+            header = false;
             break;
         default:
             break;
