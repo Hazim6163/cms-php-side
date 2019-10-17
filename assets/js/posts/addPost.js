@@ -10,6 +10,7 @@ var fontColor = '#000000';
 var fontSize = '20';
 var backgroundColor = '#ffffff';
 var type = 'span';
+var bold = false;
 var header = false;
 var headerLevel = 1;
 var customizeMenuInflaterOpened = false;
@@ -214,10 +215,44 @@ function createToolbar(postBody) {
     //Heading:
     toolbarHeadingTool().appendTo(toolsContainer);
 
+    //bolding:
+    toolbarBoldingTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//toolbar bolding tool
+function toolbarBoldingTool(){
+    const boldingContainer = $('<div>', {
+        class: 'toolbarBoldingTool toolbar-tool',
+        id: 'toolbarBoldingTool'
+    }).html('<i class="fas fa-bold"></i>');
+
+    boldingContainer.click(()=>{
+        toggleBold();
+        boldingContainer.toggleClass('toggleBold');
+    })
+    
+    return boldingContainer;
+}
+
+//toggle bold:
+function toggleBold(){
+    //toggle bold
+    bold = !bold;
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'bolding', {bold: bold});
+    }else{
+        //insert new item to post body
+        insertNewItem('span');
+    }
 }
 
 //toolbar heading tool:
@@ -255,7 +290,7 @@ function onHeaderItemClick(lvl){
         //there is selected text
         updateSelection(selection.selection, 'heading', {level: lvl});
     }else{
-        // no selected text insert new item to post body
+        //insert new item to post body
         insertNewItem('h'+lvl);
     }
 }
@@ -310,7 +345,7 @@ function toolbarBackgroundColorTool(){
     const backgroundColorContainer = $('<div>', {
         class: 'toolbarBackgroundColorTool toolbar-tool',
         id: 'toolbarBackgroundColorTool'
-    }).html('<i class="fas fa-fill-drip"></i>');
+    }).html('<i class="fas fa-highlighter"></i>');
 
     //create the color list :
     const itemsArray = new Array();
@@ -849,7 +884,11 @@ function insertNewItem(_type){
         newElement = '<'+type+'>&zwnj;';
         header = false;
     }else if(type == 'span'){
-        newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
+        if(bold){
+            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold;">&zwnj;'
+        }else{
+            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
+        }
     }
     postBody.html(postBody.html() + newElement);
 
@@ -908,6 +947,13 @@ function createUpdatedItem(changeType, selectionText, extraData){
         case 'heading':
             newElement = $('<h'+extraData.level+'>').html(selectionText);
             header = false;
+            break;
+        case 'bolding':
+            if(bold){
+                newElement = $('<span>').css('font-weight', 'bold').html(selectionText);
+            }else{
+                newElement = $('<span>').css('font-weight', 'normal').html(selectionText);
+            }
             break;
         default:
             break;
