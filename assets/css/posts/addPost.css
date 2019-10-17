@@ -71,15 +71,19 @@
 }
 .toolsContainer {
     display: flex;
+    min-height: 46px;
 }
 .toolbar-tool {
+    width: 25px;
+    height: 25px;
 	color: #13456f;
-	display: flex;
-	align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 	padding: 8px;
 	cursor: pointer;
 	border-radius: 50%;
-    background-color: beige;
+    background-color: #eaf6ff;
     margin-right: 8px;
 }
 .fontSizeMenuItemContainer {
@@ -111,9 +115,17 @@
     top: 76px;
 }
 .toolIcon{
-    width: 24px;
-    height: 24px;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.toolbar-tool:hover>.toolIcon{
+    font-size: 1.3rem ;
+}
+.toolbar-tool:hover{
+    width: 30px;
+    height: 30px;
+    font-size: 1.3rem ;
 }
 .colorIcon{
     cursor: pointer;
@@ -137,6 +149,22 @@
 }
 .toggleTool{
     color: green;
+}
+.changesSaved{
+    color:green;
+}
+.rotate{
+    animation-name: rotate-animation;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}@keyframes rotate-animation {
+    100%{
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){

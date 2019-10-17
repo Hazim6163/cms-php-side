@@ -178,6 +178,7 @@ function createPostBody() {
         }
         currentInChange = true;
         alreadyChangesSaved = false;
+        $('#toolbarSaveDocTool').removeClass('changesSaved').addClass('rotate');
     });
 
     //on focus remove default text:
@@ -213,6 +214,9 @@ function createToolbar(postBody) {
         id: 'menuContainer'
     }).appendTo(toolbarContainer);
 
+    //save doc:
+    toolbarSaveDocTool().appendTo(toolsContainer);
+
     //font size:
     toolbarFontSizeTool().appendTo(toolsContainer);
 
@@ -237,6 +241,31 @@ function createToolbar(postBody) {
     return toolbarContainer;
 }
 
+//save doc tool:
+function toolbarSaveDocTool(){
+    const saveDocTool =$('<div>',{
+        class: 'saveDocTool toolbar-tool',
+        id: 'toolbarSaveDocTool'
+    }).html('<i class="fas fa-cloud-upload-alt toolIcon"></i>');
+
+    saveDocTool.click(()=>{
+        docSave();
+    })
+
+    return saveDocTool;
+}
+
+//save doc:
+function docSave(){
+    const postBody = $('#postBody');
+    const change = postBody.html();
+    changesArrayCurrentPosition++;
+    changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
+    console.log(changesArray);
+    alreadyChangesSaved = true;
+    $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
+}
+
 //save the doc on change every 1s:
 function docSaver(){
     var postBody;
@@ -251,6 +280,7 @@ function docSaver(){
         changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
         console.log(changesArray);
         alreadyChangesSaved = true;
+        $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
     }, 1000);
 }
 
@@ -259,7 +289,7 @@ function toolbarItalicTool(){
     const italicContainer = $('<div>', {
         class: 'toolbarItalicTool toolbar-tool',
         id: 'toolbarItalicTool'
-    }).html('<i class="fas fa-italic"></i>');
+    }).html('<i class="fas fa-italic toolIcon"></i>');
 
     italicContainer.click(()=>{
         toggleItalic();
@@ -289,7 +319,7 @@ function toolbarBoldingTool(){
     const boldingContainer = $('<div>', {
         class: 'toolbarBoldingTool toolbar-tool',
         id: 'toolbarBoldingTool'
-    }).html('<i class="fas fa-bold"></i>');
+    }).html('<i class="fas fa-bold toolIcon"></i>');
 
     boldingContainer.click(()=>{
         toggleBold();
@@ -320,7 +350,7 @@ function toolbarHeadingTool(){
     const headingContainer = $('<div>', {
         class: 'toolbarHeadingTool toolbar-tool',
         id: 'toolbarHeadingTool'
-    }).html('<i class="fas fa-heading"></i>');
+    }).html('<i class="fas fa-heading toolIcon"></i>');
 
     const itemsArray = new Array();
 
@@ -405,7 +435,7 @@ function toolbarBackgroundColorTool(){
     const backgroundColorContainer = $('<div>', {
         class: 'toolbarBackgroundColorTool toolbar-tool',
         id: 'toolbarBackgroundColorTool'
-    }).html('<i class="fas fa-highlighter"></i>');
+    }).html('<i class="fas fa-highlighter toolIcon"></i>');
 
     //create the color list :
     const itemsArray = new Array();
