@@ -258,13 +258,13 @@ function createToolbar(postBody) {
 }
 
 //unordered list:
-function toolbarUnorderedList(){
-    const unorderedListContainer =$('<div>',{
+function toolbarUnorderedList() {
+    const unorderedListContainer = $('<div>', {
         class: 'unorderedListContainer toolbar-tool',
         id: 'unorderedListContainer'
     }).html('<i class="fas fa-list-ul toolIcon"></i>');
 
-    unorderedListContainer.click(()=>{
+    unorderedListContainer.click(() => {
         onUnorderedToolClick();
     })
 
@@ -272,54 +272,54 @@ function toolbarUnorderedList(){
 }
 
 //on unordered list click:
-function onUnorderedToolClick(){
+function onUnorderedToolClick() {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
         updateSelection(selection.selection, 'unordered');
-    }else{
+    } else {
         //insert new item to post body
         insertNewItem('ul');
     }
 }
 
 //ordered list tool:
-function toolbarOrderedList(){
-    const orderedListContainer =$('<div>',{
+function toolbarOrderedList() {
+    const orderedListContainer = $('<div>', {
         class: 'orderedListContainer toolbar-tool',
         id: 'orderedListContainer'
     }).html('<i class="fas fa-list-ol" toolIcon></i>');
 
-    orderedListContainer.click(()=>{
+    orderedListContainer.click(() => {
         onOrderedToolClick();
     })
 
     return orderedListContainer;
 }
 
-function onOrderedToolClick(){
+function onOrderedToolClick() {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
         updateSelection(selection.selection, 'ordered');
-    }else{
+    } else {
         //insert new item to post body
         insertNewItem('ol');
     }
 }
 
 //undo tool
-function toolbarUndoTool(){
-    const undoContainer =$('<div>',{
+function toolbarUndoTool() {
+    const undoContainer = $('<div>', {
         class: 'toolbarUndoTool toolbar-tool',
         id: 'toolbarUndoTool'
     }).html('<i class="fas fa-undo toolIcon"></i>');
 
-    undoContainer.click(()=>{
+    undoContainer.click(() => {
         undo();
     })
 
@@ -327,14 +327,14 @@ function toolbarUndoTool(){
 }
 
 //undo function
-function undo(){
+function undo() {
     //get post body:
     const postBody = $('#postBody');
 
     changesArray = docHistory;
-    changesArrayCurrentPosition = changesArray.length-1;
+    changesArrayCurrentPosition = changesArray.length - 1;
     //check if there is changes:
-    if(changesArray.length < 1){
+    if (changesArray.length < 1) {
         //there is no changes
         return;
     }
@@ -343,15 +343,16 @@ function undo(){
     //get change obj
     var changeObj = changesArray[changesArrayCurrentPosition];
     //check if the obj is valid
-    if(!changeObj){
+    if (!changeObj) {
         changesArrayCurrentPosition = changesArray.length;
         changesArrayCurrentPosition = changesArrayCurrentPosition;
         changesArrayCurrentPosition--;
     }
-    
+
     //get change obj
     changeObj = changesArray[changesArrayCurrentPosition];
-    if(changesArray.length != 0){redoArray.push({position: redoCurrentPosition++, change: postBody.html()});
+    if (changesArray.length != 0) {
+        redoArray.push({ position: redoCurrentPosition++, change: postBody.html() });
     }
     //change obj founded:
     postBody.html(changeObj.change);
@@ -359,13 +360,13 @@ function undo(){
 }
 
 //redo tool
-function toolbarRedoTool(){
-    const redoContainer =$('<div>',{
+function toolbarRedoTool() {
+    const redoContainer = $('<div>', {
         class: 'toolbarRedoTool toolbar-tool',
         id: 'toolbarRedoTool'
     }).html('<i class="fas fa-redo toolIcon"></i>');
 
-    redoContainer.click(()=>{
+    redoContainer.click(() => {
         redo();
     })
 
@@ -373,12 +374,12 @@ function toolbarRedoTool(){
 }
 
 //redo function
-function redo(){
+function redo() {
     //get post body:
     const postBody = $('#postBody');
 
     //check if there is redos:
-    if(redoArray.length < 1){
+    if (redoArray.length < 1) {
         //there is no redos
         return;
     }
@@ -387,29 +388,29 @@ function redo(){
     //get change obj
     var changeObj = redoArray[redoCurrentPosition];
     //check if the obj is valid
-    if(!changeObj){
-        redoCurrentPosition = redoArray.length-1;
+    if (!changeObj) {
+        redoCurrentPosition = redoArray.length - 1;
     }
-    
+
     //get change obj
     changeObj = redoArray[redoCurrentPosition];
     // changesArray.push({position: changesArrayCurrentPosition++, change: postBody.html()});
     //change obj founded:
     postBody.html(changeObj.change);
-    if(redoArray.length != 0){
+    if (redoArray.length != 0) {
         changesArray.push(changeObj);
     }
     redoArray.pop();
 }
 
 //save doc tool:
-function toolbarSaveDocTool(){
-    const saveDocTool =$('<div>',{
+function toolbarSaveDocTool() {
+    const saveDocTool = $('<div>', {
         class: 'saveDocTool toolbar-tool',
         id: 'toolbarSaveDocTool'
     }).html('<i class="fas fa-cloud-upload-alt toolIcon"></i>');
 
-    saveDocTool.click(()=>{
+    saveDocTool.click(() => {
         docSave();
     })
 
@@ -417,97 +418,97 @@ function toolbarSaveDocTool(){
 }
 
 //save doc:
-function docSave(){
+function docSave() {
     const postBody = $('#postBody');
     const change = postBody.html();
     changesArrayCurrentPosition++;
-    changesArray.push({position: changesArrayCurrentPosition, change: change});
-    docHistory.push({position: historyPosition++, change: change});
+    changesArray.push({ position: changesArrayCurrentPosition, change: change });
+    docHistory.push({ position: historyPosition++, change: change });
     alreadyChangesSaved = true;
     $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
 }
 
 //save the doc on change every 1s:
-function docSaver(){
+function docSaver() {
     var postBody;
-    setInterval(()=>{
-        if(currentInChange || alreadyChangesSaved){
+    setInterval(() => {
+        if (currentInChange || alreadyChangesSaved) {
             currentInChange = false;
             return
         }
         postBody = $('#postBody');
         const change = postBody.html();
         changesArrayCurrentPosition++;
-        changesArray.push({position: changesArrayCurrentPosition, change: change});
-        docHistory.push({position: historyPosition++, change: change});
+        changesArray.push({ position: changesArrayCurrentPosition, change: change });
+        docHistory.push({ position: historyPosition++, change: change });
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
     }, 1000);
 }
 
 //toolbar italic tool:
-function toolbarItalicTool(){
+function toolbarItalicTool() {
     const italicContainer = $('<div>', {
         class: 'toolbarItalicTool toolbar-tool',
         id: 'toolbarItalicTool'
     }).html('<i class="fas fa-italic toolIcon"></i>');
 
-    italicContainer.click(()=>{
+    italicContainer.click(() => {
         toggleItalic();
         italicContainer.toggleClass('toggleTool');
     })
-    
+
     return italicContainer;
 }
 
 //toggle italic:
-function toggleItalic(){
+function toggleItalic() {
     italic = !italic;
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
-        updateSelection(selection.selection, 'italic', {italic: italic});
-    }else{
+        updateSelection(selection.selection, 'italic', { italic: italic });
+    } else {
         //insert new item to post body
         insertNewItem('span');
     }
 }
 
 //toolbar bolding tool
-function toolbarBoldingTool(){
+function toolbarBoldingTool() {
     const boldingContainer = $('<div>', {
         class: 'toolbarBoldingTool toolbar-tool',
         id: 'toolbarBoldingTool'
     }).html('<i class="fas fa-bold toolIcon"></i>');
 
-    boldingContainer.click(()=>{
+    boldingContainer.click(() => {
         toggleBold();
         boldingContainer.toggleClass('toggleTool');
     })
-    
+
     return boldingContainer;
 }
 
 //toggle bold:
-function toggleBold(){
+function toggleBold() {
     //toggle bold
     bold = !bold;
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
-        updateSelection(selection.selection, 'bolding', {bold: bold});
-    }else{
+        updateSelection(selection.selection, 'bolding', { bold: bold });
+    } else {
         //insert new item to post body
         insertNewItem('span');
     }
 }
 
 //toolbar heading tool:
-function toolbarHeadingTool(){
+function toolbarHeadingTool() {
     const headingContainer = $('<div>', {
         class: 'toolbarHeadingTool toolbar-tool',
         id: 'toolbarHeadingTool'
@@ -516,16 +517,16 @@ function toolbarHeadingTool(){
     const itemsArray = new Array();
 
     for (let index = 6; index >= 1; index--) {
-       itemsArray.push($('<h'+index+'>',{
-           class: 'headerTool'
-       }).click(()=>{
+        itemsArray.push($('<h' + index + '>', {
+            class: 'headerTool'
+        }).click(() => {
             header = true;
             headerLevel = index;
             onHeaderItemClick(headerLevel);
-       }).html('H'+index).css('text-align', 'center'));
+        }).html('H' + index).css('text-align', 'center'));
     }
 
-    headingContainer.click(()=>{
+    headingContainer.click(() => {
         customizeMenuInflater(itemsArray, 'heading');
     })
 
@@ -533,21 +534,21 @@ function toolbarHeadingTool(){
 }
 
 //on header item click:
-function onHeaderItemClick(lvl){
+function onHeaderItemClick(lvl) {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
-        updateSelection(selection.selection, 'heading', {level: lvl});
-    }else{
+        updateSelection(selection.selection, 'heading', { level: lvl });
+    } else {
         //insert new item to post body
-        insertNewItem('h'+lvl);
+        insertNewItem('h' + lvl);
     }
 }
 
 //toolbar Font color tool
-function toolbarFontColorTool(){
+function toolbarFontColorTool() {
     const fontColorContainer = $('<div>', {
         class: 'toolbarFontColorTool toolbar-tool',
         id: 'toolbarFontColorTool'
@@ -556,14 +557,14 @@ function toolbarFontColorTool(){
     //create the color list :
     const itemsArray = new Array();
 
-    const platesContainer = $('<div>',{
+    const platesContainer = $('<div>', {
         class: 'platesColorContainer',
         id: 'platesColorContainer'
     });
 
     const colorsPlates = extractColors();
     //loop throw each plate
-    colorsPlates.forEach((plate)=>{
+    colorsPlates.forEach((plate) => {
         //get plate colors icons
         const plateArr = plate.children();
         for (let index = 0; index < plateArr.length; index++) {
@@ -572,7 +573,7 @@ function toolbarFontColorTool(){
             //set colorIcon css class
             element.addClass('colorIcon');
             //set on click listener
-            element.click(()=>{
+            element.click(() => {
                 fontColor = element.css('background-color');
                 onFontColorIconClick();
             })
@@ -580,7 +581,7 @@ function toolbarFontColorTool(){
         //append plate to plates container:
         platesContainer.append(plate);
     })
-    
+
 
     itemsArray.push(platesContainer);
     fontColorContainer.click(() => {
@@ -592,7 +593,7 @@ function toolbarFontColorTool(){
 }
 
 //toolbar background-color: 
-function toolbarBackgroundColorTool(){
+function toolbarBackgroundColorTool() {
     const backgroundColorContainer = $('<div>', {
         class: 'toolbarBackgroundColorTool toolbar-tool',
         id: 'toolbarBackgroundColorTool'
@@ -601,14 +602,14 @@ function toolbarBackgroundColorTool(){
     //create the color list :
     const itemsArray = new Array();
 
-    const platesContainer = $('<div>',{
+    const platesContainer = $('<div>', {
         class: 'platesColorContainer',
         id: 'platesColorContainer'
     });
 
     const colorsPlates = extractColors();
     //loop throw each plate
-    colorsPlates.forEach((plate)=>{
+    colorsPlates.forEach((plate) => {
         //get plate colors icons
         const plateArr = plate.children();
         for (let index = 0; index < plateArr.length; index++) {
@@ -617,7 +618,7 @@ function toolbarBackgroundColorTool(){
             //set colorIcon css class
             element.addClass('colorIcon');
             //set on click listener
-            element.click(()=>{
+            element.click(() => {
                 backgroundColor = element.css('background-color');
                 onBackGroundColorIconClick();
             })
@@ -625,7 +626,7 @@ function toolbarBackgroundColorTool(){
         //append plate to plates container:
         platesContainer.append(plate);
     })
-    
+
 
     itemsArray.push(platesContainer);
     backgroundColorContainer.click(() => {
@@ -636,25 +637,25 @@ function toolbarBackgroundColorTool(){
 }
 
 //on background color icon click
-function onBackGroundColorIconClick(){
+function onBackGroundColorIconClick() {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
         updateSelection(selection.selection, 'background-color');
-    }else{
+    } else {
         // no selected text insert new item to post body
         insertNewItem('span');
     }
 }
 
 //extract Colors:
-function extractColors(){
+function extractColors() {
     const colors = new Array();
 
     //plat_1
-    const plat_1 = $('<div>',{
+    const plat_1 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat_1'
     });
@@ -666,13 +667,13 @@ function extractColors(){
     plat_1Arr.push('#66ff00');
     plat_1Arr.push('#0000ff');
     plat_1Arr.push('#ffffff');
-    plat_1Arr.forEach((color)=>{
-        plat_1.append($('<div>').css({'background-color': color}));
+    plat_1Arr.forEach((color) => {
+        plat_1.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat_1);
 
     //plat1
-    const plat1 = $('<div>',{
+    const plat1 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat1'
     });
@@ -684,13 +685,13 @@ function extractColors(){
     plat1Arr.push('rgb(255, 41, 41)');
     plat1Arr.push('rgb(255, 71, 71)');
     plat1Arr.push('rgb(255, 114, 114)');
-    plat1Arr.forEach((color)=>{
-        plat1.append($('<div>').css({'background-color': color}));
+    plat1Arr.forEach((color) => {
+        plat1.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat1);
 
     //plat2
-    const plat2 = $('<div>',{
+    const plat2 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat2'
     });
@@ -702,13 +703,13 @@ function extractColors(){
     plat2Arr.push('#ff791f');
     plat2Arr.push('#ff8c40');
     plat2Arr.push('#ffa365');
-    plat2Arr.forEach((color)=>{
-        plat2.append($('<div>').css({'background-color': color}));
+    plat2Arr.forEach((color) => {
+        plat2.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat2);
 
     /* plat3 */
-    const plat3 = $('<div>',{
+    const plat3 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat3'
     });
@@ -720,13 +721,13 @@ function extractColors(){
     plat3Arr.push('#fff457');
     plat3Arr.push('#fff78e');
     plat3Arr.push('#fffabb');
-    plat3Arr.forEach((color)=>{
-        plat3.append($('<div>').css({'background-color': color}));
+    plat3Arr.forEach((color) => {
+        plat3.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat3);
 
     /* plat5 */
-    const plat5 = $('<div>',{
+    const plat5 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat5'
     });
@@ -738,13 +739,13 @@ function extractColors(){
     plat5Arr.push('#9aff57');
     plat5Arr.push('#b2ff7f');
     plat5Arr.push('#c4ff9d');
-    plat5Arr.forEach((color)=>{
-        plat5.append($('<div>').css({'background-color': color}));
+    plat5Arr.forEach((color) => {
+        plat5.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat5);
 
     /* plat7 */
-    const plat7 = $('<div>',{
+    const plat7 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat7'
     });
@@ -756,13 +757,13 @@ function extractColors(){
     plat7Arr.push('#2dff81');
     plat7Arr.push('#49ff92');
     plat7Arr.push('#80ffb3');
-    plat7Arr.forEach((color)=>{
-        plat7.append($('<div>').css({'background-color': color}));
+    plat7Arr.forEach((color) => {
+        plat7.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat7);
 
     /* plat8 */
-    const plat8 = $('<div>',{
+    const plat8 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat8'
     });
@@ -774,13 +775,13 @@ function extractColors(){
     plat8Arr.push('#4affdb');
     plat8Arr.push('#81ffe6');
     plat8Arr.push('#acffee');
-    plat8Arr.forEach((color)=>{
-        plat8.append($('<div>').css({'background-color': color}));
+    plat8Arr.forEach((color) => {
+        plat8.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat8);
 
     /* plat9 */
-    const plat9 = $('<div>',{
+    const plat9 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat9'
     });
@@ -792,13 +793,13 @@ function extractColors(){
     plat9Arr.push('#28d4ff');
     plat9Arr.push('#55ddff');
     plat9Arr.push('#81e6ff');
-    plat9Arr.forEach((color)=>{
-        plat9.append($('<div>').css({'background-color': color}));
+    plat9Arr.forEach((color) => {
+        plat9.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat9);
 
     /* plat10 */
-    const plat10 = $('<div>',{
+    const plat10 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat10'
     });
@@ -810,13 +811,13 @@ function extractColors(){
     plat10Arr.push('#297eff');
     plat10Arr.push('#4891ff');
     plat10Arr.push('#6da8ff');
-    plat10Arr.forEach((color)=>{
-        plat10.append($('<div>').css({'background-color': color}));
+    plat10Arr.forEach((color) => {
+        plat10.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat10);
 
     /* plat11 */
-    const plat11 = $('<div>',{
+    const plat11 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat11'
     });
@@ -828,13 +829,13 @@ function extractColors(){
     plat11Arr.push('#2727ff');
     plat11Arr.push('#4a4aff');
     plat11Arr.push('#8181ff');
-    plat11Arr.forEach((color)=>{
-        plat11.append($('<div>').css({'background-color': color}));
+    plat11Arr.forEach((color) => {
+        plat11.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat11);
 
     /* plat12 */
-    const plat12 = $('<div>',{
+    const plat12 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat12'
     });
@@ -846,13 +847,13 @@ function extractColors(){
     plat12Arr.push('#7c25ff');
     plat12Arr.push('#8f44ff');
     plat12Arr.push('#b787ff');
-    plat12Arr.forEach((color)=>{
-        plat12.append($('<div>').css({'background-color': color}));
+    plat12Arr.forEach((color) => {
+        plat12.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat12);
 
     /* plat13 */
-    const plat13 = $('<div>',{
+    const plat13 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat13'
     });
@@ -864,13 +865,13 @@ function extractColors(){
     plat13Arr.push('#d633ff');
     plat13Arr.push('#df61ff');
     plat13Arr.push('#ea97ff');
-    plat13Arr.forEach((color)=>{
-        plat13.append($('<div>').css({'background-color': color}));
+    plat13Arr.forEach((color) => {
+        plat13.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat13);
 
     /* plat14 */
-    const plat14 = $('<div>',{
+    const plat14 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat14'
     });
@@ -882,14 +883,14 @@ function extractColors(){
     plat14Arr.push('#ff21d3');
     plat14Arr.push('#ff57dd');
     plat14Arr.push('#ff82e6');
-    plat14Arr.forEach((color)=>{
-        plat14.append($('<div>').css({'background-color': color}));
+    plat14Arr.forEach((color) => {
+        plat14.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat14);
 
 
     /* plat15 */
-    const plat15 = $('<div>',{
+    const plat15 = $('<div>', {
         class: 'colorPlat',
         id: 'colorPlat15'
     });
@@ -901,8 +902,8 @@ function extractColors(){
     plat15Arr.push('#ff2f82');
     plat15Arr.push('#fd5196');
     plat15Arr.push('#ff89b8');
-    plat15Arr.forEach((color)=>{
-        plat15.append($('<div>').css({'background-color': color}));
+    plat15Arr.forEach((color) => {
+        plat15.append($('<div>').css({ 'background-color': color }));
     });
     colors.push(plat15);
 
@@ -910,14 +911,14 @@ function extractColors(){
 }
 
 //on color icon click
-function onFontColorIconClick(){
+function onFontColorIconClick() {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
         updateSelection(selection.selection, 'font-color');
-    }else{
+    } else {
         // no selected text insert new item to post body
         insertNewItem('span');
     }
@@ -1001,10 +1002,10 @@ function onFontPropClick() {
     //check if there is selected text
     const selection = checkIfSelection();
 
-    if(selection.isSelected){
+    if (selection.isSelected) {
         //there is selected text
         updateSelection(selection.selection, 'font-size');
-    }else{
+    } else {
         // no selected text insert new item to post body
         insertNewItem('span');
     }
@@ -1124,36 +1125,36 @@ function onLongPress(element) {
 }
 
 //insert new Item to post body:
-function insertNewItem(_type){
+function insertNewItem(_type) {
     type = _type;
     //get post body obj:
     const postBody = $('#postBody');
     //set type:
     //add new element to post body:
     var newElement;
-    if(header){
-        newElement = '<'+type+'>&zwnj;';
+    if (header) {
+        newElement = '<' + type + '>&zwnj;';
         header = false;
-    }else if(type == 'span'){
-        if(bold && italic){
-            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold; font-style: italic">&zwnj;'
-        }else if(bold){
-            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; font-weight: bold">&zwnj;'
-        }else if(italic){
-            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';font-style: italic">&zwnj;'
-        }else{
-            newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
+    } else if (type == 'span') {
+        if (bold && italic) {
+            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold; font-style: italic">&zwnj;'
+        } else if (bold) {
+            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold">&zwnj;'
+        } else if (italic) {
+            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';font-style: italic">&zwnj;'
+        } else {
+            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';">&zwnj;'
         }
-    }else if(type == 'ol'){
-        newElement = '<ol style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; margin-left: 32px"><li>&zwnj;';
+    } else if (type == 'ol') {
+        newElement = '<ol style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
         type = 'li';
         appendToLastChild(newElement);
-        return ;
-    }else if( type == 'ul'){
-        newElement = '<ul style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; margin-left: 32px"><li>&zwnj;';
+        return;
+    } else if (type == 'ul') {
+        newElement = '<ul style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
         type = 'li';
         appendToLastChild(newElement);
-        return ;
+        return;
     }
     postBody.html(postBody.html() + newElement);
 
@@ -1166,16 +1167,16 @@ function insertNewItem(_type){
 
 //append to last child loop
 //html will append to the last child or to post body if there is no elements in the post body:
-function appendToLastChild(html){
+function appendToLastChild(html) {
     const postBody = $('#postBody');
     //get last child:
     var lastChild = $(postBody.get(0).lastChild);
     //check if there is valid child
-    if(lastChild.html()){
+    if (lastChild.html()) {
         //get node name:
         const nodeName = lastChild.prop('nodeName');
-        $(nodeName).last().html($(nodeName).last().html()+ html);
-        return ;
+        $(nodeName).last().html($(nodeName).last().html() + html);
+        return;
     }
     //no nested children founded append to body:
     postBody.html(postBody.html() + html);
@@ -1184,7 +1185,7 @@ function appendToLastChild(html){
 }
 
 //check if there is selection:
-function checkIfSelection(){
+function checkIfSelection() {
     //get post body obj:
     const postBody = $('#postBody');
 
@@ -1195,11 +1196,11 @@ function checkIfSelection(){
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
-    return {isSelected: start != end, selection: selection};
+    return { isSelected: start != end, selection: selection };
 }
 
 //update the selection:
-function updateSelection(selection, changeType, data){
+function updateSelection(selection, changeType, data) {
     //extract selection text, range
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
@@ -1216,7 +1217,7 @@ function updateSelection(selection, changeType, data){
 }
 
 //create updated item 
-function createUpdatedItem(changeType, selectionText, extraData){
+function createUpdatedItem(changeType, selectionText, extraData) {
     var newElement = null;
     switch (changeType) {
         case 'font-size':
@@ -1229,26 +1230,26 @@ function createUpdatedItem(changeType, selectionText, extraData){
             newElement = $('<span>').css('background-color', backgroundColor).html(selectionText);
             break;
         case 'heading':
-            newElement = $('<h'+extraData.level+'>').html(selectionText);
+            newElement = $('<h' + extraData.level + '>').html(selectionText);
             header = false;
             break;
         case 'italic':
         case 'bolding':
-            if(bold & italic){
+            if (bold & italic) {
                 newElement = $('<span>').css('font-weight', 'bold').css('font-style', 'italic').html(selectionText);
-            }else if(bold){
+            } else if (bold) {
                 newElement = $('<span>').css('font-weight', 'bold').html(selectionText);
-            }else if(italic){
+            } else if (italic) {
                 newElement = $('<span>').css('font-style', 'italic').html(selectionText);
-            }else{
+            } else {
                 newElement = $('<span>').html(selectionText);
             }
             break;
         case 'ordered':
-            newElement = $('<ol>').css('margin-left', '32px').html('<li>'+selectionText+'</li>');
+            newElement = $('<ol>').css('margin-left', '32px').html('<li>' + selectionText + '</li>');
             break;
         case 'unordered':
-            newElement = $('<ul>').css('margin-left', '32px').html('<li>'+selectionText+'</li>');
+            newElement = $('<ul>').css('margin-left', '32px').html('<li>' + selectionText + '</li>');
             break;
         default:
             break;
