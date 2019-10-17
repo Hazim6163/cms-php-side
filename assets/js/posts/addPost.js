@@ -523,11 +523,12 @@ function onFontColorIconClick(){
 
     if(selection.isSelected){
         //there is selected text
-        updateSelection(selection.selection);
+        updateSelection(selection.selection, 'font-color');
     }else{
         // no selected text insert new item to post body
         insertNewItem('span');
     }
+    console.log($('#postBody').html());
 }
 
 //toolbarFontSizeTool
@@ -610,11 +611,12 @@ function onFontPropClick() {
 
     if(selection.isSelected){
         //there is selected text
-        updateSelection(selection.selection);
+        updateSelection(selection.selection, 'font-size');
     }else{
         // no selected text insert new item to post body
         insertNewItem('span');
     }
+    console.log($('#postBody').html());
 }
 
 //cursor at end setter:
@@ -762,12 +764,12 @@ function checkIfSelection(){
 }
 
 //update the selection:
-function updateSelection(selection){
+function updateSelection(selection, changeType){
     //extract selection text, range
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
     //create new element
-    const newElement = $('<span>').css('font-size', fontSize).css('color', fontColor).html(selectionText);
+    var newElement = createUpdatedItem(changeType, selectionText);
     //delete selection from post body
     selection.deleteFromDocument();
     //insert new element place the deleted selection
@@ -776,4 +778,20 @@ function updateSelection(selection){
     //close the menu:
     closeCustomizeMenuWithoutMoveCursor();
     return;
+}
+
+//create updated item 
+function createUpdatedItem(changeType, selectionText){
+    var newElement = null;
+    switch (changeType) {
+        case 'font-size':
+            newElement = $('<span>').css('font-size', fontSize).html(selectionText);
+            break;
+        case 'font-color':
+            newElement = $('<span>').css('color', fontColor).html(selectionText);
+            break;
+        default:
+            break;
+    }
+    return newElement;
 }
