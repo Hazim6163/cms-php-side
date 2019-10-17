@@ -79,7 +79,8 @@
 	padding: 8px;
 	cursor: pointer;
 	border-radius: 50%;
-	background-color: beige;
+    background-color: beige;
+    margin-right: 8px;
 }
 .fontSizeMenuItemContainer {
     border-bottom: 1px dotted #277ec8;
@@ -109,6 +110,26 @@
 }
 .navbarToggleActiveToolbar{
     top: 76px;
+}
+.toolIcon{
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+.colorIcon{
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    flex: 1px;
+    margin: 2px;
+}
+.platesColorContainer{
+    padding: 16px;
+}
+.colorPlat{
+    display: flex;
+    flex-wrap: wrap;
 }
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){

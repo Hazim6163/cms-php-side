@@ -1,0 +1,388 @@
+.hex .color .plat{
+    /* plat_1 */
+    color: #000;
+    color: #252525;
+    color: #ff0000;
+    color: #fff457;
+    color: #66ff00;
+    color: #0000ff;
+    color: #7e0032;
+    color: #fff;
+
+    /* plat1 */ 
+    color: #460000;
+    color: #7a0000;
+    color: #be0000;
+    color: #ff0000;
+    color: #ff2929;
+    color: #ff4747;
+    color: #ff7272;
+
+    /* plat2 */
+    color: #5a2400;
+    color: #923a00;
+    color: #ce5200;
+    color: #ff6600;
+    color: #ff791f;
+    color: #ff8c40;
+    color: #ffa365;
+
+    /* plat3 */
+    color: #362b00;
+    color: #9b7c00;
+    color: #dbaf00;
+    color: #ffcc00;
+    color: #fff457;
+    color: #fff78e;
+    color: #fffabb;
+
+    /* plat5 */
+    color: #122c00;
+    color: #358500;
+    color: #52cc00;
+    color: #66ff00;
+    color: #9aff57;
+    color: #b2ff7f;
+    color: #c4ff9d;
+
+    /* plat7 */
+    color: #003515;
+    color: #008636;
+    color: #00bd4b;
+    color: #00ff66;
+    color: #2dff81;
+    color: #49ff92;
+    color: #80ffb3;
+
+    /* plat8 */
+    color: #002e25;
+    color: #008167;
+    color: #00cca3;
+    color: #00ffcc;
+    color: #4affdb;
+    color: #81ffe6;
+    color: #acffee;
+
+    /* plat9 */
+    color: #00252e;
+    color: #006e8a;
+    color: #00a0c8;
+    color: #00ccff;
+    color: #28d4ff;
+    color: #55ddff;
+    color: #81e6ff;
+
+    /* plat10 */
+    color: #00193f;
+    color: #003c95;
+    color: #004fc5;
+    color: #0066ff;
+    color: #297eff;
+    color: #4891ff;
+    color: #6da8ff;
+
+    /* plat11 */
+    color: #000033;
+    color: #00008b;
+    color: #0000cc;
+    color: #0000ff;
+    color: #2727ff;
+    color: #4a4aff;
+    color: #8181ff;
+
+    /* plat12 */
+    color: #13002f;
+    color: #31007a;
+    color: #5100ca;
+    color: #6600ff;
+    color: #7c25ff;
+    color: #8f44ff;
+    color: #b787ff;
+
+    /* plat13 */
+    color: #270031;
+    color: #760094;
+    color: #9b00c2;
+    color: #cc00ff;
+    color: #d633ff;
+    color: #df61ff;
+    color: #ea97ff;
+
+    /* plat14 */
+    color: #3b0030;
+    color: #940076;
+    color: #c2009b;
+    color: #ff00cc;
+    color: #ff21d3;
+    color: #ff57dd;
+    color: #ff82e6;
+
+    /* plat15 */
+    color: #3d0018;
+    color: #7e0032;
+    color: #c0004d;
+    color: #ff0066;
+    color: #ff2f82;
+    color: #fd5196;
+    color: #ff89b8;
+
+}
+
+.rgb .color .plat{
+    /* plat_1 */
+    color: rgb(0, 0, 0);
+    color: rgb(37, 37, 37);
+    color: rgb(255, 0, 0);
+    color: rgb(255, 244, 87);
+    color: rgb(102, 255, 0);
+    color: rgb(0, 0, 255);
+    color: rgb(126, 0, 50);
+    color: rgb(255, 255, 255);
+    
+    /* plat1 */
+    color: rgb(70, 0, 0);
+    color: rgb(122, 0, 0);
+    color: rgb(190, 0, 0);
+    color: rgb(255, 0, 0);
+    color: rgb(255, 41, 41);
+    color: rgb(255, 71, 71);
+    color: rgb(255, 114, 114);
+
+    /* plat2 */
+    color: rgb(90, 36, 0);
+    color: rgb(146, 58, 0);
+    color: rgb(206, 82, 0);
+    color: rgb(255, 102, 0);
+    color: rgb(255, 121, 31);
+    color: rgb(255, 140, 64);
+    color: rgb(255, 163, 101);
+
+    /* plat3 */
+    color: rgb(54, 43, 0);
+    color: rgb(155, 124, 0);
+    color: rgb(219, 175, 0);
+    color: rgb(255, 204, 0);
+    color: rgb(255, 244, 87);
+    color: rgb(255, 247, 142);
+    color: rgb(255, 250, 187);
+
+    /* plat5 */
+    color: rgb(18, 44, 0);
+    color: rgb(53, 133, 0);
+    color: rgb(82, 204, 0);
+    color: rgb(102, 255, 0);
+    color: rgb(154, 255, 87);
+    color: rgb(178, 255, 127);
+    color: rgb(196, 255, 157);
+
+        /* plat7 */
+    color: rgb(0, 53, 21);
+    color: rgb(0, 134, 54);
+    color: rgb(0, 189, 75);
+    color: rgb(0, 255, 102);
+    color: rgb(45, 255, 129);
+    color: rgb(73, 255, 146);
+    color: rgb(128, 255, 179);
+
+        /* plat8 */
+    color: rgb(0, 46, 37);
+    color: rgb(0, 129, 103);
+    color: rgb(0, 204, 163);
+    color: rgb(0, 255, 204);
+    color: rgb(74, 255, 219);
+    color: rgb(117, 255, 227);
+    color: rgb(172, 255, 238);
+
+        /* plat9 */
+    color: rgb(0, 37, 46);
+    color: rgb(0, 110, 138);
+    color: rgb(0, 160, 200);
+    color: rgb(0, 204, 255);
+    color: rgb(40, 212, 255);
+    color: rgb(85, 221, 255);
+    color: rgb(129, 230, 255);
+
+        /* plat10 */
+    color: rgb(0, 25, 63);
+    color: rgb(0, 60, 149);
+    color: rgb(0, 79, 197);
+    color: rgb(0, 102, 255);
+    color: rgb(41, 126, 255);
+    color: rgb(72, 145, 255);
+    color: rgb(109, 168, 255);
+
+        /* plat11 */
+    color: rgb(0, 0, 51);
+    color: rgb(0, 0, 139);
+    color: rgb(0, 0, 204);
+    color: rgb(0, 0, 255);
+    color: rgb(39, 39, 255);
+    color: rgb(74, 74, 255);
+    color: rgb(129, 129, 255);
+
+        /* plat12 */
+    color: rgb(19, 0, 47);
+    color: rgb(49, 0, 122);
+    color: rgb(81, 0, 202);
+    color: rgb(102, 0, 255);
+    color: rgb(124, 37, 255);
+    color: rgb(143, 68, 255);
+    color: rgb(183, 135, 255);
+
+        /* plat13 */
+    color: rgb(39, 0, 49);
+    color: rgb(118, 0, 148);
+    color: rgb(155, 0, 194);
+    color: rgb(204, 0, 255);
+    color: rgb(214, 51, 255);
+    color: rgb(223, 97, 255);
+    color: rgb(234, 151, 255);
+
+        /* plat14 */
+    color: rgb(59, 0, 48);
+    color: rgb(148, 0, 118);
+    color: rgb(194, 0, 155);
+    color: rgb(255, 0, 204);
+    color: rgb(255, 33, 211);
+    color: rgb(255, 87, 221);
+    color: rgb(255, 130, 230);
+
+        /* plat15 */
+    color: rgb(61, 0, 24);
+    color: rgb(126, 0, 50);
+    color: rgb(192, 0, 77);
+    color: rgb(255, 0, 102);
+    color: rgb(255, 47, 130);
+    color: rgb(253, 81, 150);
+    color: rgb(255, 137, 184);
+}
+
+.java .script .code .array{
+
+    /* plat_1 */ 
+    plat_1Arr.push('#000000');
+    plat_1Arr.push('#252525');
+    plat_1Arr.push('#ff0000');
+    plat_1Arr.push('#fff457');
+    plat_1Arr.push('#66ff00');
+    plat_1Arr.push('#0000ff');
+    plat_1Arr.push('#ffffff');
+
+    /* plat1 */ 
+    platArr.push('#460000');
+    platArr.push('#7a0000');
+    platArr.push('#be0000');
+    platArr.push('#ff0000');
+    platArr.push('#ff2929');
+    platArr.push('#ff4747');
+    platArr.push('#ff7272');
+
+    /* plat2 */
+    platArr.push('#5a2400');
+    platArr.push('#923a00');
+    platArr.push('#ce5200');
+    platArr.push('#ff6600');
+    platArr.push('#ff791f');
+    platArr.push('#ff8c40');
+    platArr.push('#ffa365');
+
+    /* plat3 */
+    plat3Arr.push('#362b00');
+    plat3Arr.push('#9b7c00');
+    plat3Arr.push('#dbaf00');
+    plat3Arr.push('#ffcc00');
+    plat3Arr.push('#fff457');
+    plat3Arr.push('#fff78e');
+    plat3Arr.push('#fffabb');
+
+    /* plat5 */
+    plat5Arr.push('#122c00');
+    plat5Arr.push('#358500');
+    plat5Arr.push('#52cc00');
+    plat5Arr.push('#66ff00');
+    plat5Arr.push('#9aff57');
+    plat5Arr.push('#b2ff7f');
+    plat5Arr.push('#c4ff9d');
+
+    /* plat7 */
+    platArr.push('#003515');
+    platArr.push('#008636');
+    platArr.push('#00bd4b');
+    platArr.push('#00ff66');
+    platArr.push('#2dff81');
+    platArr.push('#49ff92');
+    platArr.push('#80ffb3');
+
+    /* plat8 */
+    plat8Arr.push('#002e25');
+    plat8Arr.push('#008167');
+    plat8Arr.push('#00cca3');
+    plat8Arr.push('#00ffcc');
+    plat8Arr.push('#4affdb');
+    plat8Arr.push('#81ffe6');
+    plat8Arr.push('#acffee');
+
+    /* plat9 */
+    platArr.push('#00252e');
+    platArr.push('#006e8a');
+    platArr.push('#00a0c8');
+    platArr.push('#00ccff');
+    platArr.push('#28d4ff');
+    platArr.push('#55ddff');
+    platArr.push('#81e6ff');
+
+    /* plat10 */
+    platArr.push('#00193f');
+    platArr.push('#003c95');
+    platArr.push('#004fc5');
+    platArr.push('#0066ff');
+    platArr.push('#297eff');
+    platArr.push('#4891ff');
+    platArr.push('#6da8ff');
+
+    /* plat11 */
+    platArr.push('#000033');
+    platArr.push('#00008b');
+    platArr.push('#0000cc');
+    platArr.push('#0000ff');
+    platArr.push('#2727ff');
+    platArr.push('#4a4aff');
+    platArr.push('#8181ff');
+
+    /* plat12 */
+    platArr.push('#13002f');
+    platArr.push('#31007a');
+    platArr.push('#5100ca');
+    platArr.push('#6600ff');
+    platArr.push('#7c25ff');
+    platArr.push('#8f44ff');
+    platArr.push('#b787ff');
+
+    /* plat13 */
+    platArr.push('#270031');
+    platArr.push('#760094');
+    platArr.push('#9b00c2');
+    platArr.push('#cc00ff');
+    platArr.push('#d633ff');
+    platArr.push('#df61ff');
+    platArr.push('#ea97ff');
+
+    /* plat14 */
+    platArr.push('#3b0030');
+    platArr.push('#940076');
+    platArr.push('#c2009b');
+    platArr.push('#ff00cc');
+    platArr.push('#ff21d3');
+    platArr.push('#ff57dd');
+    platArr.push('#ff82e6');
+
+    /* plat15 */
+    platArr.push('#3d0018');
+    platArr.push('#7e0032');
+    platArr.push('#c0004d');
+    platArr.push('#ff0066');
+    platArr.push('#ff2f82');
+    platArr.push('#fd5196');
+    platArr.push('#ff89b8');
+
+}

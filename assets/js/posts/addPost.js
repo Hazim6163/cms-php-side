@@ -153,7 +153,7 @@ function createPostBody() {
 
     //create on key up listener to set the place holder
     postBody.on('keyup', () => {
-        if (postBody.html() === '<br>') {
+        if (postBody.html() === '<br>' || postBody.html() == '') {
             postBody.html('Add Post Body');
 
             const range = new Range();
@@ -202,10 +202,331 @@ function createToolbar(postBody) {
     //font size:
     toolbarFontSizeTool().appendTo(toolsContainer);
 
+    //font color:
+    toolbarFontColorTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//toolbar Font color tool
+function toolbarFontColorTool(){
+    const fontColorContainer = $('<div>', {
+        class: 'toolbarFontColorTool toolbar-tool',
+        id: 'toolbarFontColorTool'
+    }).html('<i class="fas fa-tint toolIcon"></i>');
+
+    //create the color list :
+    const itemsArray = new Array();
+
+    const platesContainer = $('<div>',{
+        class: 'platesColorContainer',
+        id: 'platesColorContainer'
+    });
+
+    const colorsPlates = extractColors();
+    colorsPlates.forEach((plate)=>{
+        platesContainer.append(plate);
+    })
+    
+
+    itemsArray.push(platesContainer);
+    fontColorContainer.click(() => {
+        customizeMenuInflater(itemsArray, 'font-color');
+    })
+
+
+    return fontColorContainer;
+}
+
+//extract Colors:
+function extractColors(){
+    const colors = new Array();
+
+    //plat_1
+    const plat_1 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat_1'
+    });
+    const plat_1Arr = new Array();
+    plat_1Arr.push('#000000');
+    plat_1Arr.push('#252525');
+    plat_1Arr.push('#ff0000');
+    plat_1Arr.push('#fff457');
+    plat_1Arr.push('#66ff00');
+    plat_1Arr.push('#0000ff');
+    plat_1Arr.push('#ffffff');
+    plat_1Arr.forEach((color)=>{
+        plat_1.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat_1);
+
+    //plat1
+    const plat1 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat1'
+    });
+    const plat1Arr = new Array();
+    plat1Arr.push('rgb(70, 0, 0)');
+    plat1Arr.push('rgb(122, 0, 0)');
+    plat1Arr.push('rgb(190, 0, 0)');
+    plat1Arr.push('rgb(255, 0, 0)');
+    plat1Arr.push('rgb(255, 41, 41)');
+    plat1Arr.push('rgb(255, 71, 71)');
+    plat1Arr.push('rgb(255, 114, 114)');
+    plat1Arr.forEach((color)=>{
+        plat1.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat1);
+
+    //plat2
+    const plat2 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat2'
+    });
+    const plat2Arr = new Array();
+    plat2Arr.push('#5a2400');
+    plat2Arr.push('#923a00');
+    plat2Arr.push('#ce5200');
+    plat2Arr.push('#ff6600');
+    plat2Arr.push('#ff791f');
+    plat2Arr.push('#ff8c40');
+    plat2Arr.push('#ffa365');
+    plat2Arr.forEach((color)=>{
+        plat2.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat2);
+
+    /* plat3 */
+    const plat3 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat3'
+    });
+    const plat3Arr = new Array();
+    plat3Arr.push('#362b00');
+    plat3Arr.push('#9b7c00');
+    plat3Arr.push('#dbaf00');
+    plat3Arr.push('#ffcc00');
+    plat3Arr.push('#fff457');
+    plat3Arr.push('#fff78e');
+    plat3Arr.push('#fffabb');
+    plat3Arr.forEach((color)=>{
+        plat3.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat3);
+
+    /* plat5 */
+    const plat5 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat5'
+    });
+    const plat5Arr = new Array();
+    plat5Arr.push('#122c00');
+    plat5Arr.push('#358500');
+    plat5Arr.push('#52cc00');
+    plat5Arr.push('#66ff00');
+    plat5Arr.push('#9aff57');
+    plat5Arr.push('#b2ff7f');
+    plat5Arr.push('#c4ff9d');
+    plat5Arr.forEach((color)=>{
+        plat5.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat5);
+
+    /* plat7 */
+    const plat7 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat7'
+    });
+    const plat7Arr = new Array();
+    plat7Arr.push('#003515');
+    plat7Arr.push('#008636');
+    plat7Arr.push('#00bd4b');
+    plat7Arr.push('#00ff66');
+    plat7Arr.push('#2dff81');
+    plat7Arr.push('#49ff92');
+    plat7Arr.push('#80ffb3');
+    plat7Arr.forEach((color)=>{
+        plat7.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat7);
+
+    /* plat8 */
+    const plat8 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat8'
+    });
+    const plat8Arr = new Array();
+    plat8Arr.push('#002e25');
+    plat8Arr.push('#008167');
+    plat8Arr.push('#00cca3');
+    plat8Arr.push('#00ffcc');
+    plat8Arr.push('#4affdb');
+    plat8Arr.push('#81ffe6');
+    plat8Arr.push('#acffee');
+    plat8Arr.forEach((color)=>{
+        plat8.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat8);
+
+    /* plat9 */
+    const plat9 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat9'
+    });
+    const plat9Arr = new Array();
+    plat9Arr.push('#00252e');
+    plat9Arr.push('#006e8a');
+    plat9Arr.push('#00a0c8');
+    plat9Arr.push('#00ccff');
+    plat9Arr.push('#28d4ff');
+    plat9Arr.push('#55ddff');
+    plat9Arr.push('#81e6ff');
+    plat9Arr.forEach((color)=>{
+        plat9.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat9);
+
+    /* plat10 */
+    const plat10 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat10'
+    });
+    const plat10Arr = new Array();
+    plat10Arr.push('#00193f');
+    plat10Arr.push('#003c95');
+    plat10Arr.push('#004fc5');
+    plat10Arr.push('#0066ff');
+    plat10Arr.push('#297eff');
+    plat10Arr.push('#4891ff');
+    plat10Arr.push('#6da8ff');
+    plat10Arr.forEach((color)=>{
+        plat10.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat10);
+
+    /* plat11 */
+    const plat11 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat11'
+    });
+    const plat11Arr = new Array();
+    plat11Arr.push('#000033');
+    plat11Arr.push('#00008b');
+    plat11Arr.push('#0000cc');
+    plat11Arr.push('#0000ff');
+    plat11Arr.push('#2727ff');
+    plat11Arr.push('#4a4aff');
+    plat11Arr.push('#8181ff');
+    plat11Arr.forEach((color)=>{
+        plat11.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat11);
+
+    /* plat12 */
+    const plat12 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat12'
+    });
+    const plat12Arr = new Array();
+    plat12Arr.push('#13002f');
+    plat12Arr.push('#31007a');
+    plat12Arr.push('#5100ca');
+    plat12Arr.push('#6600ff');
+    plat12Arr.push('#7c25ff');
+    plat12Arr.push('#8f44ff');
+    plat12Arr.push('#b787ff');
+    plat12Arr.forEach((color)=>{
+        plat12.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat12);
+
+    /* plat13 */
+    const plat13 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat13'
+    });
+    const plat13Arr = new Array();
+    plat13Arr.push('#270031');
+    plat13Arr.push('#760094');
+    plat13Arr.push('#9b00c2');
+    plat13Arr.push('#cc00ff');
+    plat13Arr.push('#d633ff');
+    plat13Arr.push('#df61ff');
+    plat13Arr.push('#ea97ff');
+    plat13Arr.forEach((color)=>{
+        plat13.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat13);
+
+    /* plat14 */
+    const plat14 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat14'
+    });
+    const plat14Arr = new Array();
+    plat14Arr.push('#3b0030');
+    plat14Arr.push('#940076');
+    plat14Arr.push('#c2009b');
+    plat14Arr.push('#ff00cc');
+    plat14Arr.push('#ff21d3');
+    plat14Arr.push('#ff57dd');
+    plat14Arr.push('#ff82e6');
+    plat14Arr.forEach((color)=>{
+        plat14.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat14);
+
+
+    /* plat15 */
+    const plat15 = $('<div>',{
+        class: 'colorPlat',
+        id: 'colorPlat15'
+    });
+    const plat15Arr = new Array();
+    plat15Arr.push('#3d0018');
+    plat15Arr.push('#7e0032');
+    plat15Arr.push('#c0004d');
+    plat15Arr.push('#ff0066');
+    plat15Arr.push('#ff2f82');
+    plat15Arr.push('#fd5196');
+    plat15Arr.push('#ff89b8');
+    plat15Arr.forEach((color)=>{
+        plat15.append($('<div>',{
+            class: 'colorIcon'
+        }).css({'background-color': color}));
+    });
+    colors.push(plat15);
+
+    return colors;
 }
 
 //toolbarFontSizeTool
@@ -213,7 +534,7 @@ function toolbarFontSizeTool() {
     const fontSizeContainer = $('<div>', {
         class: 'toolbarFontSizeTool toolbar-tool',
         id: 'toolbarFontSizeTool'
-    }).html('<i class="material-icons">format_size</i>');
+    }).html('<i class="material-icons toolIcon">format_size</i>');
 
     //inflate list 8-32: 
     const itemsArray = new Array();
@@ -363,6 +684,7 @@ function customizeMenuInflater(items, menuType) {
         //clean up the menu container:
         $('#customizeMenu').remove();
         //inflate new menu 
+        customizeMenuInflaterOpened = false;
         customizeMenuInflater(items, menuType);
         return;
     }
