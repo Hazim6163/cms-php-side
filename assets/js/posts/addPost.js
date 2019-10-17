@@ -6,8 +6,8 @@ getUserInfo((userInfo) => {
 
 
 //post body editor vars:
-var fontColor = '';
-var fontSize = '40';
+var fontColor = '#000000';
+var fontSize = '20';
 var type = 'span';
 var customizeMenuInflaterOpened = false;
 var openedCustomizeMenuType = 'none';
@@ -261,7 +261,10 @@ function extractColors(){
     plat_1Arr.forEach((color)=>{
         plat_1.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat_1);
 
@@ -281,7 +284,10 @@ function extractColors(){
     plat1Arr.forEach((color)=>{
         plat1.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat1);
 
@@ -301,7 +307,10 @@ function extractColors(){
     plat2Arr.forEach((color)=>{
         plat2.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat2);
 
@@ -321,7 +330,10 @@ function extractColors(){
     plat3Arr.forEach((color)=>{
         plat3.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat3);
 
@@ -341,7 +353,10 @@ function extractColors(){
     plat5Arr.forEach((color)=>{
         plat5.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat5);
 
@@ -361,7 +376,10 @@ function extractColors(){
     plat7Arr.forEach((color)=>{
         plat7.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat7);
 
@@ -381,7 +399,10 @@ function extractColors(){
     plat8Arr.forEach((color)=>{
         plat8.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat8);
 
@@ -401,7 +422,10 @@ function extractColors(){
     plat9Arr.forEach((color)=>{
         plat9.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat9);
 
@@ -421,7 +445,10 @@ function extractColors(){
     plat10Arr.forEach((color)=>{
         plat10.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat10);
 
@@ -441,7 +468,10 @@ function extractColors(){
     plat11Arr.forEach((color)=>{
         plat11.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat11);
 
@@ -461,7 +491,10 @@ function extractColors(){
     plat12Arr.forEach((color)=>{
         plat12.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat12);
 
@@ -481,7 +514,10 @@ function extractColors(){
     plat13Arr.forEach((color)=>{
         plat13.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat13);
 
@@ -501,7 +537,10 @@ function extractColors(){
     plat14Arr.forEach((color)=>{
         plat14.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat14);
 
@@ -522,11 +561,19 @@ function extractColors(){
     plat15Arr.forEach((color)=>{
         plat15.append($('<div>',{
             class: 'colorIcon'
-        }).css({'background-color': color}));
+        }).css({'background-color': color}).click(()=>{
+            fontColor = color;
+            onColorIconClick(color);
+        }));
     });
     colors.push(plat15);
 
     return colors;
+}
+
+//on color icon click
+function onColorIconClick(color){
+    console.log(color);
 }
 
 //toolbarFontSizeTool
