@@ -245,10 +245,40 @@ function createToolbar(postBody) {
     //italic:
     toolbarItalicTool().appendTo(toolsContainer);
 
+    //ordered list 
+    toolbarOrderedList().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//ordered list tool:
+function toolbarOrderedList(){
+    const orderedListContainer =$('<div>',{
+        class: 'orderedListContainer toolbar-tool',
+        id: 'orderedListContainer'
+    }).html('<i class="fas fa-list-ol" toolIcon></i>');
+
+    orderedListContainer.click(()=>{
+        onOrderedToolClick();
+    })
+
+    return orderedListContainer;
+}
+
+function onOrderedToolClick(){
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'ordered');
+    }else{
+        //insert new item to post body
+        insertNewItem('ol');
+    }
 }
 
 //undo tool
@@ -1083,6 +1113,11 @@ function insertNewItem(_type){
         }else{
             newElement = '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;'
         }
+    }else if(type == 'ol'){
+        newElement = '<ol style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; margin-left: 32px"><li>&zwnj;';
+        type = 'li';
+        appendToLastChild(newElement);
+        return ;
     }
     postBody.html(postBody.html() + newElement);
 
@@ -1090,6 +1125,25 @@ function insertNewItem(_type){
     const newHtml = postBody.html();
     postBody.html(newHtml.replace(/<br>/g, ''));
 
+    closeCustomizeMenu();
+}
+
+//append to last child loop
+//html will append to the last child or to post body if there is no elements in the post body:
+function appendToLastChild(html){
+    const postBody = $('#postBody');
+    //get last child:
+    var lastChild = $(postBody.get(0).lastChild);
+    //check if there is valid child
+    if(lastChild.html()){
+        //get node name:
+        const nodeName = lastChild.prop('nodeName');
+        $(nodeName).last().html($(nodeName).last().html()+ html);
+        return ;
+    }
+    //no nested children founded append to body:
+    postBody.html(postBody.html() + html);
+    //close menu:
     closeCustomizeMenu();
 }
 
@@ -1113,6 +1167,7 @@ function updateSelection(selection, changeType, data){
     //extract selection text, range
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
+    console.log(selectionRange.endContainer);
     //create new element
     var newElement = createUpdatedItem(changeType, selectionText, data);
     //delete selection from post body
@@ -1153,6 +1208,9 @@ function createUpdatedItem(changeType, selectionText, extraData){
             }else{
                 newElement = $('<span>').html(selectionText);
             }
+            break;
+        case 'ordered':
+            newElement = $('<ol>').css('margin-left', '32px').html('<li>'+selectionText+'</li>');
             break;
         default:
             break;
