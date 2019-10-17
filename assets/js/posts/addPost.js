@@ -20,6 +20,11 @@ var openedCustomizeMenuType = 'none';
 var menuIsClicked = false;
 var mousedown = false;
 var mousedown_timer = '';
+//version controller:
+const changesArray = new Array();
+var changesArrayCurrentPosition = 0;
+var currentInChange = false;
+var alreadyChangesSaved = false;
 
 /******************* functions  *************/
 
@@ -151,6 +156,8 @@ function createPostDes() {
 
 //create Post Body:
 function createPostBody() {
+    //version control tool
+    docSaver();
     const postBody = $('<div>', {
         class: 'postBody',
         id: 'postBody'
@@ -169,6 +176,8 @@ function createPostBody() {
             window.getSelection().addRange(range);
             return;
         }
+        currentInChange = true;
+        alreadyChangesSaved = false;
     });
 
     //on focus remove default text:
@@ -226,6 +235,23 @@ function createToolbar(postBody) {
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//save the doc on change every 1s:
+function docSaver(){
+    var postBody;
+    setInterval(()=>{
+        if(currentInChange || alreadyChangesSaved){
+            currentInChange = false;
+            return
+        }
+        postBody = $('#postBody');
+        const change = postBody.html();
+        changesArrayCurrentPosition++;
+        changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
+        console.log(changesArray);
+        alreadyChangesSaved = true;
+    }, 1000);
 }
 
 //toolbar italic tool:
