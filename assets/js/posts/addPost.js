@@ -248,10 +248,41 @@ function createToolbar(postBody) {
     //ordered list 
     toolbarOrderedList().appendTo(toolsContainer);
 
+    //unordered list :
+    toolbarUnorderedList().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//unordered list:
+function toolbarUnorderedList(){
+    const unorderedListContainer =$('<div>',{
+        class: 'unorderedListContainer toolbar-tool',
+        id: 'unorderedListContainer'
+    }).html('<i class="fas fa-list-ul toolIcon"></i>');
+
+    unorderedListContainer.click(()=>{
+        onUnorderedToolClick();
+    })
+
+    return unorderedListContainer;
+}
+
+//on unordered list click:
+function onUnorderedToolClick(){
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'unordered');
+    }else{
+        //insert new item to post body
+        insertNewItem('ul');
+    }
 }
 
 //ordered list tool:
@@ -1118,6 +1149,11 @@ function insertNewItem(_type){
         type = 'li';
         appendToLastChild(newElement);
         return ;
+    }else if( type == 'ul'){
+        newElement = '<ul style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+'; margin-left: 32px"><li>&zwnj;';
+        type = 'li';
+        appendToLastChild(newElement);
+        return ;
     }
     postBody.html(postBody.html() + newElement);
 
@@ -1167,7 +1203,6 @@ function updateSelection(selection, changeType, data){
     //extract selection text, range
     const selectionText = selection.toString();
     const selectionRange = selection.getRangeAt(0);
-    console.log(selectionRange.endContainer);
     //create new element
     var newElement = createUpdatedItem(changeType, selectionText, data);
     //delete selection from post body
@@ -1211,6 +1246,9 @@ function createUpdatedItem(changeType, selectionText, extraData){
             break;
         case 'ordered':
             newElement = $('<ol>').css('margin-left', '32px').html('<li>'+selectionText+'</li>');
+            break;
+        case 'unordered':
+            newElement = $('<ul>').css('margin-left', '32px').html('<li>'+selectionText+'</li>');
             break;
         default:
             break;
