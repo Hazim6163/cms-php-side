@@ -227,7 +227,22 @@ function toolbarFontColorTool(){
     });
 
     const colorsPlates = extractColors();
+    //loop throw each plate
     colorsPlates.forEach((plate)=>{
+        //get plate colors icons
+        const plateArr = plate.children();
+        for (let index = 0; index < plateArr.length; index++) {
+            //get color icon jquery obj
+            const element = $(plateArr[index]);
+            //set colorIcon css class
+            element.addClass('colorIcon');
+            //set on click listener
+            element.click(()=>{
+                fontColor = element.css('background-color');
+                onFontColorIconClick();
+            })
+        }
+        //append plate to plates container:
         platesContainer.append(plate);
     })
     
@@ -259,12 +274,7 @@ function extractColors(){
     plat_1Arr.push('#0000ff');
     plat_1Arr.push('#ffffff');
     plat_1Arr.forEach((color)=>{
-        plat_1.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat_1.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat_1);
 
@@ -282,12 +292,7 @@ function extractColors(){
     plat1Arr.push('rgb(255, 71, 71)');
     plat1Arr.push('rgb(255, 114, 114)');
     plat1Arr.forEach((color)=>{
-        plat1.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat1.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat1);
 
@@ -305,12 +310,7 @@ function extractColors(){
     plat2Arr.push('#ff8c40');
     plat2Arr.push('#ffa365');
     plat2Arr.forEach((color)=>{
-        plat2.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat2.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat2);
 
@@ -328,12 +328,7 @@ function extractColors(){
     plat3Arr.push('#fff78e');
     plat3Arr.push('#fffabb');
     plat3Arr.forEach((color)=>{
-        plat3.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat3.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat3);
 
@@ -351,12 +346,7 @@ function extractColors(){
     plat5Arr.push('#b2ff7f');
     plat5Arr.push('#c4ff9d');
     plat5Arr.forEach((color)=>{
-        plat5.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat5.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat5);
 
@@ -374,12 +364,7 @@ function extractColors(){
     plat7Arr.push('#49ff92');
     plat7Arr.push('#80ffb3');
     plat7Arr.forEach((color)=>{
-        plat7.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat7.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat7);
 
@@ -397,12 +382,7 @@ function extractColors(){
     plat8Arr.push('#81ffe6');
     plat8Arr.push('#acffee');
     plat8Arr.forEach((color)=>{
-        plat8.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat8.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat8);
 
@@ -420,12 +400,7 @@ function extractColors(){
     plat9Arr.push('#55ddff');
     plat9Arr.push('#81e6ff');
     plat9Arr.forEach((color)=>{
-        plat9.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat9.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat9);
 
@@ -443,12 +418,7 @@ function extractColors(){
     plat10Arr.push('#4891ff');
     plat10Arr.push('#6da8ff');
     plat10Arr.forEach((color)=>{
-        plat10.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat10.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat10);
 
@@ -466,12 +436,7 @@ function extractColors(){
     plat11Arr.push('#4a4aff');
     plat11Arr.push('#8181ff');
     plat11Arr.forEach((color)=>{
-        plat11.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat11.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat11);
 
@@ -489,12 +454,7 @@ function extractColors(){
     plat12Arr.push('#8f44ff');
     plat12Arr.push('#b787ff');
     plat12Arr.forEach((color)=>{
-        plat12.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat12.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat12);
 
@@ -512,12 +472,7 @@ function extractColors(){
     plat13Arr.push('#df61ff');
     plat13Arr.push('#ea97ff');
     plat13Arr.forEach((color)=>{
-        plat13.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat13.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat13);
 
@@ -535,12 +490,7 @@ function extractColors(){
     plat14Arr.push('#ff57dd');
     plat14Arr.push('#ff82e6');
     plat14Arr.forEach((color)=>{
-        plat14.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat14.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat14);
 
@@ -559,12 +509,7 @@ function extractColors(){
     plat15Arr.push('#fd5196');
     plat15Arr.push('#ff89b8');
     plat15Arr.forEach((color)=>{
-        plat15.append($('<div>',{
-            class: 'colorIcon'
-        }).css({'background-color': color}).click(()=>{
-            fontColor = color;
-            onColorIconClick();
-        }));
+        plat15.append($('<div>').css({'background-color': color}));
     });
     colors.push(plat15);
 
@@ -572,7 +517,7 @@ function extractColors(){
 }
 
 //on color icon click
-function onColorIconClick(){
+function onFontColorIconClick(){
     //check if there is selected text
     const selection = checkIfSelection();
 
