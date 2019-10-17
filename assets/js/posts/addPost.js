@@ -21,11 +21,14 @@ var menuIsClicked = false;
 var mousedown = false;
 var mousedown_timer = '';
 //version controller:
-const changesArray = new Array();
+const docHistory = new Array();
+var historyPosition = 0;
+var changesArray = new Array();
 var changesArrayCurrentPosition = -1;
 var currentInChange = false;
 var alreadyChangesSaved = false;
-const redoArray = new Array();
+var redoArray = new Array();
+var redoCurrentPosition = 0;
 
 /******************* functions  *************/
 
@@ -267,8 +270,10 @@ function undo(){
     //get post body:
     const postBody = $('#postBody');
 
+    changesArray = docHistory;
+    changesArrayCurrentPosition = changesArray.length-1;
     //check if there is changes:
-    if(changesArray.length <= 1){
+    if(changesArray.length < 1){
         //there is no changes
         return;
     }
@@ -285,11 +290,11 @@ function undo(){
     
     //get change obj
     changeObj = changesArray[changesArrayCurrentPosition];
+    if(changesArray.length != 0){redoArray.push({position: redoCurrentPosition++, change: postBody.html()});
+    }
     //change obj founded:
     postBody.html(changeObj.change);
     changesArray.pop();
-    redoArray.push(changeObj);
-
 }
 
 //redo tool
@@ -308,7 +313,32 @@ function toolbarRedoTool(){
 
 //redo function
 function redo(){
+    //get post body:
+    const postBody = $('#postBody');
 
+    //check if there is redos:
+    if(redoArray.length < 1){
+        //there is no redos
+        return;
+    }
+    // go to the end of the array:
+    redoCurrentPosition = redoArray.length;
+    //get change obj
+    var changeObj = redoArray[redoCurrentPosition];
+    //check if the obj is valid
+    if(!changeObj){
+        redoCurrentPosition = redoArray.length-1;
+    }
+    
+    //get change obj
+    changeObj = redoArray[redoCurrentPosition];
+    // changesArray.push({position: changesArrayCurrentPosition++, change: postBody.html()});
+    //change obj founded:
+    postBody.html(changeObj.change);
+    if(redoArray.length != 0){
+        changesArray.push(changeObj);
+    }
+    redoArray.pop();
 }
 
 //save doc tool:
@@ -330,7 +360,8 @@ function docSave(){
     const postBody = $('#postBody');
     const change = postBody.html();
     changesArrayCurrentPosition++;
-    changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
+    changesArray.push({position: changesArrayCurrentPosition, change: change});
+    docHistory.push({position: historyPosition++, change: change});
     alreadyChangesSaved = true;
     $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
 }
@@ -347,6 +378,7 @@ function docSaver(){
         const change = postBody.html();
         changesArrayCurrentPosition++;
         changesArray.push({position: changesArrayCurrentPosition, change: change});
+        docHistory.push({position: historyPosition++, change: change});
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
     }, 1000);
