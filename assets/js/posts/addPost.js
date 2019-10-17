@@ -22,9 +22,10 @@ var mousedown = false;
 var mousedown_timer = '';
 //version controller:
 const changesArray = new Array();
-var changesArrayCurrentPosition = 0;
+var changesArrayCurrentPosition = -1;
 var currentInChange = false;
 var alreadyChangesSaved = false;
+const redoArray = new Array();
 
 /******************* functions  *************/
 
@@ -217,6 +218,12 @@ function createToolbar(postBody) {
     //save doc:
     toolbarSaveDocTool().appendTo(toolsContainer);
 
+    //undo:
+    toolbarUndoTool().appendTo(toolsContainer);
+
+    //redo:
+    toolbarRedoTool().appendTo(toolsContainer);
+
     //font size:
     toolbarFontSizeTool().appendTo(toolsContainer);
 
@@ -241,6 +248,69 @@ function createToolbar(postBody) {
     return toolbarContainer;
 }
 
+//undo tool
+function toolbarUndoTool(){
+    const undoContainer =$('<div>',{
+        class: 'toolbarUndoTool toolbar-tool',
+        id: 'toolbarUndoTool'
+    }).html('<i class="fas fa-undo toolIcon"></i>');
+
+    undoContainer.click(()=>{
+        undo();
+    })
+
+    return undoContainer;
+}
+
+//undo function
+function undo(){
+    //get post body:
+    const postBody = $('#postBody');
+
+    //check if there is changes:
+    if(changesArray.length <= 1){
+        //there is no changes
+        return;
+    }
+    // go step to back:
+    changesArrayCurrentPosition--;
+    //get change obj
+    var changeObj = changesArray[changesArrayCurrentPosition];
+    //check if the obj is valid
+    if(!changeObj){
+        changesArrayCurrentPosition = changesArray.length;
+        changesArrayCurrentPosition = changesArrayCurrentPosition;
+        changesArrayCurrentPosition--;
+    }
+    
+    //get change obj
+    changeObj = changesArray[changesArrayCurrentPosition];
+    //change obj founded:
+    postBody.html(changeObj.change);
+    changesArray.pop();
+    redoArray.push(changeObj);
+
+}
+
+//redo tool
+function toolbarRedoTool(){
+    const redoContainer =$('<div>',{
+        class: 'toolbarRedoTool toolbar-tool',
+        id: 'toolbarRedoTool'
+    }).html('<i class="fas fa-redo toolIcon"></i>');
+
+    redoContainer.click(()=>{
+        redo();
+    })
+
+    return redoContainer;
+}
+
+//redo function
+function redo(){
+
+}
+
 //save doc tool:
 function toolbarSaveDocTool(){
     const saveDocTool =$('<div>',{
@@ -261,7 +331,6 @@ function docSave(){
     const change = postBody.html();
     changesArrayCurrentPosition++;
     changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
-    console.log(changesArray);
     alreadyChangesSaved = true;
     $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
 }
@@ -277,8 +346,7 @@ function docSaver(){
         postBody = $('#postBody');
         const change = postBody.html();
         changesArrayCurrentPosition++;
-        changesArray.push({changesArrayCurrentPosition: changesArrayCurrentPosition, change: change});
-        console.log(changesArray);
+        changesArray.push({position: changesArrayCurrentPosition, change: change});
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
     }, 1000);
