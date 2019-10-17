@@ -8,6 +8,7 @@ getUserInfo((userInfo) => {
 //post body editor vars:
 var fontColor = '#000000';
 var fontSize = '20';
+var backgroundColor = '#ffffff';
 var type = 'span';
 var customizeMenuInflaterOpened = false;
 var openedCustomizeMenuType = 'none';
@@ -205,6 +206,9 @@ function createToolbar(postBody) {
     //font color:
     toolbarFontColorTool().appendTo(toolsContainer);
 
+    //background color:
+    toolbarBackgroundColorTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
@@ -254,6 +258,64 @@ function toolbarFontColorTool(){
 
 
     return fontColorContainer;
+}
+
+//toolbar background-color: 
+function toolbarBackgroundColorTool(){
+    const backgroundColorContainer = $('<div>', {
+        class: 'toolbarBackgroundColorTool toolbar-tool',
+        id: 'toolbarBackgroundColorTool'
+    }).html('<i class="fas fa-fill-drip"></i>');
+
+    //create the color list :
+    const itemsArray = new Array();
+
+    const platesContainer = $('<div>',{
+        class: 'platesColorContainer',
+        id: 'platesColorContainer'
+    });
+
+    const colorsPlates = extractColors();
+    //loop throw each plate
+    colorsPlates.forEach((plate)=>{
+        //get plate colors icons
+        const plateArr = plate.children();
+        for (let index = 0; index < plateArr.length; index++) {
+            //get color icon jquery obj
+            const element = $(plateArr[index]);
+            //set colorIcon css class
+            element.addClass('colorIcon');
+            //set on click listener
+            element.click(()=>{
+                backgroundColor = element.css('background-color');
+                onBackGroundColorIconClick();
+            })
+        }
+        //append plate to plates container:
+        platesContainer.append(plate);
+    })
+    
+
+    itemsArray.push(platesContainer);
+    backgroundColorContainer.click(() => {
+        customizeMenuInflater(itemsArray, 'background-color');
+    })
+
+    return backgroundColorContainer;
+}
+
+//on background color icon click
+function onBackGroundColorIconClick(){
+    //check if there is selected text
+    const selection = checkIfSelection();
+
+    if(selection.isSelected){
+        //there is selected text
+        updateSelection(selection.selection, 'background-color');
+    }else{
+        // no selected text insert new item to post body
+        insertNewItem('span');
+    }
 }
 
 //extract Colors:
@@ -528,7 +590,6 @@ function onFontColorIconClick(){
         // no selected text insert new item to post body
         insertNewItem('span');
     }
-    console.log($('#postBody').html());
 }
 
 //toolbarFontSizeTool
@@ -616,7 +677,6 @@ function onFontPropClick() {
         // no selected text insert new item to post body
         insertNewItem('span');
     }
-    console.log($('#postBody').html());
 }
 
 //cursor at end setter:
@@ -739,7 +799,7 @@ function insertNewItem(_type){
     const postBody = $('#postBody');
     //set type:
     // no selection text add new span to post body:
-    postBody.html(postBody.html() + '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+';">&zwnj;');
+    postBody.html(postBody.html() + '<'+type+' style="font-size:' + fontSize + 'px; color:'+fontColor+'; background-color: '+backgroundColor+';">&zwnj;');
 
     //remove <br>
     const newHtml = postBody.html();
@@ -789,6 +849,9 @@ function createUpdatedItem(changeType, selectionText){
             break;
         case 'font-color':
             newElement = $('<span>').css('color', fontColor).html(selectionText);
+            break;
+        case 'background-color':
+            newElement = $('<span>').css('background-color', backgroundColor).html(selectionText);
             break;
         default:
             break;
