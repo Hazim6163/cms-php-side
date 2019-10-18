@@ -194,6 +194,7 @@ function createPostBody() {
     })
     //set default place holder
     postBody.on('focusout', () => {
+        console.log(postBody.html())
         if (postBody.html() === '') {
             postBody.html('Add Post Body');
         }
@@ -1136,15 +1137,9 @@ function insertNewItem(_type) {
         newElement = '<' + type + '>&zwnj;';
         header = false;
     } else if (type == 'span') {
-        if (bold && italic) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold; font-style: italic">&zwnj;'
-        } else if (bold) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold">&zwnj;'
-        } else if (italic) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';font-style: italic">&zwnj;'
-        } else {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';">&zwnj;'
-        }
+        newElement = $('<span>').css(getStyleCssProp());
+        appendToLastChild2(newElement);
+        return;
     } else if (type == 'ol') {
         newElement = '<ol style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
         type = 'li';
@@ -1163,6 +1158,96 @@ function insertNewItem(_type) {
     postBody.html(newHtml.replace(/<br>/g, ''));
 
     closeCustomizeMenu();
+}
+
+//remove br from the post body:
+function removeBrFromElement(element){
+   //remove <br>
+   const html = element.html();
+   element.html(html.replace(/<br>/g, '')); 
+}
+
+//append element to last child
+function appendToLastChild2(element){
+    //get post body element
+    const postBody = $('#postBody');
+    //remove br from post body:
+    removeBrFromElement(postBody);
+    
+    //check if the post body hes children:
+    var lastPostBodyChild = postBody.get(0).lastElementChild;
+    if(!lastPostBodyChild){
+        //no post children append to post body
+        postBody.append(element);
+        //close menu:
+        closeCustomizeMenu2();
+        //set cursor inside the New item:
+        setElementCursor(element);
+        return;
+    }
+
+    //post body has child 
+    //loop throw last child children get the last child:
+    var tempLastChild = lastPostBodyChild;
+    while(tempLastChild){
+        lastPostBodyChild = tempLastChild;
+        tempLastChild = tempLastChild.lastElementChild;
+    }
+    //append the element to the last child:
+    $(lastPostBodyChild).append(element);
+
+    //close menu
+    closeCustomizeMenu2();
+    //set cursor inside the New item:
+    setElementCursor(element);
+}
+
+//append element to the current cursor:
+function appendToCurrentCursor(element){
+}
+
+// to close the customize menu and set the cursor inside the element:
+function closeCustomizeMenu2(){
+    $('#customizeMenu').toggle('fast');
+    $('#customizeMenu').remove();
+    openedCustomizeMenuType = 'none';
+    customizeMenuInflaterOpened = false;
+}
+
+// to set the cursor inside the element:
+function setElementCursor(element){
+    const range = new Range();
+    range.setStart(element.get(0), 0);
+    range.setEnd(element.get(0), 0);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//css prop
+function getStyleCssProp(){
+    var cssProp = {
+        'background-color': backgroundColor,
+        'color': fontColor,
+        'font-size': fontSize+'px',
+    };
+
+    if(bold && italic){
+        cssProp['font-weight'] = 'bold';
+        cssProp['font-style'] = 'italic';
+
+    }else if(italic){
+        cssProp['font-style'] = 'italic';
+        cssProp['font-weight'] = 'normal';
+    }else if(bold){
+        cssProp['font-weight'] = 'bold';
+        cssProp['font-style'] = 'normal';
+    }else{
+        cssProp['font-style'] = 'normal';
+        cssProp['font-weight'] = 'normal';
+    }
+
+    return cssProp;
 }
 
 //append to last child loop
@@ -1191,12 +1276,34 @@ function checkIfSelection() {
 
     //get the selections if founded
     const selection = document.getSelection(postBody.get(0));
-
     const selectionRange = selection.getRangeAt(0);
+
+    //check if the range is in the post body:
+    const container = selectionRange.endContainer.parentNode;
+    const isPostBodyChild = checkPostBodyChild(container);
+    if(!isPostBodyChild){return {isSelected: false};}
+
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
     return { isSelected: start != end, selection: selection };
+}
+
+// check if the element is post body child
+function checkPostBodyChild(element){
+    //check if valid element :
+    if(!element){return false;}
+    
+    var isPostBodyChild = false;
+    //check if the element is the post body:
+    if(element.id == 'postBody') { isPostBodyChild = true; }
+    //check if the element parents is the post body:
+    while (element) {
+        if(element.id == 'postBody'){ isPostBodyChild = true;}
+        element = element.parentNode;
+    }
+
+    return isPostBodyChild;
 }
 
 //update the selection:
