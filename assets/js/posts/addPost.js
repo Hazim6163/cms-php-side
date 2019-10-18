@@ -194,7 +194,6 @@ function createPostBody() {
     })
     //set default place holder
     postBody.on('focusout', () => {
-        console.log(postBody.html());
         if (postBody.html() === '') {
             postBody.html('Add Post Body');
         }
@@ -1145,9 +1144,6 @@ function insertNewItem(_type) {
             newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';font-style: italic">&zwnj;'
         } else {
             newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';">&zwnj;'
-            const e = $('<span>').css(getSpanCssProp());
-            appendToLastChildN(e);
-            return;
         }
     } else if (type == 'ol') {
         newElement = '<ol style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
@@ -1167,68 +1163,6 @@ function insertNewItem(_type) {
     postBody.html(newHtml.replace(/<br>/g, ''));
 
     closeCustomizeMenu();
-}
-
-//append element to last child:
-function appendToLastChildN(element){
-    type = element.prop('nodeName');
-    //get last body element:
-    const postBody = $('#postBody');
-    const lastPostBodyChild = $('#postBody :last-child');
-    if(!lastPostBodyChild.html()){
-        //no last child:
-        postBody.append(element);
-        //close menu
-        closeCustomizeMenuWithoutMoveCursor();
-        //set cursor inside element:
-        setCursorInside(element);
-        return;
-    }
-    const lastLastChild = $(lastPostBodyChild.get(0).lastChild);
-    console.log(lastLastChild);
-    
-    lastPostBodyChild.append(element);
-    //set focus to appended child:
-    closeCustomizeMenuWithoutMoveCursor();
-    
-    //set cursor inside element:
-    setCursorInside(element);
-}
-
-//set cursor inside new element:
-function setCursorInside(element){
-    const range = new Range();
-    range.setStart(element.get(0), 0);
-    range.setEnd(element.get(0), 0);
-
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-}
-
-//get css prop:
-function getSpanCssProp(){
-    var cssProp = {
-        'background-color': backgroundColor,
-        'color': fontColor,
-        'font-size': fontSize+'px',
-    };
-
-    if(bold && italic){
-        cssProp['font-weight'] = 'bold';
-        cssProp['font-style'] = 'italic';
-
-    }else if(italic){
-        cssProp['font-style'] = 'italic';
-        cssProp['font-weight'] = 'normal';
-    }else if(bold){
-        cssProp['font-weight'] = 'bold';
-        cssProp['font-style'] = 'normal';
-    }else{
-        cssProp['font-style'] = 'normal';
-        cssProp['font-weight'] = 'normal';
-    }
-
-    return cssProp;
 }
 
 //append to last child loop
@@ -1257,9 +1191,8 @@ function checkIfSelection() {
 
     //get the selections if founded
     const selection = document.getSelection(postBody.get(0));
+
     const selectionRange = selection.getRangeAt(0);
-    const container = selectionRange.endContainer.parentNode;
-    console.log(container == $('#postDes').get(0))
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
