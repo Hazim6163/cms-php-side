@@ -4,6 +4,15 @@ getUserInfo((userInfo) => {
     createPage(userInfo)
 });
 
+/**
+ * information about last merge: 
+ *  ********** new-way-to-append-items-to-post-body **********
+ *      in the last merge i create a new way to add elements to the
+ *      post body where the new item can append to the last cursor
+ *      position i this way we don't take care about the element
+ *      position if no last position founded then the element will 
+ *      append to the last nested element in the post body 
+ */
 
 //post body editor vars:
 var fontColor = '#000000';
@@ -1140,7 +1149,7 @@ function insertNewItem(_type) {
     //add new element to post body:
     var newElement;
     if (headerChecker()) {
-        newElement = $('<'+type+'>').css(getStyleCssProp());
+        newElement = $('<' + type + '>').css(getStyleCssProp());
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
@@ -1150,39 +1159,39 @@ function insertNewItem(_type) {
         newElement = $('<ul>').css(getStyleCssProp(isList = true));
         const liElement = $('<li>').appendTo(newElement);
     }
-    
+
     appendToCurrentCursor(newElement);
     return;
 }
 
 //header checker:
-function headerChecker(){
+function headerChecker() {
     var isHeader = false;
-    if(
+    if (
         type == 'h1' || type == 'h2' ||
         type == 'h3' || type == 'h4' ||
         type == 'h5' || type == 'h6'
-    ){
+    ) {
         isHeader = true;
     }
-    
+
     return isHeader;
 }
 
 //remove br from the post body:
-function removeBrFromElement(element){
-   //remove <br>
-   const html = element.html();
-   element.html(html.replace(/<br>/g, '')); 
+function removeBrFromElement(element) {
+    //remove <br>
+    const html = element.html();
+    element.html(html.replace(/<br>/g, ''));
 }
 
 //append element to last child
-function appendToLastChild2(element, nested=true){
+function appendToLastChild2(element, nested = true) {
     //get post body element
     const postBody = $('#postBody');
     //remove place holder and br:
     postBodyCleanUp();
-    
+
     const targetElement = getLastNestedChild(postBody.get(0));
 
     //append the element to the last child:
@@ -1191,19 +1200,17 @@ function appendToLastChild2(element, nested=true){
     //close menu
     closeCustomizeMenu2();
     //check if the cursor will be at the end of the element children:
-    if(nested){
+    if (nested) {
         element = getLastNestedChild(element.get(0));
-        console.log(element);
     }
     //set cursor inside the New element:
     cursorAtStartElement(element);
 }
 
 //get the last nested child of the element:
-function getLastNestedChild(element){
+function getLastNestedChild(element) {
     var temp = element.lastElementChild;
-    while(temp){
-        console.log(temp)
+    while (temp) {
         element = temp;
         temp = temp.lastElementChild;
     }
@@ -1211,10 +1218,10 @@ function getLastNestedChild(element){
 }
 
 //remove br and the place holder from the post body
-function postBodyCleanUp(){
+function postBodyCleanUp() {
     //remove place holder:
     const postBody = $('#postBody');
-    if(postBody.get(0).innerText == 'Add Post Body'){
+    if (postBody.get(0).innerText == 'Add Post Body') {
         postBody.get(0).innerText = '';
     }
     //remove br from post body:
@@ -1223,31 +1230,30 @@ function postBodyCleanUp(){
 
 //append element to the current cursor:
 // nested : to set the cursor at the end of the last child Element
-function appendToCurrentCursor(element, nested=true){
+function appendToCurrentCursor(element, nested = true) {
     //check if there is a valid selection:
-    if(!lastSelection){
+    if (!lastSelection) {
         appendToLastChild2(element, nested);
         return;
     }
     //get selection range:
     const selectionRange = lastSelection.getRangeAt(0);
     //insert new element
-    selectionRange.insertNode(element.get(0)); 
+    selectionRange.insertNode(element.get(0));
     //close menu
     closeCustomizeMenu2();
     //check if the cursor will be at the end of the element children:
-    if(nested){
+    if (nested) {
         element = getLastNestedChild(element.get(0));
-        console.log(element);
     }
-    
+
     //cursor setter:
     cursorAtEndElement(element);
-   
+
 }
 
 // to close the customize menu and set the cursor inside the element:
-function closeCustomizeMenu2(){
+function closeCustomizeMenu2() {
     $('#customizeMenu').toggle('fast');
     $('#customizeMenu').remove();
     openedCustomizeMenuType = 'none';
@@ -1255,9 +1261,9 @@ function closeCustomizeMenu2(){
 }
 
 // to set the cursor inside the element:
-function cursorAtEndElement(element){
+function cursorAtEndElement(element) {
     //convert element to jquery if not:
-    if(!element.jquery){element = $(element)}
+    if (!element.jquery) { element = $(element) }
     //get element text
     const innerText = element.get(0).innerText;
     //get element text range:
@@ -1272,7 +1278,7 @@ function cursorAtEndElement(element){
 }
 
 //highlight element : 
-function highlightElement(element){
+function highlightElement(element) {
     //get element text
     const innerText = element.get(0).innerText;
     //get element text range:
@@ -1287,9 +1293,9 @@ function highlightElement(element){
 }
 
 //cursor of the element start:
-function cursorAtStartElement(element){
+function cursorAtStartElement(element) {
     //convert the element to jquery if not
-    if(!element.jquery){element = $(element)}
+    if (!element.jquery) { element = $(element) }
     const range = new Range();
     range.setStart(element.get(0), 0);
     range.setEnd(element.get(0), 0);
@@ -1299,15 +1305,15 @@ function cursorAtStartElement(element){
 }
 
 //css prop
-function getStyleCssProp(isList = false){
+function getStyleCssProp(isList = false) {
     var cssProp = {
         'background-color': backgroundColor,
         'color': fontColor,
-        'font-size': fontSize+'px',
+        'font-size': fontSize + 'px',
     };
 
     //set header style;
-    if(headerChecker()){
+    if (headerChecker()) {
         cssProp = {
             'background-color': backgroundColor,
             'color': fontColor
@@ -1315,21 +1321,21 @@ function getStyleCssProp(isList = false){
     }
 
     //set lists style
-    if(isList){
+    if (isList) {
         cssProp['margin-left'] = '30px';
     }
 
-    if(bold && italic){
+    if (bold && italic) {
         cssProp['font-weight'] = 'bold';
         cssProp['font-style'] = 'italic';
 
-    }else if(italic){
+    } else if (italic) {
         cssProp['font-style'] = 'italic';
         cssProp['font-weight'] = 'normal';
-    }else if(bold){
+    } else if (bold) {
         cssProp['font-weight'] = 'bold';
         cssProp['font-style'] = 'normal';
-    }else{
+    } else {
         cssProp['font-style'] = 'normal';
         cssProp['font-weight'] = 'normal';
     }
@@ -1368,7 +1374,7 @@ function checkIfSelection() {
     //check if the range is in the post body:
     const container = selectionRange.endContainer.parentNode;
     const isPostBodyChild = checkPostBodyChild(container);
-    if(!isPostBodyChild){return {isSelected: false};}
+    if (!isPostBodyChild) { return { isSelected: false }; }
 
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
@@ -1377,16 +1383,16 @@ function checkIfSelection() {
 }
 
 // check if the element is post body child
-function checkPostBodyChild(element){
+function checkPostBodyChild(element) {
     //check if valid element :
-    if(!element){return false;}
-    
+    if (!element) { return false; }
+
     var isPostBodyChild = false;
     //check if the element is the post body:
-    if(element.id == 'postBody') { isPostBodyChild = true; }
+    if (element.id == 'postBody') { isPostBodyChild = true; }
     //check if the element parents is the post body:
     while (element) {
-        if(element.id == 'postBody'){ isPostBodyChild = true;}
+        if (element.id == 'postBody') { isPostBodyChild = true; }
         element = element.parentNode;
     }
 
