@@ -70,8 +70,11 @@
     user-select: none;
 }
 .toolsContainer {
+    /*TODO style tools container */
     display: flex;
-    min-height: 46px;
+    flex-wrap: wrap;
+    min-height: 128px;
+    justify-content: center;
 }
 .toolbar-tool {
     width: 25px;
@@ -85,6 +88,7 @@
 	border-radius: 50%;
     background-color: #eaf6ff;
     margin-right: 8px;
+    margin-bottom: 16px;
 }
 .fontSizeMenuItemContainer {
     padding: 8px 0px;

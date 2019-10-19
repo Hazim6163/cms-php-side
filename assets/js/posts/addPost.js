@@ -260,10 +260,28 @@ function createToolbar(postBody) {
     //text-align:
     toolbarTextAlignTool().appendTo(toolsContainer);
 
+    //add html:
+    toolbarAddHtmlTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//add html section to post body:
+function toolbarAddHtmlTool(){
+    const addHtmlContainer = $('<div>', {
+        class: 'addHtmlContainer toolbar-tool',
+        id: 'addHtmlContainer'
+    }).html('<i class="fab fa-html5 toolIcon"></i>');
+
+    addHtmlContainer.click(()=>{
+        //create modal 
+        addHtmlModal();
+    })
+
+    return addHtmlContainer;
 }
 
 //text align tool:
