@@ -187,6 +187,58 @@
     justify-content: center;
     padding: 16px;
 }
+#htmlModalContainer {
+    width: 80vw;
+    height: 40vh;
+    position: fixed;
+    top: 22vh;
+    left: 10vw;
+    background-color: #f7f7f7;
+    border-radius: 15px;
+    box-shadow: 0px 0px 6px black;
+    display: flex;
+    flex-direction: column;
+}
+#htmlModalEditorArea {
+    height: 89%;
+    background-color: #171717;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    border-radius: 15px 15px 0px 0px;
+    font-family: Source Code Pro;
+    font-size: 0.8rem;
+    color: gainsboro;
+}
+#htmlModalBtnsContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    flex: 1;
+    justify-content: end;
+    background-color: #282828;
+    padding: 8px;
+    border-radius: 0px 0px 15px 15px;
+}
+#htmlModalCancelBtn {
+    background-color: #4f0000;
+    padding: 8px;
+    color: gainsboro;
+    border-radius: 12px;
+    cursor: pointer;
+    min-width: 58px;
+    text-align: center;
+}
+#htmlModalAddBtn {
+    background-color: #002600;
+    color: gainsboro;
+    padding: 8px;
+    border-radius: 12px;
+    min-width: 58px;
+    text-align: center;
+    cursor: pointer;
+    margin: 0px 56px;
+}
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){
     .toolbarContainer {
@@ -212,5 +264,12 @@
     }
     .navbarToggleActiveToolbar{
         top: 76px;
+    }
+    #htmlModalContainer{
+        top: 32vh;
+        height: 60vh;
+    }
+    #htmlModalAddBtn{
+        margin: 0px 35px;
     }
 }

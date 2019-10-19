@@ -8,6 +8,7 @@ if(!isset($_SESSION['token'])){
 
 $title = 'Add Post';
 $custom_headers = '
+<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" href="../assets/css/posts/addPost.css">
 <script src="../assets/js/posts/addPost.js"></script>
 ';

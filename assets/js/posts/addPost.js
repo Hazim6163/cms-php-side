@@ -31,6 +31,8 @@ var redoArray = new Array();
 var redoCurrentPosition = 0;
 //cursor vars:
 var lastSelection;
+//html modal:
+var htmlModalOpened = false;
 
 /******************* functions  *************/
 
@@ -282,6 +284,54 @@ function toolbarAddHtmlTool(){
     })
 
     return addHtmlContainer;
+}
+
+//add html to post body modal:
+function addHtmlModal(){
+    //check if the modal already opened;
+    if(htmlModalOpened){
+        $('#htmlModalContainer').remove();
+        //toggle opened:
+        htmlModalOpened = !htmlModalOpened;
+        return;
+    }
+    //create the modal:
+    const modalContainer = $('<div>',{
+        class: 'htmlModalContainer',
+        id: 'htmlModalContainer'
+    });
+
+    const editorArea = $('<div>', {
+        class: 'htmlModalEditorArea',
+        id: 'htmlModalEditorArea'
+    }).attr('contenteditable', 'true').attr('spellcheck', 'false').appendTo(modalContainer);
+
+    const btnsContainer = $('<div>',{
+        class: 'htmlModalBtnsContainer',
+        id: 'htmlModalBtnsContainer'
+    }).appendTo(modalContainer)
+
+    const addBtn = $('<div>',{
+        class: 'htmlModalAddBtn',
+        id: 'htmlModalAddBtn'
+    }).appendTo(btnsContainer).html('Save');
+
+    const cancelBtn = $('<div>',{
+        class: 'htmlModalCancelBtn',
+        id: 'htmlModalCancelBtn'
+    }).appendTo(btnsContainer).html('Cancel').click(()=>{
+        $('#htmlModalContainer').remove();
+        //toggle opened:
+        htmlModalOpened = !htmlModalOpened;
+        return;
+    });
+
+    //append to document:
+    $('body').append(modalContainer);
+    console.log($('body').html())
+
+    //toggle opened:
+    htmlModalOpened = !htmlModalOpened;
 }
 
 //text align tool:
