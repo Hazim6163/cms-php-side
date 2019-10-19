@@ -29,6 +29,8 @@ var currentInChange = false;
 var alreadyChangesSaved = false;
 var redoArray = new Array();
 var redoCurrentPosition = 0;
+//cursor vars:
+var lastSelection;
 
 /******************* functions  *************/
 
@@ -183,6 +185,9 @@ function createPostBody() {
         currentInChange = true;
         alreadyChangesSaved = false;
         $('#toolbarSaveDocTool').removeClass('changesSaved').addClass('rotate');
+
+        //save current cursor position:
+        lastSelection = document.getSelection();
     });
 
     //on focus remove default text:
@@ -190,7 +195,8 @@ function createPostBody() {
         if (postBody.html() === 'Add Post Body') {
             postBody.html('');
         }
-
+        //save current cursor position:
+        lastSelection = document.getSelection();
     })
     //set default place holder
     postBody.on('focusout', () => {
@@ -543,7 +549,8 @@ function onHeaderItemClick(lvl) {
         updateSelection(selection.selection, 'heading', { level: lvl });
     } else {
         //insert new item to post body
-        insertNewItem('h' + lvl);
+        type = 'h' + lvl;
+        insertNewItem(type);
     }
 }
 
@@ -1132,37 +1139,203 @@ function insertNewItem(_type) {
     //set type:
     //add new element to post body:
     var newElement;
-    if (header) {
-        newElement = '<' + type + '>&zwnj;';
-        header = false;
+    if (headerChecker()) {
+        newElement = $('<'+type+'>').css(getStyleCssProp());
     } else if (type == 'span') {
-        if (bold && italic) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold; font-style: italic">&zwnj;'
-        } else if (bold) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; font-weight: bold">&zwnj;'
-        } else if (italic) {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';font-style: italic">&zwnj;'
-        } else {
-            newElement = '<' + type + ' style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + ';">&zwnj;'
-        }
+        newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
-        newElement = '<ol style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
-        type = 'li';
-        appendToLastChild(newElement);
-        return;
+        const newElement = $('<ol>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(olElement);
     } else if (type == 'ul') {
-        newElement = '<ul style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
-        type = 'li';
-        appendToLastChild(newElement);
+        const newElement = $('<ul>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(olElement);
+    }
+    
+    appendToCurrentCursor(newElement);
+    return;
+}
+
+//header checker:
+function headerChecker(){
+    var isHeader = false;
+    if(
+        type == 'h1' || type == 'h2' ||
+        type == 'h3' || type == 'h4' ||
+        type == 'h5' || type == 'h6'
+    ){
+        isHeader = true;
+    }
+    
+    return isHeader;
+}
+
+//remove br from the post body:
+function removeBrFromElement(element){
+   //remove <br>
+   const html = element.html();
+   element.html(html.replace(/<br>/g, '')); 
+}
+
+//append element to last child
+function appendToLastChild2(element, nested=true){
+    //get post body element
+    const postBody = $('#postBody');
+    //remove place holder and br:
+    postBodyCleanUp();
+    
+    const targetElement = getLastNestedChild(postBody.get(0));
+
+    //append the element to the last child:
+    $(targetElement).append(element);
+
+    //close menu
+    closeCustomizeMenu2();
+    //check if the cursor will be at the end of the element children:
+    if(nested){
+        element = getLastNestedChild(element.get(0));
+        console.log(element);
+    }
+    //set cursor inside the New element:
+    cursorAtStartElement(element);
+}
+
+//get the last nested child of the element:
+function getLastNestedChild(element){
+    var temp = element.lastElementChild;
+    while(temp){
+        console.log(temp)
+        element = temp;
+        temp = temp.lastElementChild;
+    }
+    return element;
+}
+
+//remove br and the place holder from the post body
+function postBodyCleanUp(){
+    //remove place holder:
+    const postBody = $('#postBody');
+    if(postBody.get(0).innerText == 'Add Post Body'){
+        postBody.get(0).innerText = '';
+    }
+    //remove br from post body:
+    removeBrFromElement(postBody);
+}
+
+//append element to the current cursor:
+// nested : to set the cursor at the end of the last child Element
+function appendToCurrentCursor(element, nested=true){
+    
+    //check if there is a valid selection:
+    if(!lastSelection){
+        appendToLastChild2(element, nested);
         return;
     }
-    postBody.html(postBody.html() + newElement);
+    //get selection range:
+    const selectionRange = lastSelection.getRangeAt(0);
+    //insert new element
+    selectionRange.insertNode(element.get(0)); 
+    //close menu
+    closeCustomizeMenu2();
+    //check if the cursor will be at the end of the element children:
+    if(nested){
+        element = getLastNestedChild(element.get(0));
+        console.log(element);
+    }
+    
+    //cursor setter:
+    cursorAtEndElement(element);
+   
+}
 
-    //remove <br>
-    const newHtml = postBody.html();
-    postBody.html(newHtml.replace(/<br>/g, ''));
+// to close the customize menu and set the cursor inside the element:
+function closeCustomizeMenu2(){
+    $('#customizeMenu').toggle('fast');
+    $('#customizeMenu').remove();
+    openedCustomizeMenuType = 'none';
+    customizeMenuInflaterOpened = false;
+}
 
-    closeCustomizeMenu();
+// to set the cursor inside the element:
+function cursorAtEndElement(element){
+    //convert element to jquery if not:
+    if(!element.jquery){element = $(element)}
+    //get element text
+    const innerText = element.get(0).innerText;
+    //get element text range:
+    const length = innerText.length;
+    //create the range at the end of the element:
+    const range = new Range();
+    range.setStart(element.get(0), length);
+    range.setEnd(element.get(0), length);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//highlight element : 
+function highlightElement(element){
+    //get element text
+    const innerText = element.get(0).innerText;
+    //get element text range:
+    const length = innerText.length;
+    //create the range at the end of the element:
+    const range = new Range();
+    range.setStart(element.get(0), 0);
+    range.setEnd(element.get(0), length);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//cursor of the element start:
+function cursorAtStartElement(element){
+    //convert the element to jquery if not
+    if(!element.jquery){element = $(element)}
+    const range = new Range();
+    range.setStart(element.get(0), 0);
+    range.setEnd(element.get(0), 0);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//css prop
+function getStyleCssProp(isList = false){
+    var cssProp = {
+        'background-color': backgroundColor,
+        'color': fontColor,
+        'font-size': fontSize+'px',
+    };
+
+    //set header style;
+    if(headerChecker()){
+        cssProp = {
+            'background-color': backgroundColor,
+            'color': fontColor
+        };
+    }
+
+    //set lists style
+    if(isList){
+        cssProp['margin-left'] = '30px';
+    }
+
+    if(bold && italic){
+        cssProp['font-weight'] = 'bold';
+        cssProp['font-style'] = 'italic';
+
+    }else if(italic){
+        cssProp['font-style'] = 'italic';
+        cssProp['font-weight'] = 'normal';
+    }else if(bold){
+        cssProp['font-weight'] = 'bold';
+        cssProp['font-style'] = 'normal';
+    }else{
+        cssProp['font-style'] = 'normal';
+        cssProp['font-weight'] = 'normal';
+    }
+
+    return cssProp;
 }
 
 //append to last child loop
@@ -1191,12 +1364,34 @@ function checkIfSelection() {
 
     //get the selections if founded
     const selection = document.getSelection(postBody.get(0));
-
     const selectionRange = selection.getRangeAt(0);
+
+    //check if the range is in the post body:
+    const container = selectionRange.endContainer.parentNode;
+    const isPostBodyChild = checkPostBodyChild(container);
+    if(!isPostBodyChild){return {isSelected: false};}
+
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
     return { isSelected: start != end, selection: selection };
+}
+
+// check if the element is post body child
+function checkPostBodyChild(element){
+    //check if valid element :
+    if(!element){return false;}
+    
+    var isPostBodyChild = false;
+    //check if the element is the post body:
+    if(element.id == 'postBody') { isPostBodyChild = true; }
+    //check if the element parents is the post body:
+    while (element) {
+        if(element.id == 'postBody'){ isPostBodyChild = true;}
+        element = element.parentNode;
+    }
+
+    return isPostBodyChild;
 }
 
 //update the selection:
@@ -1213,7 +1408,6 @@ function updateSelection(selection, changeType, data) {
 
     //close the menu:
     closeCustomizeMenuWithoutMoveCursor();
-    return;
 }
 
 //create updated item 
