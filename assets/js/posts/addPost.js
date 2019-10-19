@@ -4,16 +4,6 @@ getUserInfo((userInfo) => {
     createPage(userInfo)
 });
 
-/**
- * information about last merge: 
- *  ********** new-way-to-append-items-to-post-body **********
- *      in the last merge i create a new way to add elements to the
- *      post body where the new item can append to the last cursor
- *      position i this way we don't take care about the element
- *      position if no last position founded then the element will 
- *      append to the last nested element in the post body 
- */
-
 //post body editor vars:
 var fontColor = '#000000';
 var fontSize = '20';
@@ -296,7 +286,7 @@ function toolbarTextAlignTool(){
         id: 'textAlignLeftAlign'
     }).html('<i class="fas fa-align-left toolIcon"></i>').appendTo(positionsContainer).click(()=>{
         textAlign = 'left';
-
+        onTextAlignToolClick();
     });
     //center align:
     const alignCenter = $('<div>', {
@@ -304,7 +294,7 @@ function toolbarTextAlignTool(){
         id: 'textAlignCenterAlign'
     }).html('<i class="fas fa-align-center toolIcon"></i>').appendTo(positionsContainer).click(()=>{
         textAlign = 'center';
-
+        onTextAlignToolClick();
     });
     //right align:
     const alignRight = $('<div>', {
@@ -312,7 +302,7 @@ function toolbarTextAlignTool(){
         id: 'textAlignRightAlign'
     }).html('<i class="fas fa-align-right toolIcon"></i>').appendTo(positionsContainer).click(()=>{
         textAlign = 'right';
-
+        onTextAlignToolClick();
     });
 
     //append to menu items 
@@ -323,6 +313,20 @@ function toolbarTextAlignTool(){
     })
 
     return textAlignContainer;
+}
+
+//text align tools:
+function onTextAlignToolClick(){
+   //check if there is selected text
+   const selection = checkIfSelection();
+
+   if (selection.isSelected) {
+       //there is selected text
+       updateSelection(selection.selection, 'text-align');
+   } else {
+       //insert new item to post body
+       insertNewItem('div');
+   } 
 }
 
 //unordered list:
@@ -1196,8 +1200,6 @@ function onLongPress(element) {
 //insert new Item to post body:
 function insertNewItem(_type) {
     type = _type;
-    //get post body obj:
-    const postBody = $('#postBody');
     //set type:
     //add new element to post body:
     var newElement;
@@ -1206,11 +1208,13 @@ function insertNewItem(_type) {
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
-        newElement = $('<ol>').css(getStyleCssProp(isList = true));
+        newElement = $('<ol>').css(getStyleCssProp('list'));
         const liElement = $('<li>').appendTo(newElement);
     } else if (type == 'ul') {
-        newElement = $('<ul>').css(getStyleCssProp(isList = true));
+        newElement = $('<ul>').css(getStyleCssProp('list'));
         const liElement = $('<li>').appendTo(newElement);
+    } else if (type == 'div') {
+        newElement = $('<div>').css(getStyleCssProp('div'));
     }
 
     appendToCurrentCursor(newElement);
@@ -1358,7 +1362,7 @@ function cursorAtStartElement(element) {
 }
 
 //css prop
-function getStyleCssProp(isList = false) {
+function getStyleCssProp(item) {
     var cssProp = {
         'background-color': backgroundColor,
         'color': fontColor,
@@ -1374,8 +1378,13 @@ function getStyleCssProp(isList = false) {
     }
 
     //set lists style
-    if (isList) {
+    if (item == 'list') {
         cssProp['margin-left'] = '30px';
+    }
+
+    //set div style:
+    if(item == 'div'){
+        cssProp['text-align'] = textAlign;
     }
 
     if (bold && italic) {
@@ -1502,6 +1511,9 @@ function createUpdatedItem(changeType, selectionText, extraData) {
             break;
         case 'unordered':
             newElement = $('<ul>').css('margin-left', '32px').html('<li>' + selectionText + '</li>');
+            break;
+        case 'text-align':
+            newElement = $('<div>').css(getStyleCssProp('div')).html(selectionText);
             break;
         default:
             break;
