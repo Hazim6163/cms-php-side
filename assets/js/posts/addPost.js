@@ -1144,11 +1144,11 @@ function insertNewItem(_type) {
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
-        const newElement = $('<ol>').css(getStyleCssProp(isList = true));
-        const liElement = $('<li>').appendTo(olElement);
+        newElement = $('<ol>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(newElement);
     } else if (type == 'ul') {
-        const newElement = $('<ul>').css(getStyleCssProp(isList = true));
-        const liElement = $('<li>').appendTo(olElement);
+        newElement = $('<ul>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(newElement);
     }
     
     appendToCurrentCursor(newElement);
@@ -1224,7 +1224,6 @@ function postBodyCleanUp(){
 //append element to the current cursor:
 // nested : to set the cursor at the end of the last child Element
 function appendToCurrentCursor(element, nested=true){
-    
     //check if there is a valid selection:
     if(!lastSelection){
         appendToLastChild2(element, nested);
