@@ -1190,9 +1190,14 @@ function checkIfSelection() {
     const postBody = $('#postBody');
 
     //get the selections if founded
-    const selection = document.getSelection(postBody.get(0));
+    const selection = document.getSelection();
 
     const selectionRange = selection.getRangeAt(0);
+    //check if the range is in the post body:
+    const container = selectionRange.endContainer.parentNode;
+    const isPostBodyChild = checkPostBodyChild(container);
+    if(!isPostBodyChild){return {isSelected: false};}
+    
     const start = selectionRange.startOffset;
     const end = selectionRange.endOffset;
 
@@ -1255,4 +1260,21 @@ function createUpdatedItem(changeType, selectionText, extraData) {
             break;
     }
     return newElement;
+}
+
+// check if the element is post body child
+function checkPostBodyChild(element){
+    //check if valid element :
+    if(!element){return false;}
+
+    var isPostBodyChild = false;
+    //check if the element is the post body:
+    if(element.id == 'postBody') { isPostBodyChild = true; }
+    //check if the element parents is the post body:
+    while (element) {
+        if(element.id == 'postBody'){ isPostBodyChild = true;}
+        element = element.parentNode;
+    }
+
+    return isPostBodyChild;
 }
