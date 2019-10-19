@@ -29,6 +29,8 @@ var currentInChange = false;
 var alreadyChangesSaved = false;
 var redoArray = new Array();
 var redoCurrentPosition = 0;
+//cursor vars:
+var lastSelection;
 
 /******************* functions  *************/
 
@@ -183,6 +185,9 @@ function createPostBody() {
         currentInChange = true;
         alreadyChangesSaved = false;
         $('#toolbarSaveDocTool').removeClass('changesSaved').addClass('rotate');
+
+        //save current cursor position:
+        lastSelection = document.getSelection();
     });
 
     //on focus remove default text:
@@ -190,11 +195,11 @@ function createPostBody() {
         if (postBody.html() === 'Add Post Body') {
             postBody.html('');
         }
-
+        //save current cursor position:
+        lastSelection = document.getSelection();
     })
     //set default place holder
     postBody.on('focusout', () => {
-        console.log(postBody.html())
         if (postBody.html() === '') {
             postBody.html('Add Post Body');
         }
@@ -544,7 +549,8 @@ function onHeaderItemClick(lvl) {
         updateSelection(selection.selection, 'heading', { level: lvl });
     } else {
         //insert new item to post body
-        insertNewItem('h' + lvl);
+        type = 'h' + lvl;
+        insertNewItem(type);
     }
 }
 
@@ -1133,31 +1139,34 @@ function insertNewItem(_type) {
     //set type:
     //add new element to post body:
     var newElement;
-    if (header) {
-        newElement = '<' + type + '>&zwnj;';
-        header = false;
+    if (headerChecker()) {
+        newElement = $('<'+type+'>').css(getStyleCssProp());
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
-        appendToLastChild2(newElement);
-        return;
     } else if (type == 'ol') {
-        newElement = '<ol style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
-        type = 'li';
-        appendToLastChild(newElement);
-        return;
+        const newElement = $('<ol>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(olElement);
     } else if (type == 'ul') {
-        newElement = '<ul style="font-size:' + fontSize + 'px; color:' + fontColor + '; background-color: ' + backgroundColor + '; margin-left: 32px"><li>&zwnj;';
-        type = 'li';
-        appendToLastChild(newElement);
-        return;
+        const newElement = $('<ul>').css(getStyleCssProp(isList = true));
+        const liElement = $('<li>').appendTo(olElement);
     }
-    postBody.html(postBody.html() + newElement);
+    
+    appendToCurrentCursor(newElement);
+    return;
+}
 
-    //remove <br>
-    const newHtml = postBody.html();
-    postBody.html(newHtml.replace(/<br>/g, ''));
-
-    closeCustomizeMenu();
+//header checker:
+function headerChecker(){
+    var isHeader = false;
+    if(
+        type == 'h1' || type == 'h2' ||
+        type == 'h3' || type == 'h4' ||
+        type == 'h5' || type == 'h6'
+    ){
+        isHeader = true;
+    }
+    
+    return isHeader;
 }
 
 //remove br from the post body:
@@ -1168,42 +1177,74 @@ function removeBrFromElement(element){
 }
 
 //append element to last child
-function appendToLastChild2(element){
+function appendToLastChild2(element, nested=true){
     //get post body element
     const postBody = $('#postBody');
-    //remove br from post body:
-    removeBrFromElement(postBody);
+    //remove place holder and br:
+    postBodyCleanUp();
     
-    //check if the post body hes children:
-    var lastPostBodyChild = postBody.get(0).lastElementChild;
-    if(!lastPostBodyChild){
-        //no post children append to post body
-        postBody.append(element);
-        //close menu:
-        closeCustomizeMenu2();
-        //set cursor inside the New item:
-        setElementCursor(element);
-        return;
-    }
+    const targetElement = getLastNestedChild(postBody.get(0));
 
-    //post body has child 
-    //loop throw last child children get the last child:
-    var tempLastChild = lastPostBodyChild;
-    while(tempLastChild){
-        lastPostBodyChild = tempLastChild;
-        tempLastChild = tempLastChild.lastElementChild;
-    }
     //append the element to the last child:
-    $(lastPostBodyChild).append(element);
+    $(targetElement).append(element);
 
     //close menu
     closeCustomizeMenu2();
-    //set cursor inside the New item:
-    setElementCursor(element);
+    //check if the cursor will be at the end of the element children:
+    if(nested){
+        element = getLastNestedChild(element.get(0));
+        console.log(element);
+    }
+    //set cursor inside the New element:
+    cursorAtStartElement(element);
+}
+
+//get the last nested child of the element:
+function getLastNestedChild(element){
+    var temp = element.lastElementChild;
+    while(temp){
+        console.log(temp)
+        element = temp;
+        temp = temp.lastElementChild;
+    }
+    return element;
+}
+
+//remove br and the place holder from the post body
+function postBodyCleanUp(){
+    //remove place holder:
+    const postBody = $('#postBody');
+    if(postBody.get(0).innerText == 'Add Post Body'){
+        postBody.get(0).innerText = '';
+    }
+    //remove br from post body:
+    removeBrFromElement(postBody);
 }
 
 //append element to the current cursor:
-function appendToCurrentCursor(element){
+// nested : to set the cursor at the end of the last child Element
+function appendToCurrentCursor(element, nested=true){
+    
+    //check if there is a valid selection:
+    if(!lastSelection){
+        appendToLastChild2(element, nested);
+        return;
+    }
+    //get selection range:
+    const selectionRange = lastSelection.getRangeAt(0);
+    //insert new element
+    selectionRange.insertNode(element.get(0)); 
+    //close menu
+    closeCustomizeMenu2();
+    //check if the cursor will be at the end of the element children:
+    if(nested){
+        element = getLastNestedChild(element.get(0));
+        console.log(element);
+    }
+    
+    //cursor setter:
+    cursorAtEndElement(element);
+   
 }
 
 // to close the customize menu and set the cursor inside the element:
@@ -1215,7 +1256,41 @@ function closeCustomizeMenu2(){
 }
 
 // to set the cursor inside the element:
-function setElementCursor(element){
+function cursorAtEndElement(element){
+    //convert element to jquery if not:
+    if(!element.jquery){element = $(element)}
+    //get element text
+    const innerText = element.get(0).innerText;
+    //get element text range:
+    const length = innerText.length;
+    //create the range at the end of the element:
+    const range = new Range();
+    range.setStart(element.get(0), length);
+    range.setEnd(element.get(0), length);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//highlight element : 
+function highlightElement(element){
+    //get element text
+    const innerText = element.get(0).innerText;
+    //get element text range:
+    const length = innerText.length;
+    //create the range at the end of the element:
+    const range = new Range();
+    range.setStart(element.get(0), 0);
+    range.setEnd(element.get(0), length);
+
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//cursor of the element start:
+function cursorAtStartElement(element){
+    //convert the element to jquery if not
+    if(!element.jquery){element = $(element)}
     const range = new Range();
     range.setStart(element.get(0), 0);
     range.setEnd(element.get(0), 0);
@@ -1225,12 +1300,25 @@ function setElementCursor(element){
 }
 
 //css prop
-function getStyleCssProp(){
+function getStyleCssProp(isList = false){
     var cssProp = {
         'background-color': backgroundColor,
         'color': fontColor,
         'font-size': fontSize+'px',
     };
+
+    //set header style;
+    if(headerChecker()){
+        cssProp = {
+            'background-color': backgroundColor,
+            'color': fontColor
+        };
+    }
+
+    //set lists style
+    if(isList){
+        cssProp['margin-left'] = '30px';
+    }
 
     if(bold && italic){
         cssProp['font-weight'] = 'bold';
@@ -1320,7 +1408,6 @@ function updateSelection(selection, changeType, data) {
 
     //close the menu:
     closeCustomizeMenuWithoutMoveCursor();
-    return;
 }
 
 //create updated item 
