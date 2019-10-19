@@ -23,6 +23,7 @@ var bold = false;
 var italic = false;
 var header = false;
 var headerLevel = 1;
+var textAlign = 'left';
 var customizeMenuInflaterOpened = false;
 var openedCustomizeMenuType = 'none';
 //change the menu position on drag
@@ -266,10 +267,62 @@ function createToolbar(postBody) {
     //unordered list :
     toolbarUnorderedList().appendTo(toolsContainer);
 
+    //text-align:
+    toolbarTextAlignTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//text align tool:
+function toolbarTextAlignTool(){
+    const textAlignContainer = $('<div>', {
+        class: 'textAlignContainer toolbar-tool',
+        id: 'textAlignContainer'
+    }).html('<i class="fas fa-align-center toolIcon"></i>');
+
+    const menuItems = new Array();
+
+    const positionsContainer = $('<div>', {
+        class: 'textAlignPositionsContainer',
+        id: 'textAlignPositionsContainer'
+    });
+
+    //left align:
+    const alignLeft = $('<div>', {
+        class: 'textAlignTool textAlign-tool',
+        id: 'textAlignLeftAlign'
+    }).html('<i class="fas fa-align-left toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+        textAlign = 'left';
+
+    });
+    //center align:
+    const alignCenter = $('<div>', {
+        class: 'textAlignTool textAlign-tool',
+        id: 'textAlignCenterAlign'
+    }).html('<i class="fas fa-align-center toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+        textAlign = 'center';
+
+    });
+    //right align:
+    const alignRight = $('<div>', {
+        class: 'textAlignTool textAlign-tool',
+        id: 'textAlignRightAlign'
+    }).html('<i class="fas fa-align-right toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+        textAlign = 'right';
+
+    });
+
+    //append to menu items 
+    menuItems.push(positionsContainer);
+    //open items menu on click:
+    textAlignContainer.click(()=>{
+        customizeMenuInflater(menuItems, 'text-align');
+    })
+
+    return textAlignContainer;
 }
 
 //unordered list:

@@ -166,6 +166,23 @@
         transform: rotate(360deg);
     }
 }
+.textAlign-tool {
+    width: 40px;
+    height: 40px;
+    background-color: #13456f;
+    border-radius: 50px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    color: #e37801;
+    margin: 0px 16px;
+    cursor: pointer;
+}
+.textAlignPositionsContainer {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){
     .toolbarContainer {
