@@ -29,6 +29,8 @@ var currentInChange = false;
 var alreadyChangesSaved = false;
 var redoArray = new Array();
 var redoCurrentPosition = 0;
+//last cursor in post body position
+var lastSelection;
 
 /******************* functions  *************/
 
@@ -183,6 +185,9 @@ function createPostBody() {
         currentInChange = true;
         alreadyChangesSaved = false;
         $('#toolbarSaveDocTool').removeClass('changesSaved').addClass('rotate');
+
+        //save current cursor position:
+        lastSelection = document.getSelection();
     });
 
     //on focus remove default text:
@@ -190,7 +195,8 @@ function createPostBody() {
         if (postBody.html() === 'Add Post Body') {
             postBody.html('');
         }
-
+        //save current cursor position:
+        lastSelection = document.getSelection();
     })
     //set default place holder
     postBody.on('focusout', () => {
