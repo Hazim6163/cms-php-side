@@ -239,10 +239,10 @@ function savePostToServer(){
     const title = $('#postTitle').html();
     const des = $('#postDes').html();
     const body = $('#postBody').html();
-    const category = '5d97671b52754d206075e506';
-    const showInActivity = 1;
-    const img = null;
-    const tags = null;
+    const category = '5d97671b52754d206075e506';//TODO GET CATEGORIES ->> 1 create category input ->> 2
+    const showInActivity = 1;//CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
+    const img = null;//CREATE IMG HOLDER ->> 4
+    const tags = null;//GET TAGS ->> 1 CREATE TAGS INPUT ->> 3
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
         console.log(res)
