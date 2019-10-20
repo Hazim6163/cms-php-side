@@ -222,7 +222,7 @@
     border-radius: 0px 0px 15px 15px;
 }
 #htmlModalCancelBtn {
-    background-color: #4f0000;
+    background-color: #551919;
     padding: 8px;
     color: gainsboro;
     border-radius: 12px;
@@ -231,7 +231,7 @@
     text-align: center;
 }
 #htmlModalAddBtn {
-    background-color: #002600;
+    background-color: #2b5b28;
     color: gainsboro;
     padding: 8px;
     border-radius: 12px;
@@ -244,6 +244,43 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+#embedModalContainer {
+    width: 60%;
+    position: fixed;
+    height: 5%;
+    top: 30%;
+    left: 20%;
+    background-color: #171717;
+    border-radius: 15px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+}
+#embedModalInput {
+    height: 100%;
+    width: 80%;
+    color: gainsboro;
+    border: 1px solid #484848;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: .8rem;
+    margin-right: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+  #embedModalSubmitBtn {
+    color: gainsboro;
+    background-color: #2b5b28;
+    padding: 8px 16px;
+    border-radius: 9px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
 }
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){

@@ -33,6 +33,8 @@ var redoCurrentPosition = 0;
 var lastSelection;
 //html modal:
 var htmlModalOpened = false;
+//embed modal:
+var embedModalOpened = false;
 
 /******************* functions  *************/
 
@@ -318,7 +320,45 @@ function toolbarEmbedTool(){
 
 //embed tool click : 
 function embedToolClick(eType){
-    
+    //check if the modal already opened;
+    if(embedModalOpened){
+        $('#embedModalContainer').remove();
+        //toggle opened:
+        embedModalOpened = !embedModalOpened;
+        return;
+    }
+    //create the modal:
+    const modalContainer = $('<div>',{
+        class: 'embedModalContainer',
+        id: 'embedModalContainer'
+    });
+    //input: 
+    const input = $('<div>',{
+        class: 'embedModalInput',
+        id: 'embedModalInput'
+    }).attr('contenteditable', 'true').appendTo(modalContainer);
+    //submit:
+    const submit = $('<div>',{
+        class: 'embedModalSubmitBtn',
+        id: 'embedModalSubmitBtn'
+    }).appendTo(modalContainer).text('Submit').click(()=>{
+        submitEmbed(eType);
+    });
+
+
+    //append modal to body:
+    $('body').append(modalContainer);
+    //toggle modal opened:
+    embedModalOpened = !embedModalOpened;
+    //close customize menu:
+    closeCustomizeMenu2();
+}
+
+//on submit embed click
+function submitEmbed(embedType){
+
+    //close modal
+    embedToolClick();
 }
 
 //add html section to post body:
@@ -385,6 +425,9 @@ function addHtmlModal(){
 
     //toggle opened:
     htmlModalOpened = !htmlModalOpened;
+
+    //focus
+    editorArea.trigger('focus');
 }
 
 //to add html from modal to post body
