@@ -55,6 +55,8 @@ const createPage = (userInfo) => {
     postContainer.append(postHeader());
     //post Body:
     postBody.appendTo(postContainer)
+    //editor footer:
+    createEditorFooter().appendTo(page);
 }
 
 //create post header
@@ -211,6 +213,40 @@ function createPostBody() {
     })
 
     return postBody;
+}
+
+//create editor footer:
+function createEditorFooter(){
+    const editorFooterContainer = $('<div>',{
+        class: 'editorFooterContainer',
+        id: 'editorFooterContainer'
+    });
+
+    const saveButton = $('<div>',{
+        class: 'eFSaveBtn',
+        id: 'eFSaveBtn'
+    }).html('Save').appendTo(editorFooterContainer).click(()=>{
+        savePostToServer();
+    });
+
+
+    return editorFooterContainer;
+}
+
+//send the post to the server:
+function savePostToServer(){
+    //get post title :
+    const title = $('#postTitle').html();
+    const des = $('#postDes').html();
+    const body = $('#postBody').html();
+    const category = '5d97671b52754d206075e506';
+    const showInActivity = 1;
+    const img = null;
+    const tags = null;
+
+    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
+        console.log(res)
+    }, 'json')
 }
 
 //create toolbar

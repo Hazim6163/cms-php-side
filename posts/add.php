@@ -1,4 +1,29 @@
-<?php 
+<?php
+
+/****************** editor requests **********/
+//save post:
+if(isset($_POST['savePost'])){
+    session_start();
+    $url = 'http://localhost:3000/posts/add';
+    $postData = array(
+        'title' => $_POST['title'],
+        'des' => $_POST['des'],
+        'des' => $_POST['des'],
+        'body' => $_POST['body'],
+        'body' => $_POST['body'],
+        'parentId' => $_POST['category'],
+        'showInActivity' => $_POST['showInActivity'],
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../classes/utils.php');
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
+    
+    echo($res);
+    return;
+}
+
 session_start();
 
 //check if the user logged in 
