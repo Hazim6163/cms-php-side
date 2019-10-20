@@ -371,7 +371,7 @@ function extractHolderMsg(eType){
             
             break;
         case 'Image':
-            
+            return 'Ex: https://i.imgur.com/0d21RdD.jpg'
             break;
         default:
             break;
@@ -403,7 +403,21 @@ function submitEmbed(embedType){
             
             break;
         case 'Image':
-            
+            const image = $('<img>');
+            image.attr({
+                'src': inputText,
+                'frameborder': '0',
+                'allow': 'encrypted-media',
+                'allowfullscreen':''
+            }).css({
+                //TODO TAKE HEIGHT WIDTH FROM MODAL
+                'max-width': '100%',
+                'display': 'block',
+                'margin': '16px auto',
+                'border-radius': '20px',
+                'box-shadow': '0px 0px 3px black'
+            });
+            insertNewItem('image', {target: image});
             break;
         default:
             break;
@@ -1447,7 +1461,7 @@ function insertNewItem(_type, extraData) {
     } else if (type == 'customHtml') {
         const target = extraData.target;
         newElement = target;
-    } else if (type == 'y-iframe') {
+    } else if (type == 'y-iframe' || type == 'image') {
         const target = extraData.target;
         newElement = target;
     }
