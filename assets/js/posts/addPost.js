@@ -189,7 +189,7 @@ function createPostBody() {
         $('#toolbarSaveDocTool').removeClass('changesSaved').addClass('rotate');
 
         //save current cursor position:
-        lastSelection = document.getSelection();
+        lastSelection = document.getSelection().getRangeAt(0);
     });
 
     //on focus remove default text:
@@ -198,14 +198,14 @@ function createPostBody() {
             postBody.html('');
         }
         //save current cursor position:
-        lastSelection = document.getSelection();
+        lastSelection = document.getSelection().getRangeAt(0);
     })
     //set default place holder
     postBody.on('focusout', () => {
         if (postBody.html() === '') {
             postBody.html('Add Post Body');
         }
-
+        console.log(postBody.html())
     })
 
     return postBody;
@@ -314,7 +314,12 @@ function addHtmlModal(){
     const addBtn = $('<div>',{
         class: 'htmlModalAddBtn',
         id: 'htmlModalAddBtn'
-    }).appendTo(btnsContainer).html('Save');
+    }).appendTo(btnsContainer).html('Save').click(()=>{
+        saveHtmlToPostBody();
+        $('#htmlModalContainer').remove();
+        //toggle opened:
+        htmlModalOpened = !htmlModalOpened;
+    });
 
     const cancelBtn = $('<div>',{
         class: 'htmlModalCancelBtn',
@@ -323,15 +328,28 @@ function addHtmlModal(){
         $('#htmlModalContainer').remove();
         //toggle opened:
         htmlModalOpened = !htmlModalOpened;
-        return;
     });
 
     //append to document:
     $('body').append(modalContainer);
-    console.log($('body').html())
 
     //toggle opened:
     htmlModalOpened = !htmlModalOpened;
+}
+
+//to add html from modal to post body
+function saveHtmlToPostBody(){
+    const editor = $('#htmlModalEditorArea');
+    console.log(editor.text());
+    const newDivTarget = $('<div>',{
+        class: 'newDivTarget'
+    }).html(editor.text());
+    const extraData = {
+        'target': newDivTarget,
+    };
+
+    //insert target to post body
+    insertNewItem('customHtml', extraData);
 }
 
 //text align tool:
@@ -1266,7 +1284,7 @@ function onLongPress(element) {
 }
 
 //insert new Item to post body:
-function insertNewItem(_type) {
+function insertNewItem(_type, extraData) {
     type = _type;
     //set type:
     //add new element to post body:
@@ -1283,6 +1301,9 @@ function insertNewItem(_type) {
         const liElement = $('<li>').appendTo(newElement);
     } else if (type == 'div') {
         newElement = $('<div>').css(getStyleCssProp('div'));
+    } else if (type == 'customHtml') {
+        const target = extraData.target;
+        newElement = target;
     }
 
     appendToCurrentCursor(newElement);
@@ -1362,7 +1383,7 @@ function appendToCurrentCursor(element, nested = true) {
         return;
     }
     //get selection range:
-    const selectionRange = lastSelection.getRangeAt(0);
+    const selectionRange = lastSelection;
     //insert new element
     selectionRange.insertNode(element.get(0));
     //close menu
@@ -1393,6 +1414,11 @@ function cursorAtEndElement(element) {
     const innerText = element.get(0).innerText;
     //get element text range:
     const length = innerText.length;
+    //check if the element has text first child or not 
+    if(element.get(0).firstChild){
+        element = element.get(0).firstChild;
+        element = $(element);
+    }
     //create the range at the end of the element:
     const range = new Range();
     range.setStart(element.get(0), length);
