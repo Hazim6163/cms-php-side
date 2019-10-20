@@ -1,7 +1,30 @@
+//get categories:
+var categories;
+function getCategories(nextFun){
+    $.post('./add.php', {getCategories: true}, (categories)=>{
+        nextFun(categories);
+    }, 'json')
+}
+
+//get tags: 
+var tags;
+function getTags(nextFun){
+    $.post('./add.php', {getTags: true}, (tags)=>{
+        nextFun(tags);
+    }, 'json')
+}
+
 //get user info:
 getUserInfo((userInfo) => {
-    //create main page:
-    createPage(userInfo)
+    //get categories:
+    getCategories((categories)=>{
+        //get tags:
+        getTags((tags)=>{
+            //create main page:
+            createPage(userInfo, categories, tags)
+        })
+    })
+    
 });
 
 //post body editor vars:
@@ -39,7 +62,7 @@ var embedModalOpened = false;
 /******************* functions  *************/
 
 //main page:
-const createPage = (userInfo) => {
+const createPage = (userInfo, categories, tags) => {
     //page
     const page = $('#pageContainer');
 
@@ -239,10 +262,10 @@ function savePostToServer(){
     const title = $('#postTitle').html();
     const des = $('#postDes').html();
     const body = $('#postBody').html();
-    const category = '5d97671b52754d206075e506';//TODO GET CATEGORIES ->> 1 create category input ->> 2
+    const category = '5d97671b52754d206075e506';//TODO create category input ->> 2
     const showInActivity = 1;//CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     const img = null;//CREATE IMG HOLDER ->> 4
-    const tags = null;//GET TAGS ->> 1 CREATE TAGS INPUT ->> 3
+    const tags = null;//CREATE TAGS INPUT ->> 3
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
         console.log(res)

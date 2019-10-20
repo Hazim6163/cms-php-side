@@ -22,6 +22,26 @@ if(isset($_POST['savePost'])){
     return;
 }
 
+//get categories:
+if(isset($_POST['getCategories'])){
+    $url = 'http://localhost:3000/categories';
+    require('../classes/utils.php');
+    $res = Utils::getRequest($url);
+    
+    echo($res);
+    return;
+}
+
+//get tags: 
+if(isset($_POST['getTags'])){
+    $url = 'http://localhost:3000/tags';
+    require('../classes/utils.php');
+    $res = Utils::getRequest($url);
+    
+    echo($res);
+    return;
+}
+
 session_start();
 
 //check if the user logged in 
