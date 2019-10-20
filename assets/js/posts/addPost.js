@@ -368,11 +368,9 @@ function extractHolderMsg(eType){
         case 'YouTube':
             return 'video ID';
         case 'gist':
-            
-            break;
+            return 'Ex: https://gist.github.com/Hazim6163/000395f0b608eebece8651bd0ae890f8'
         case 'Image':
             return 'Ex: https://i.imgur.com/0d21RdD.jpg'
-            break;
         default:
             break;
     }
@@ -381,9 +379,10 @@ function extractHolderMsg(eType){
 //on submit embed click
 function submitEmbed(embedType){
     const inputText = $('#embedModalInput').text();
+    var iframe;
     switch (embedType) {
         case 'YouTube':
-            const iframe = $('<iframe>');
+            iframe = $('<iframe>');
             iframe.attr({
                 'width': '560',
                 'height': '315',
@@ -400,7 +399,22 @@ function submitEmbed(embedType){
             insertNewItem('y-iframe', {target: iframe});
             break;
         case 'gist':
-            
+            iframe = $('<iframe>');
+            iframe.attr({
+                'frameborder': '0',
+                'scrolling': 'no',
+                'seamless': 'seamless',
+                'onload': 'resizeIframe(this)',
+                'srcdoc': '<html><body><script src="'+inputText+'.js"></script><style type="text/css">.gist .gist-data {} .gist-file{border: 0px !important; padding-bottom: 16px} /** custom style: */.gist .gist-data {  background-color: #171717;  border-bottom: 1px solid #171717;  padding-bottom: 16px;}.gist .highlight {  color: wheat;  background: #171717;}.gist .gist-meta {  color: #171717;  background-color: #171717;}.gist .pl-pds, .gist .pl-s, .gist .pl-s .pl-pse .pl-s1, .gist .pl-sr, .gist .pl-sr .pl-cce, .gist .pl-sr .pl-sra, .gist .pl-sr .pl-sre {  color: #90a21f;}.gist .pl-c1, .gist .pl-s .pl-v {  color: #7ab8ff;}.gist .blob-code-inner {  color: white;}.gist .pl-s .pl-s1, .gist .pl-smi {  color: #ff7878;}html {background-color: #171717;scrollbar-width: thin;scrollbar-color:black#171717; }::-webkit-scrollbar-track {background: #171717; }::-webkit-scrollbar-thumb {background: #000; }::-webkit-scrollbar {width: 10px;}::-webkit-scrollbar-arrow-color{background: gray}.gist .blob-num::before {color: wheat;}.gist .blob-wrapper table {border-collapse:collapse;margin-bottom: 16px;}</style></body></html>'
+            });
+            iframe.css({
+                'display': 'block',
+                'width': '70%',
+                'margin': '24px auto',
+                'border-radius': '20px',
+                'box-shadow': '0px 0px 3px black'
+            });
+            insertNewItem('g-iframe', {target: iframe});
             break;
         case 'Image':
             const image = $('<img>');
@@ -424,6 +438,11 @@ function submitEmbed(embedType){
     }
     //close modal
     embedToolClick();
+}
+
+//resize iframe:
+function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
 }
 
 //add html section to post body:
@@ -1461,7 +1480,7 @@ function insertNewItem(_type, extraData) {
     } else if (type == 'customHtml') {
         const target = extraData.target;
         newElement = target;
-    } else if (type == 'y-iframe' || type == 'image') {
+    } else if (type == 'y-iframe' || type == 'image' || type == 'g-iframe') {
         const target = extraData.target;
         newElement = target;
     }
