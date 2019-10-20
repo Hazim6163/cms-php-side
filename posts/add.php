@@ -8,8 +8,6 @@ if(isset($_POST['savePost'])){
     $postData = array(
         'title' => $_POST['title'],
         'des' => $_POST['des'],
-        'des' => $_POST['des'],
-        'body' => $_POST['body'],
         'body' => $_POST['body'],
         'parentId' => $_POST['category'],
         'showInActivity' => $_POST['showInActivity'],
