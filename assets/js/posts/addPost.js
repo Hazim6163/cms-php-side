@@ -294,7 +294,7 @@ function toolbarEmbedTool(){
         class: 'youTubeEmbedTool toolbar-tool',
         id: 'youTubeEmbedTool'
     }).html('<i class="fab fa-youtube toolIcon"></i>').appendTo(embedsContainer).click(()=>{
-        embedToolClick('youtube');
+        embedToolClick('YouTube');
     });
     const gistEmbedTool  = $('<div>', {
         class: 'gistEmbedTool toolbar-tool',
@@ -306,7 +306,7 @@ function toolbarEmbedTool(){
         class: 'imageEmbedTool toolbar-tool',
         id: 'imageEmbedTool'
     }).html('<i class="fas fa-image toolIcon"></i>').appendTo(embedsContainer).click(()=>{
-        embedToolClick('image');
+        embedToolClick('Image');
     });
 
     items.push(embedsContainer);
@@ -333,10 +333,11 @@ function embedToolClick(eType){
         id: 'embedModalContainer'
     });
     //input: 
+    const holder = extractHolderMsg(eType);
     const input = $('<div>',{
         class: 'embedModalInput',
         id: 'embedModalInput'
-    }).attr('contenteditable', 'true').appendTo(modalContainer);
+    }).attr('contenteditable', 'true').appendTo(modalContainer).text(holder);
     //submit:
     const submit = $('<div>',{
         class: 'embedModalSubmitBtn',
@@ -352,11 +353,61 @@ function embedToolClick(eType){
     embedModalOpened = !embedModalOpened;
     //close customize menu:
     closeCustomizeMenu2();
+    //select holder text:
+    const range = new Range();
+    const length = input.text().length;
+    range.setStart(input.get(0).firstChild, 0);
+    range.setEnd(input.get(0).firstChild, length);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
+
+//to set the input holder:
+function extractHolderMsg(eType){
+    switch (eType) {
+        case 'YouTube':
+            return 'video ID';
+        case 'gist':
+            
+            break;
+        case 'Image':
+            
+            break;
+        default:
+            break;
+    }
 }
 
 //on submit embed click
 function submitEmbed(embedType){
-
+    const inputText = $('#embedModalInput').text();
+    switch (embedType) {
+        case 'YouTube':
+            const iframe = $('<iframe>');
+            iframe.attr({
+                'width': '560',
+                'height': '315',
+                'src': 'https://www.youtube.com/embed/'+inputText,
+                'frameborder': '0',
+                'allow': 'encrypted-media',
+                'allowfullscreen':''
+            }).css({
+                'display': 'block',
+                'margin': '16px auto',
+                'border-radius': '20px',
+                'box-shadow': '0px 0px 3px black'
+            });
+            insertNewItem('y-iframe', {target: iframe});
+            break;
+        case 'gist':
+            
+            break;
+        case 'Image':
+            
+            break;
+        default:
+            break;
+    }
     //close modal
     embedToolClick();
 }
@@ -433,7 +484,6 @@ function addHtmlModal(){
 //to add html from modal to post body
 function saveHtmlToPostBody(){
     const editor = $('#htmlModalEditorArea');
-    console.log(editor.text());
     const newDivTarget = $('<div>',{
         class: 'newDivTarget'
     }).html(editor.text());
@@ -1395,6 +1445,9 @@ function insertNewItem(_type, extraData) {
     } else if (type == 'div') {
         newElement = $('<div>').css(getStyleCssProp('div'));
     } else if (type == 'customHtml') {
+        const target = extraData.target;
+        newElement = target;
+    } else if (type == 'y-iframe') {
         const target = extraData.target;
         newElement = target;
     }
