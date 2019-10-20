@@ -212,7 +212,7 @@ function createPostBody() {
 }
 
 //create toolbar
-function createToolbar(postBody) {
+function createToolbar() {
     const toolbarContainer = $('<div>', {
         class: 'toolbarContainer',
         id: 'toolbarContainer'
@@ -265,10 +265,60 @@ function createToolbar(postBody) {
     //add html:
     toolbarAddHtmlTool().appendTo(toolsContainer);
 
+    //embed:
+    toolbarEmbedTool().appendTo(toolsContainer);
+
     //on long press move:
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//embed:
+function toolbarEmbedTool(){
+    const embedContainer = $('<div>', {
+        class: 'embedContainer toolbar-tool',
+        id: 'embedContainer'
+    }).html('<i class="fas fa-link toolIcon"></i>');
+
+    const items = new Array();
+
+    const embedsContainer = $('<div>', {
+        class: 'embedsContainer',
+        id: 'embedsContainer'
+    });
+
+    const youTubeEmbedTool  = $('<div>', {
+        class: 'youTubeEmbedTool toolbar-tool',
+        id: 'youTubeEmbedTool'
+    }).html('<i class="fab fa-youtube toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+        embedToolClick('youtube');
+    });
+    const gistEmbedTool  = $('<div>', {
+        class: 'gistEmbedTool toolbar-tool',
+        id: 'gistEmbedTool'
+    }).html('<i class="fab fa-github toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+        embedToolClick('gist');
+    });
+    const imageEmbedTool  = $('<div>', {
+        class: 'imageEmbedTool toolbar-tool',
+        id: 'imageEmbedTool'
+    }).html('<i class="fas fa-image toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+        embedToolClick('image');
+    });
+
+    items.push(embedsContainer);
+
+    embedContainer.click(()=>{
+        customizeMenuInflater(items, 'embeds')
+    })
+
+    return embedContainer;
+}
+
+//embed tool click : 
+function embedToolClick(eType){
+    
 }
 
 //add html section to post body:
@@ -276,7 +326,7 @@ function toolbarAddHtmlTool(){
     const addHtmlContainer = $('<div>', {
         class: 'addHtmlContainer toolbar-tool',
         id: 'addHtmlContainer'
-    }).html('<i class="fab fa-html5 toolIcon"></i>');
+    }).html('<i class="fas fa-code toolIcon"></i>');
 
     addHtmlContainer.click(()=>{
         //create modal 

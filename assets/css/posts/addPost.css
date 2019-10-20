@@ -240,6 +240,11 @@
     cursor: pointer;
     margin: 0px 56px;
 }
+#embedsContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){
     .toolbarContainer {
