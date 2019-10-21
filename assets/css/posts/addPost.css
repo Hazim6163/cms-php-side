@@ -286,7 +286,7 @@
 #editorFooterContainer {
     min-height: 60px;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     color: wheat;
     align-items: center;
     margin: 16px;
@@ -296,8 +296,25 @@
     padding: 8px 16px;
     border-radius: 10px;
     color: whitesmoke;
-    margin-right: 10em;
+    margin-right: 5em;
     cursor: pointer;
+}
+#chooseCategoryContainer {
+    color: #171717;
+    margin-left: 16px;
+    line-height: 1.4em;
+}
+.categoriesGroupContainer span {
+    margin-left: 8px;
+    font-size: .9rem;
+}
+.categoriesGroupContainer input {
+    cursor: pointer;
+}
+.dropDownIcon {
+    cursor: pointer;
+    font-size: .7rem !important;
+    color: #13456f;
 }
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px){

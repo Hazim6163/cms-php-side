@@ -79,7 +79,7 @@ const createPage = (userInfo, categories, tags) => {
     //post Body:
     postBody.appendTo(postContainer)
     //editor footer:
-    createEditorFooter().appendTo(page);
+    createEditorFooter(categories, tags, userInfo).appendTo(page);
 }
 
 //create post header
@@ -232,18 +232,26 @@ function createPostBody() {
         if (postBody.html() === '') {
             postBody.html('Add Post Body');
         }
-        console.log(postBody.html())
     })
 
     return postBody;
 }
 
 //create editor footer:
-function createEditorFooter(){
+function createEditorFooter(categories, tags, userInfo){
     const editorFooterContainer = $('<div>',{
         class: 'editorFooterContainer',
         id: 'editorFooterContainer'
     });
+
+    //categories container:
+    const chooseCategoryContainer = $('<div>',{
+        class: 'chooseCategoryContainer',
+        id: 'chooseCategoryContainer'
+    }).appendTo(editorFooterContainer).html('Post Category:<br>');
+
+
+    extractCategories(categories).appendTo(chooseCategoryContainer);
 
     const saveButton = $('<div>',{
         class: 'eFSaveBtn',
@@ -256,16 +264,104 @@ function createEditorFooter(){
     return editorFooterContainer;
 }
 
+//extract categories and nested categories:
+function extractCategories(categories, nested = false, parentContainer){
+    //check if nested: 
+    if(nested){
+        parentContainer.append(extractCategories(categories));
+        return;
+    }
+    const categoriesGroupContainer = $('<div>',{
+        class: 'categoriesGroupContainer'
+    });
+    categories.forEach((category)=>{
+        //filter root categories
+        if(!category.parentId){
+            //create category container
+            const categoryContainer = $('<div>',{
+                class: 'rootCategoryContainer',
+                id: 'rootCategoryContainer' + category._id
+            }).appendTo(categoriesGroupContainer).css('margin-left', '30px');
+            //category radio
+            const categoryRadio = $('<input type="radio" name="category" value="'+category._id+'">',{
+                class: 'categoryRadio',
+                id: 'categoryRadio'+category._id
+            }).appendTo(categoryContainer);
+            //category label
+            const label = $('<span>').html(category.title+'<br>');
+            categoryContainer.append(label);
+            //check if the category has nested categories:
+            if(category.nestedCategories.length > 0){
+                // edit label
+                label.html(category.title);
+                // create dropdown;
+                const dropDown = $('<span>', {
+                    class: 'dropDownIcon'
+                }).html('<i class="fas fa-chevron-circle-down"></i><br>');
+                categoryContainer.append(dropDown);
+                //nested container:
+                const nestedCatContainer = $('<div>',{
+                    class: 'nestedCatContainer',
+                    id: 'nestedCatContainer' + category._id
+                }).appendTo(categoryContainer).hide();
+                dropDown.click(()=>{
+                    nestedCatContainer.toggle('fast');
+                });
+                //extract nested categories:
+                extractNestedCategories(category, nestedCatContainer);
+            }
+        }
+        
+    });
+
+    return categoriesGroupContainer;
+}
+
+//extract nested categories:
+function extractNestedCategories(_category, categoryContainer){
+    _category.nestedCategories.forEach((category)=>{
+        const container = $('<div>',{
+            class: 'categoryContainer',
+            id: 'categoryContainer' + category._id
+        }).css('margin-left', '30px');
+        const categoryRadio = $('<input type="radio" name="category" value="'+category._id+'">',{
+            class: 'categoryRadio',
+            id: 'categoryRadio'+category._id
+        }).appendTo(container);
+        const label = $('<span>').html(category.title+'<br>');
+        container.append(label);
+        categoryContainer.append(container);
+        if(category.nestedCategories.length > 0){
+            // edit label
+            label.html(category.title);
+            // create dropdown;
+            const dropDown = $('<span>', {
+                class: 'dropDownIcon'
+            }).html('<i class="fas fa-chevron-circle-down"></i><br>');
+            container.append(dropDown);
+            //nested container:
+            const nestedCatContainer = $('<div>',{
+                class: 'nestedCatContainer',
+                id: 'nestedCatContainer' + category._id
+            }).appendTo(categoryContainer).css('margin-left', '30px').hide();
+            dropDown.click(()=>{
+                nestedCatContainer.toggle('fast');
+            });
+            extractNestedCategories(category, nestedCatContainer);
+        }
+    });
+}
+
 //send the post to the server:
 function savePostToServer(){
     //get post title :
     const title = $('#postTitle').html();
     const des = $('#postDes').html();
     const body = $('#postBody').html();
-    const category = '5d97671b52754d206075e506';//TODO create category input ->> 2
+    const category = $("input[name='category']:checked").val();
     const showInActivity = 1;//CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     const img = null;//CREATE IMG HOLDER ->> 4
-    const tags = null;//CREATE TAGS INPUT ->> 3
+    const tags = null;//CREATE TAGS INPUT ->> 3 / CREATE ALERT ON NON SELECTED CATEGORY ->> 6 // HANDEL POST SAVED ->> 7
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
         console.log(res)
