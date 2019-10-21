@@ -14,8 +14,9 @@
 
 .postContainer {
     padding: 2em;
-    width: 100%;
+    width: 700px;
     box-sizing: border-box;
+    margin: auto;
 }
 
 .postTitle {
@@ -44,12 +45,13 @@
     border-radius: 15px;
     padding: 16px;
     min-height: 35px;
+    margin: 60px 0px;
 }
 
 .postBody {
     border-radius: 15px;
     padding: 16px;
-    min-height: 23px;
+    min-height: 20vh;
 }
 
 .toolbarContainer {
@@ -319,12 +321,10 @@
 }
 
 #editorFooterContainer {
-    min-height: 60px;
-    display: flex;
-    justify-content: space-between;
-    color: wheat;
-    align-items: center;
-    margin: 16px;
+    width: 700px;
+    margin: 2em auto;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
 }
 
 #eFSaveBtn {
@@ -334,13 +334,17 @@
     color: whitesmoke;
     margin-right: 5em;
     cursor: pointer;
+    width: 50px;
+    text-align: center;
+    margin: 0px auto 2em auto;
 }
 
 #chooseCategoryContainer {
     color: #171717;
     margin-left: 16px;
-    line-height: 1.4em;
-    align-self: flex-start;
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding: 2em;
 }
 
 .categoriesGroupContainer span {
@@ -352,6 +356,11 @@
     cursor: pointer;
 }
 
+.categoriesGroupContainer {
+    margin-top: 8px;
+    font-weight: normal;
+}
+
 .dropDownIcon {
     cursor: pointer;
     font-size: .7rem !important;
@@ -360,8 +369,10 @@
 
 #chooseTagsContainer {
     color: #171717;
-    align-self: start;
-    line-height: 1.4em;
+    width: 700px;
+    padding: 2em;
+    margin-left: 16px;
+    font-weight: bold;
     /* non select */
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
@@ -369,6 +380,7 @@
     -o-user-select: none;
     user-select: none;
 }
+
 .tagContainer {
     background-color: #eaf6ff;
     margin: 4px;
@@ -402,7 +414,7 @@
     border-left: 0px;
     border-bottom: 1px solid #1717;
     padding: 4px;
-    margin: 0px 8px;
+    margin: 0px 16px 0px 0px;
     box-shadow: 0px 0px 2px #1717;
     color: #004f00;
     border-radius: 5px;
@@ -411,7 +423,6 @@
 .tagsContainer {
     margin: 8px 16px;
     max-width: 250px;
-    min-height: 52px;
 }
 
 .tagSubmit {
@@ -486,24 +497,50 @@
     color: rosybrown;
 }
 
-.toolbarContainerHidden{
+.toolbarContainerHidden {
     width: auto !important;
     padding: 8px 8px 0px 8px;
     margin: 0px 16px 0px 16px;
     text-align: center;
 }
+
 .toolbarToLeft {
     overflow-y: auto;
     border-radius: 0px;
     max-height: 50%;
     border-radius: 0px 15px 15px 0px;
 }
-.toolbarToRight{
+
+.toolbarToRight {
     overflow-y: auto;
     max-height: 50%;
     border-radius: 15px 0px 0px 15px;
 }
+
+.inputForm {
+    margin: 16px 0px;
+}
+
+#tagsInputContainer {
+    font-weight: normal;
+    padding: 16px;
+}
+
 /********************** responsive layout ********************/
+@media only screen and (min-width: 1000px) {
+    #chooseTagsContainer {
+        width: 870px;
+    }
+
+    .postContainer {
+        width: 870px;
+    }
+
+    #editorFooterContainer {
+        width: 870px;
+    }
+}
+
 @media only screen and (max-width: 800px) {
     .toolbarContainer {
         top: 196px;
@@ -514,6 +551,18 @@
 
     .navbarToggleActiveToolbar {
         top: 76px;
+    }
+
+    #chooseTagsContainer {
+        width: 600px;
+    }
+
+    .postContainer {
+        width: 600px;
+    }
+
+    #editorFooterContainer {
+        width: 600px;
     }
 }
 
@@ -540,5 +589,37 @@
 
     #htmlModalAddBtn {
         margin: 0px 35px;
+    }
+
+    #chooseTagsContainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 16px;
+    }
+
+    .postContainer {
+        width: 100%;
+        padding: 16px;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 16px;
+    }
+
+    #editorFooterContainer {
+        width: 90%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 0px;
+        border: 0px;
+        box-sizing: border-box;
+    }
+
+    #chooseCategoryContainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding: 16px;
+        box-sizing: border-box;
     }
 }
