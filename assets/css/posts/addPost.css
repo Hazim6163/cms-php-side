@@ -360,18 +360,27 @@
     color: #171717;
     align-self: start;
     line-height: 1.4em;
+    /* non select */
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
-
 .tagContainer {
-    display: inline-block;
     background-color: #eaf6ff;
     margin: 4px;
     padding: 8px;
     border-radius: 15px;
-    /*! min-width: 40px; */
     font-size: 0.8rem;
     cursor: pointer;
     color: #13456f;
+    flex-wrap: wrap;
+    display: inline-flex;
+}
+
+.tagName {
+    margin-left: 4px;
 }
 
 .tagContainer:hover {
@@ -399,6 +408,8 @@
 
 .tagsContainer {
     margin: 8px 16px;
+    max-width: 250px;
+    min-height: 52px;
 }
 
 .tagSubmit {
@@ -418,17 +429,56 @@
 
 #tagInputSuggests {
     width: 190px;
+    height: 200px;
+    overflow: auto;
     margin-left: 8px;
     box-sizing: border-box;
     padding: 1px 8px;
     box-shadow: 0px 0px 1px gray;
 }
+
 .tagResultContainer {
     box-shadow: 0px 0px 1px black;
     padding: 8px;
     margin: 8px 0px;
     font-size: .8rem;
 }
+
+.searchTagResultIcon {
+    border-radius: 50px;
+    background-color: #1b5520;
+    width: 30px;
+    height: 30px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tagResultContainer {
+    box-shadow: 0px 0px 1px black;
+    padding: 8px;
+    margin: 8px 0px;
+    font-size: .8rem;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.tagResultName {
+    width: 70%;
+    margin-left: 8px;
+}
+
+.tagResultPostsCount {
+    margin-left: auto;
+    margin-right: 16px;
+    font-size: .7rem;
+    line-height: 0px;
+    padding: 4px;
+}
+
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px) {
     .toolbarContainer {

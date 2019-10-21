@@ -9,6 +9,7 @@ if(isset($_POST['savePost'])){
         'title' => $_POST['title'],
         'des' => $_POST['des'],
         'body' => $_POST['body'],
+        'tags' => $_POST['tags'],
         'parentId' => $_POST['category'],
         'showInActivity' => $_POST['showInActivity'],
     );
@@ -38,6 +39,33 @@ if(isset($_POST['getTags'])){
     require('../classes/utils.php');
     $res = Utils::getRequest($url);
     
+    echo($res);
+    return;
+}
+
+//search tag:
+if(isset($_POST['searchTag'])){
+    $chars = $_POST['word'];
+    $url = 'http://localhost:3000/search/tags?chars=' . $chars;
+    require('../classes/utils.php');
+    $res = Utils::getRequest($url);
+    
+    echo($res);
+    return;  
+}
+
+//submit tag:
+if(isset($_POST['tagSubmit'])){
+    session_start();
+    $url = 'http://localhost:3000/tags/';
+    $postData = array(
+        'name' => $_POST['name']
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    require('../classes/utils.php');
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
     echo($res);
     return;
 }

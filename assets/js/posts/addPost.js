@@ -58,6 +58,9 @@ var lastSelection;
 var htmlModalOpened = false;
 //embed modal:
 var embedModalOpened = false;
+//post tags:
+var postTagsArr = new Array();
+var lastTagsSearch = new Array();
 
 /******************* functions  *************/
 
@@ -277,29 +280,18 @@ function createTagsContainer(tags){
     });
 
     const tagsContainer = $('<div>',{
-        class: 'tagsContainer'
+        class: 'tagsContainer',
+        id: 'postTagsContainer'
     }).appendTo(container);
-    
-    //dummy tags
-    const tagContainer = $('<div>',{
-        class: 'tagContainer'
-    }).html('# test').appendTo(tagsContainer);
 
-    const tag2Container = $('<div>',{
-        class: 'tagContainer'
-    }).html('# test').appendTo(tagsContainer);
-
-    const tag3Container = $('<div>',{
-        class: 'tagContainer'
-    }).html('# t').appendTo(tagsContainer);
-    
     //add tags form
     const tagsForm = $('<form>',{
         class: 'inputForm'
     }).appendTo(container).attr('autocomplete', 'off');
     //input 
     const tagInput = $('<input>',{
-        class: 'tagInput'
+        class: 'tagInput',
+        id: 'tagInput'
     }).attr({'type':'text', 'name': 'name'}).appendTo(tagsForm);
     //to get suggests:
     tagInput.on('keyup', ()=>{
@@ -312,8 +304,14 @@ function createTagsContainer(tags){
     //on form submit
     tagsForm.on('submit', (e)=>{
         e.preventDefault();
-        $.post('./add.php', {tagSubmit: true, name: tagInput.val()}, (res)=>{
-            //todo handel res
+        //send post request to add tag:
+        $.post('./add.php', {tagSubmit: true, name: tagInput.val()}, (tag)=>{
+            if(!tag._id){
+                //TODO error modal
+                return;
+            }
+            addTag(tag, false);
+            tagInput.val('');
         }, 'json')
     })
     //const suggests:
@@ -321,6 +319,12 @@ function createTagsContainer(tags){
         class: 'tagInputSuggests',
         id: 'tagInputSuggests'
     }).appendTo(container).hide();
+    tagInput.on('focus', ()=>{
+        suggests.show('fast');
+    });
+    tagInput.on('focusout', ()=>{
+        suggests.hide('fast');
+    })
 
     return container;
 }
@@ -329,23 +333,98 @@ function createTagsContainer(tags){
 function getTagsSuggests(word){
     //clean up the suggests container:
     const suggests = $('#tagInputSuggests');
-    suggests.html('');
+    const input = $('#tagInput')
     //check if the word not empty 
     if(!word || word == ''){
-        suggests.hide();
+        suggests.html('');
         return;
     }
-    //show suggests
-    suggests.show();
+    //replace space with +:
+    word = encodeURIComponent(word)
     //send search request:
-    $.post('./add.php', {searchTag: true, word: word}, (res)=>{
-        //todo handle res
-    })
-    //dummy tag result
-    const tagResult = $('<div>',{
-        class: 'tagResultContainer'
-    }).html(word).appendTo(suggests);
+    $.post('./add.php', {searchTag: true, word: word}, (tags)=>{
+        // check if the last result is the same:
+        if(JSON.stringify(tags) == JSON.stringify(lastTagsSearch)){
+            return;
+        }
+        //save search result:
+        lastTagsSearch = tags;
+        //clean up search suggests container:
+        suggests.html('');
+        //loop throw each tag:
+        for (let i = 0; i < tags.length; i++) {
+            const tag = tags[i];
+            //check if the tag already added:
+            var added = false;
+            for (let i = 0; i < postTagsArr.length; i++) {
+                const at = postTagsArr[i];
+                if (tag.name === at){
+                    added = true;
+                }
+            }
+            if(added){
+                continue;
+            }
+            //create tag result container
+            const tagResult = $('<div>',{
+                class: 'tagResultContainer',
+                id: tag._id
+            }).appendTo(suggests);
+            //on tag result click
+            tagResult.click(()=>{
+                addTag(tag, true);
+                input.val('');
+                input.trigger('focus');
+            })
+            tagResult.on('focus', ()=>{
+                suggests.show('fast');
+            })
+            // tag result icon
+            const icon = $('<div>', {
+                class: 'searchTagResultIcon'
+            }).html('<i class="fas fa-tag searchTagIcon"></i>').appendTo(tagResult);
+            // tag result name
+            const name = $('<div>',{
+                class: 'tagResultName'
+            }).appendTo(tagResult).html(tag.name);
+            // tag result posts count
+            const postsCount = $('<div>',{
+                class: 'tagResultPostsCount'
+            }).appendTo(tagResult).html(tag.postsCount + ' Posts');
+        }
+    }, 'json')
+}
 
+//add tag by search:
+function addTag(tag, bySearch){
+    //add the tag to post tags array: 
+    postTagsArr.push(tag.name);
+    //add tag to post tags container:
+    const container = $('#postTagsContainer');
+    //create tag container
+    const tagContainer = $('<div>',{
+        class: 'tagContainer'
+    }).appendTo(container).click(()=>{
+        //on click remove tag from container
+        tagContainer.remove();
+        //on click remove tag from post array tags:
+        postTagsArr = postTagsArr.filter((t)=>{
+            return t != tag.name
+        });
+    });
+    //tag icon : 
+    const icon = $('<div>', {
+        class: 'tagIcon'
+    }).html('<i class="fas fa-tag searchTagIcon"></i>').appendTo(tagContainer);
+    // tag name
+    const name = $('<div>',{
+        class: 'tagName'
+    }).appendTo(tagContainer).html(tag.name);
+
+    if(bySearch){
+        //if by search remove tag from the search result:
+        $('#'+tag._id).remove();
+    }
 }
 
 //extract categories and nested categories:
@@ -443,13 +522,35 @@ function savePostToServer(){
     const des = $('#postDes').html();
     const body = $('#postBody').html();
     const category = $("input[name='category']:checked").val();
-    const showInActivity = 1;//CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
-    const img = null;//CREATE IMG HOLDER ->> 4
-    const tags = null;//CREATE ALERT ON NON SELECTED CATEGORY ->> 6 // HANDEL POST SAVED ->> 7
+    const tags = getPostTags();
+    const showInActivity = 1;
+    const img = null;
+    //CREATE IMG HOLDER ->> 4
+    //CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
+    //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
+    // HANDEL POST SAVED ->> 7
 
-    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
+    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity,  }, (res)=>{
         console.log(res)
     }, 'json')
+}
+
+//get post tags before save the post :
+function getPostTags(){
+    var tags = '';
+    for (let i = 0; i < postTagsArr.length; i++) {
+        const t = postTagsArr[i];
+        if(i == postTagsArr.length-1){
+            tags += t ;
+            break;
+        }
+        tags += t + ', ';
+    }
+    if(tags == ''){
+        tags = undefined
+    }
+
+    return tags;
 }
 
 //create toolbar
