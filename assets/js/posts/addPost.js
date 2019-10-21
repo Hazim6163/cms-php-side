@@ -1,3 +1,11 @@
+//check if there is a post copy:
+var postCopy;
+function getPostCopy(nextFun){
+    $.post('./add.php', {getPostCopy: true}, (postC)=>{
+        nextFun(postC)
+    }, 'json');
+}
+
 //get categories:
 var categories;
 function getCategories(nextFun){
@@ -20,12 +28,23 @@ getUserInfo((userInfo) => {
     getCategories((categories)=>{
         //get tags:
         getTags((tags)=>{
-            //create main page:
-            createPage(userInfo, categories, tags)
+            //get post copy:
+            getPostCopy((postC)=>{
+                if(!postC.false){
+                    //create main page:
+                    createPage(userInfo, categories, tags, postC)
+                    console.log(postC)
+                }else{
+                    //create main page:
+                    createPage(userInfo, categories, tags, undefined)
+                }
+            })
         })
     })
     
 });
+
+
 
 //post body editor vars:
 var fontColor = '#000000';
@@ -52,6 +71,7 @@ var currentInChange = false;
 var alreadyChangesSaved = false;
 var redoArray = new Array();
 var redoCurrentPosition = 0;
+var isPostCopy = false;
 //cursor vars:
 var lastSelection;
 //html modal:
@@ -68,11 +88,15 @@ var toolbarOnRight = false;
 /******************* functions  *************/
 
 //main page:
-const createPage = (userInfo, categories, tags) => {
+const createPage = (userInfo, categories, tags, postC) => {
+    //check if there is post copy : 
+    if(postC){
+        isPostCopy = true;
+    }
     //page
     const page = $('#pageContainer');
 
-    const postBody = createPostBody();
+    const postBody = createPostBody(postC);
     //createToolBar
     createToolbar(postBody).appendTo(page);
     //post container
@@ -81,7 +105,7 @@ const createPage = (userInfo, categories, tags) => {
         id: 'postContainer'
     }).appendTo(page);
     //create post header 
-    postContainer.append(postHeader());
+    postContainer.append(postHeader(postC));
     //post Body:
     postBody.appendTo(postContainer)
     //editor footer:
@@ -89,7 +113,7 @@ const createPage = (userInfo, categories, tags) => {
 }
 
 //create post header
-function postHeader() {
+function postHeader(postC) {
     const pageHeader = $('<div>', {
         class: 'pageHeader',
         id: 'pageHeader'
@@ -98,15 +122,15 @@ function postHeader() {
     //TODO  CREATE POST IMG SECTION
 
     //post title section
-    createPostTitle().appendTo(pageHeader);
+    createPostTitle(postC).appendTo(pageHeader);
     //post description section:
-    createPostDes().appendTo(pageHeader);
+    createPostDes(postC).appendTo(pageHeader);
 
     return pageHeader;
 }
 
 //create post title section;
-function createPostTitle() {
+function createPostTitle(postC) {
     const postTitleContainer = $('<div>', {
         class: 'postTitleSectionContainer',
         id: 'postTitleSectionContainer'
@@ -116,6 +140,11 @@ function createPostTitle() {
         class: 'postTitle',
         id: 'postTitle'
     }).html('Post Title').appendTo(postTitleContainer).attr('contenteditable', 'true');
+    if(isPostCopy){
+        if(postC.title != ''){
+            postTitle.html(postC.title);
+        }
+    }
 
     //create on key up listener to set the place holder:
     postTitle.on('keyup', () => {
@@ -152,7 +181,7 @@ function createPostTitle() {
 }
 
 //create post Description section
-function createPostDes() {
+function createPostDes(postC) {
     const postDesContainer = $('<div>', {
         class: 'postDesContainer',
         id: 'postDesContainer'
@@ -162,7 +191,12 @@ function createPostDes() {
         class: 'postDes',
         id: 'postDes'
     }).html('Add Post Description').appendTo(postDesContainer).attr('contenteditable', 'true');
-
+    //check if there is post copy
+    if(isPostCopy){
+        if(postC.des != ''){
+            postDes.html(postC.des);
+        }
+    }
     //create on key up listener to set the place holder
     postDes.on('keyup', () => {
         if (postDes.html() === '<br>') {
@@ -196,13 +230,19 @@ function createPostDes() {
 }
 
 //create Post Body:
-function createPostBody() {
+function createPostBody(postC) {
     //version control tool
     docSaver();
     const postBody = $('<div>', {
         class: 'postBody',
         id: 'postBody'
     }).attr('contenteditable', 'true').html('Add Post Body');
+    //check if there is post copy
+    if(isPostCopy){
+        if(postC.body != ''){
+            postBody.html(postC.body);
+        }
+    }
 
     //create on key up listener to set the place holder
     postBody.on('keyup', () => {
@@ -1148,6 +1188,13 @@ function docSaver() {
         docHistory.push({ position: historyPosition++, change: change });
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
+        //get post title description:
+        title = $('#postTitle').text();
+        des = $('#postDes').text();
+        //send save copy to php:
+        $.post('./add.php', {savePostCopy: true, title: title, des: des, body: postBody.html()}, (res)=>{
+            //alert post saved
+        }, 'json')
     }, 1000);
 }
 

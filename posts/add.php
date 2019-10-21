@@ -70,6 +70,39 @@ if(isset($_POST['tagSubmit'])){
     return;
 }
 
+//save post copy :
+if(isset($_POST['savePostCopy'])){
+    session_start();
+    $post = array(
+        'title'=> $_POST['title'],
+        'body'=> $_POST['body'],
+        'des'=> $_POST['des'],
+
+    );
+
+    //save post to session:
+    $_SESSION['postCopy'] = $post;
+
+    $res = json_encode($post);
+    echo $res;
+    return;
+}
+
+//get post copy: 
+if(isset($_POST['getPostCopy'])){
+    session_start();
+    $copy = false;
+    $res;
+    if(isset($_SESSION['postCopy'])){
+        $copy = true;
+        $res = json_encode($_SESSION['postCopy']);
+        echo $res;
+        return ;
+    }
+    echo '{"false": false}';
+    return;
+}
+
 session_start();
 
 //check if the user logged in 
