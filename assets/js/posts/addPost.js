@@ -61,6 +61,9 @@ var embedModalOpened = false;
 //post tags:
 var postTagsArr = new Array();
 var lastTagsSearch = new Array();
+//toolbar vars:
+var toolbarOpened = true;
+var toolbarOnRight = false;
 
 /******************* functions  *************/
 
@@ -559,6 +562,15 @@ function createToolbar() {
         class: 'toolbarContainer',
         id: 'toolbarContainer'
     });
+
+    //toggle toolbar:
+    const toggleBar = $('<div>', {
+        class: 'toggleToolBarIconActive toolbar-tool',
+        id: 'toggleToolBarBtn'
+    }).html('<i class="far fa-eye-slash toggleToolbarIcon"></i>').appendTo(toolbarContainer).click(()=>{
+        toggleToolbar();
+    });
+
     const toolsContainer = $('<div>', {
         class: 'toolsContainer',
         id: 'toolsContainer'
@@ -614,6 +626,25 @@ function createToolbar() {
     onLongPress(toolbarContainer);
 
     return toolbarContainer;
+}
+
+//minimize toolbar
+function toggleToolbar(){
+    const toolbarContainer = $('#toolbarContainer');
+    const toolsContainer = $('#toolsContainer');
+    const toggleBtn = $('#toggleToolBarBtn');
+
+    //hide tools container
+    toolsContainer.toggle('fast');
+    //apply hide class to toolbar container
+    toolbarContainer.toggleClass('toolbarContainerHidden');
+    toolbarOpened = !toolbarOpened;
+    //change btn content:
+    if(toolbarOpened){
+        toggleBtn.html('<i class="far fa-eye-slash toggleToolbarIcon"></i>').css('color', 'rosybrown')
+    }else{
+        toggleBtn.html('<i class="fas fa-ellipsis-h toggleToolbarIcon"></i>').css('color', '#13456f')
+    }
 }
 
 //embed:
@@ -1768,8 +1799,6 @@ function closeCustomizeMenuWithoutMoveCursor() {
 
 //long muse click listener on toolbar to move:
 function onLongPress(element) {
-
-
     //set mouse click timeout to move
     element.mousedown(function (e) {
         mousedown = true;
@@ -1792,11 +1821,64 @@ function onLongPress(element) {
     function onMouseUpdate(e) {
         if (menuIsClicked) {
             element.css({
-                'left': e.pageX + (element.width() / 2) - 15,
-                'top': e.pageY - 15
+                'left': getToolbarXPosition(e, element),
+                'top': getToolbarYPosition(e, element)
             });
         }
     }
+}
+
+//get x position for tool bar:
+function getToolbarXPosition(e, element){
+    var x; // present element left position
+    var saveX = 5 // to be sure the cursor is in the element
+    const viewPortWidth = $( window ).width();
+    var fromRightMargin = 52;
+
+    //check if the -x out the page
+    if(e.pageX < 15){
+        x = 0;
+        //set element width to 50px
+        element.width('50');
+        //apply pinned to left class
+        element.addClass('toolbarToLeft')
+        return x;
+    }
+
+    //check if the +x out page:
+    if(e.pageX > viewPortWidth - 50){
+        //set element width to 50px
+        element.width('70');
+        //open tool bar if closed
+        if(!toolbarOpened){
+            toggleToolbar();
+            toolbarOpened = true;
+        }
+        x = viewPortWidth - 50 - fromRightMargin;
+        element.addClass('toolbarToRight')
+        return x;
+    }
+
+    // x is on the page 
+    x = e.pageX - saveX;
+    //remove classes right left
+    element.removeClass('toolbarToRight')
+    element.removeClass('toolbarToLeft')
+    //remove margin:
+    element.css('margin-left', '0px')
+    if(toolbarOpened){
+        element.width('25%');
+    }else{
+        element.width('auto');
+    }
+
+    return x ;
+}
+
+//get y position for toolbar:
+function getToolbarYPosition(e, element){
+    var y = e.pageY - 15
+    return y;
 }
 
 //insert new Item to post body:

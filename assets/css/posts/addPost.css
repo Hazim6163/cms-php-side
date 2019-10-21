@@ -70,6 +70,7 @@
     -webkit-user-select: none;
     -o-user-select: none;
     user-select: none;
+    overflow: hidden;
 }
 
 .toolsContainer {
@@ -78,6 +79,7 @@
     flex-wrap: wrap;
     min-height: 128px;
     justify-content: center;
+    overflow: hidden;
 }
 
 .toolbar-tool {
@@ -479,6 +481,28 @@
     padding: 4px;
 }
 
+.toggleToolBarIconActive {
+    margin: 8px auto 16px auto;
+    color: rosybrown;
+}
+
+.toolbarContainerHidden{
+    width: auto !important;
+    padding: 8px 8px 0px 8px;
+    margin: 0px 16px 0px 16px;
+    text-align: center;
+}
+.toolbarToLeft {
+    overflow-y: auto;
+    border-radius: 0px;
+    max-height: 50%;
+    border-radius: 0px 15px 15px 0px;
+}
+.toolbarToRight{
+    overflow-y: auto;
+    max-height: 50%;
+    border-radius: 15px 0px 0px 15px;
+}
 /********************** responsive layout ********************/
 @media only screen and (max-width: 800px) {
     .toolbarContainer {
