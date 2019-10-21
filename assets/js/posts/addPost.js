@@ -249,9 +249,14 @@ function createEditorFooter(categories, tags, userInfo){
         class: 'chooseCategoryContainer',
         id: 'chooseCategoryContainer'
     }).appendTo(editorFooterContainer).html('Post Category:<br>');
-
-
     extractCategories(categories).appendTo(chooseCategoryContainer);
+
+    //tags container:
+    const chooseTagsContainer = $('<div>',{
+        class: 'chooseTagsContainer',
+        id: 'chooseTagsContainer'
+    }).appendTo(editorFooterContainer).html('Tags:<br>');
+    createTagsContainer(tags).appendTo(chooseTagsContainer);
 
     const saveButton = $('<div>',{
         class: 'eFSaveBtn',
@@ -262,6 +267,85 @@ function createEditorFooter(categories, tags, userInfo){
 
 
     return editorFooterContainer;
+}
+
+//create tags input container:
+function createTagsContainer(tags){
+    const container = $('<div>',{
+        class: 'tagsInputContainer',
+        id: 'tagsInputContainer'
+    });
+
+    const tagsContainer = $('<div>',{
+        class: 'tagsContainer'
+    }).appendTo(container);
+    
+    //dummy tags
+    const tagContainer = $('<div>',{
+        class: 'tagContainer'
+    }).html('# test').appendTo(tagsContainer);
+
+    const tag2Container = $('<div>',{
+        class: 'tagContainer'
+    }).html('# test').appendTo(tagsContainer);
+
+    const tag3Container = $('<div>',{
+        class: 'tagContainer'
+    }).html('# t').appendTo(tagsContainer);
+    
+    //add tags form
+    const tagsForm = $('<form>',{
+        class: 'inputForm'
+    }).appendTo(container).attr('autocomplete', 'off');
+    //input 
+    const tagInput = $('<input>',{
+        class: 'tagInput'
+    }).attr({'type':'text', 'name': 'name'}).appendTo(tagsForm);
+    //to get suggests:
+    tagInput.on('keyup', ()=>{
+        getTagsSuggests(tagInput.val());
+    })
+    //submit
+    const tagSubmit = $('<input>',{
+        class: 'tagSubmit'
+    }).attr({'type':'submit', 'value': 'Add', 'autocomplete': 'off'}).appendTo(tagsForm);
+    //on form submit
+    tagsForm.on('submit', (e)=>{
+        e.preventDefault();
+        $.post('./add.php', {tagSubmit: true, name: tagInput.val()}, (res)=>{
+            //todo handel res
+        }, 'json')
+    })
+    //const suggests:
+    const suggests = $('<div>',{
+        class: 'tagInputSuggests',
+        id: 'tagInputSuggests'
+    }).appendTo(container).hide();
+
+    return container;
+}
+
+//get tags suggests:
+function getTagsSuggests(word){
+    //clean up the suggests container:
+    const suggests = $('#tagInputSuggests');
+    suggests.html('');
+    //check if the word not empty 
+    if(!word || word == ''){
+        suggests.hide();
+        return;
+    }
+    //show suggests
+    suggests.show();
+    //send search request:
+    $.post('./add.php', {searchTag: true, word: word}, (res)=>{
+        //todo handle res
+    })
+    //dummy tag result
+    const tagResult = $('<div>',{
+        class: 'tagResultContainer'
+    }).html(word).appendTo(suggests);
+
 }
 
 //extract categories and nested categories:
@@ -361,7 +445,7 @@ function savePostToServer(){
     const category = $("input[name='category']:checked").val();
     const showInActivity = 1;//CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     const img = null;//CREATE IMG HOLDER ->> 4
-    const tags = null;//CREATE TAGS INPUT ->> 3 / CREATE ALERT ON NON SELECTED CATEGORY ->> 6 // HANDEL POST SAVED ->> 7
+    const tags = null;//CREATE ALERT ON NON SELECTED CATEGORY ->> 6 // HANDEL POST SAVED ->> 7
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, showInActivity: showInActivity }, (res)=>{
         console.log(res)

@@ -3,22 +3,22 @@
     padding: 0;
 }
 
-.pageWrapper{
+.pageWrapper {
     min-height: 77vh;
 }
 
-.pageContainer{
+.pageContainer {
     width: 100%;
     padding-top: 82px;
 }
 
-.postContainer{
+.postContainer {
     padding: 2em;
     width: 100%;
     box-sizing: border-box;
 }
 
-.postTitle{
+.postTitle {
     text-align: center;
     font-size: 2.2rem;
     border-radius: 15px;
@@ -27,17 +27,19 @@
     min-height: 50px;
 }
 
-.postTitle:focus, .postDes:focus, .postBody:focus{
-    box-shadow:  0px 0px 4px black;
+.postTitle:focus,
+.postDes:focus,
+.postBody:focus {
+    box-shadow: 0px 0px 4px black;
 }
 
-.postTitleSectionContainer{
+.postTitleSectionContainer {
     display: flex;
     justify-content: center;
     min-width: 100%;
 }
 
-.postDes{
+.postDes {
     font-size: 1.5rem;
     border-radius: 15px;
     padding: 16px;
@@ -51,24 +53,25 @@
 }
 
 .toolbarContainer {
-	width: 25%;
-	position: fixed;
-	top: 130px;
+    width: 25%;
+    position: fixed;
+    top: 130px;
     left: 50%;
     margin-left: -12.5%;
     max-height: 381px;
-	overflow-y: auto;
-	padding: 16px;
-	background-color: #fbffe4;
+    overflow-y: auto;
+    padding: 16px;
+    background-color: #fbffe4;
     box-shadow: 0px 0px 3px black;
-	border-radius: 15px;
-	color: #4c107d;
+    border-radius: 15px;
+    color: #4c107d;
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
     user-select: none;
 }
+
 .toolsContainer {
     /*TODO style tools container */
     display: flex;
@@ -76,62 +79,73 @@
     min-height: 128px;
     justify-content: center;
 }
+
 .toolbar-tool {
     width: 25px;
     height: 25px;
-	color: #13456f;
+    color: #13456f;
     display: flex;
     flex-direction: column;
     justify-content: center;
-	padding: 8px;
-	cursor: pointer;
-	border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 50%;
     background-color: #eaf6ff;
     margin-right: 8px;
     margin-bottom: 16px;
 }
+
 .fontSizeMenuItemContainer {
     padding: 8px 0px;
     text-align: center;
     cursor: pointer;
 }
+
 .customFontSizeContainer {
-	display: flex;
-	padding: 16px;
-	justify-content: center;
+    display: flex;
+    padding: 16px;
+    justify-content: center;
 }
+
 .customFontSizeI {
-	width: 50px;
-	border: 1px solid #9b9b9b;
-	margin: 0px 4px;
+    width: 50px;
+    border: 1px solid #9b9b9b;
+    margin: 0px 4px;
     color: #13456f;
     text-align: center;
 }
+
 #customFontSizeIPx {
     margin-right: 16px;
     margin-top: -4px;
 }
+
 #customFontSizeSubmit {
     margin-top: -2px;
     cursor: pointer;
 }
-.navbarToggleActiveToolbar{
+
+.navbarToggleActiveToolbar {
     top: 76px;
 }
-.toolIcon{
+
+.toolIcon {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
 }
-.toolbar-tool:hover>.toolIcon{
-    font-size: 1.3rem ;
+
+.toolbar-tool:hover>.toolIcon {
+    font-size: 1.3rem;
 }
-.toolbar-tool:hover{
+
+.toolbar-tool:hover {
     width: 30px;
     height: 30px;
-    font-size: 1.3rem ;
+    font-size: 1.3rem;
 }
-.colorIcon{
+
+.colorIcon {
     cursor: pointer;
     width: 30px;
     height: 30px;
@@ -139,37 +153,46 @@
     flex: 1px;
     margin: 2px;
 }
-.platesColorContainer{
+
+.platesColorContainer {
     padding: 16px;
 }
-.colorPlat{
+
+.colorPlat {
     display: flex;
     flex-wrap: wrap;
 }
-.headerTool{
+
+.headerTool {
     cursor: pointer;
     min-height: 20px;
     margin: 8px;
 }
-.toggleTool{
+
+.toggleTool {
     color: green;
 }
-.changesSaved{
-    color:green;
+
+.changesSaved {
+    color: green;
 }
-.rotate{
+
+.rotate {
     animation-name: rotate-animation;
     animation-duration: 3s;
     animation-timing-function: linear;
     animation-delay: 0s;
     animation-iteration-count: infinite;
     animation-direction: normal;
-}@keyframes rotate-animation {
-    100%{
+}
+
+@keyframes rotate-animation {
+    100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
 }
+
 .textAlign-tool {
     width: 40px;
     height: 40px;
@@ -182,11 +205,13 @@
     margin: 0px 16px;
     cursor: pointer;
 }
+
 .textAlignPositionsContainer {
     display: flex;
     justify-content: center;
     padding: 16px;
 }
+
 #htmlModalContainer {
     width: 80vw;
     height: 40vh;
@@ -199,6 +224,7 @@
     display: flex;
     flex-direction: column;
 }
+
 #htmlModalEditorArea {
     height: 89%;
     background-color: #171717;
@@ -211,6 +237,7 @@
     color: gainsboro;
     overflow: auto;
 }
+
 #htmlModalBtnsContainer {
     display: flex;
     flex-direction: row-reverse;
@@ -221,6 +248,7 @@
     padding: 8px;
     border-radius: 0px 0px 15px 15px;
 }
+
 #htmlModalCancelBtn {
     background-color: #551919;
     padding: 8px;
@@ -230,6 +258,7 @@
     min-width: 58px;
     text-align: center;
 }
+
 #htmlModalAddBtn {
     background-color: #2b5b28;
     color: gainsboro;
@@ -240,6 +269,7 @@
     cursor: pointer;
     margin: 0px 56px;
 }
+
 #embedsContainer {
     display: flex;
     justify-content: center;
@@ -259,6 +289,7 @@
     display: flex;
     align-items: center;
 }
+
 #embedModalInput {
     height: 100%;
     width: 80%;
@@ -274,7 +305,8 @@
     overflow-x: auto;
     overflow-y: hidden;
 }
-  #embedModalSubmitBtn {
+
+#embedModalSubmitBtn {
     color: gainsboro;
     background-color: #2b5b28;
     padding: 8px 16px;
@@ -283,6 +315,7 @@
     margin-right: auto;
     cursor: pointer;
 }
+
 #editorFooterContainer {
     min-height: 60px;
     display: flex;
@@ -291,6 +324,7 @@
     align-items: center;
     margin: 16px;
 }
+
 #eFSaveBtn {
     background-color: #13456f;
     padding: 8px 16px;
@@ -299,54 +333,138 @@
     margin-right: 5em;
     cursor: pointer;
 }
+
 #chooseCategoryContainer {
     color: #171717;
     margin-left: 16px;
     line-height: 1.4em;
+    align-self: flex-start;
 }
+
 .categoriesGroupContainer span {
     margin-left: 8px;
     font-size: .9rem;
 }
+
 .categoriesGroupContainer input {
     cursor: pointer;
 }
+
 .dropDownIcon {
     cursor: pointer;
     font-size: .7rem !important;
     color: #13456f;
 }
+
+#chooseTagsContainer {
+    color: #171717;
+    align-self: start;
+    line-height: 1.4em;
+}
+
+.tagContainer {
+    display: inline-block;
+    background-color: #eaf6ff;
+    margin: 4px;
+    padding: 8px;
+    border-radius: 15px;
+    /*! min-width: 40px; */
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #13456f;
+}
+
+.tagContainer:hover {
+    background-color: darkred;
+    color: whitesmoke;
+}
+
+.tagInputForm {
+    margin: 8px 16px;
+    display: flex;
+    align-items: center;
+}
+
+.tagInput {
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    border-bottom: 1px solid #1717;
+    padding: 4px;
+    margin: 0px 8px;
+    box-shadow: 0px 0px 2px #1717;
+    color: #004f00;
+    border-radius: 5px;
+}
+
+.tagsContainer {
+    margin: 8px 16px;
+}
+
+.tagSubmit {
+    border: 0px;
+    box-shadow: 0px 0px 1px black;
+    padding: 4px 8px;
+    background-color: #eaf6ff;
+    border-radius: 10px;
+    color: #13456f;
+    cursor: pointer;
+}
+
+.tagSubmit:hover {
+    background-color: darkgreen;
+    color: white;
+}
+
+#tagInputSuggests {
+    width: 190px;
+    margin-left: 8px;
+    box-sizing: border-box;
+    padding: 1px 8px;
+    box-shadow: 0px 0px 1px gray;
+}
+.tagResultContainer {
+    box-shadow: 0px 0px 1px black;
+    padding: 8px;
+    margin: 8px 0px;
+    font-size: .8rem;
+}
 /********************** responsive layout ********************/
-@media only screen and (max-width: 800px){
+@media only screen and (max-width: 800px) {
     .toolbarContainer {
         top: 196px;
         width: 75%;
         margin-left: -37.5%;
         box-sizing: border-box;
     }
-    .navbarToggleActiveToolbar{
+
+    .navbarToggleActiveToolbar {
         top: 76px;
     }
 }
 
-@media only screen and (max-width: 400px){
+@media only screen and (max-width: 400px) {
     .toolbarContainer {
         top: 196px;
         width: 75%;
         margin-left: -37.5%;
         box-sizing: border-box;
     }
+
     .postContainer {
         margin-top: 20px;
     }
-    .navbarToggleActiveToolbar{
+
+    .navbarToggleActiveToolbar {
         top: 76px;
     }
-    #htmlModalContainer{
+
+    #htmlModalContainer {
         top: 32vh;
         height: 60vh;
     }
-    #htmlModalAddBtn{
+
+    #htmlModalAddBtn {
         margin: 0px 35px;
     }
 }
