@@ -89,10 +89,82 @@ const createPage = (userInfo, categories, tags, postC) => {
     //create post header 
     postContainer.append(postHeader(postC));
     //post Body:
-    postBody.appendTo(postContainer)
+    //create post headers navigation:
+    postBody.prepend(postNav());
+    postBody.appendTo(postContainer);
+    //post body navigation append headers links:
+    extractHeadersLinks();
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
 }
+
+//post headers navigation:
+function postNav(){
+    const navigationContainer = $('<div>',{
+        class: 'navigationContainer',
+        id: 'navigationContainer'
+    }).show();
+
+    return navigationContainer;
+}
+
+
+
+//extract headers containers :
+function extractHeadersLinks(){
+    const navContainer = $('#navigationContainer');
+
+    //clean up the navContainer:
+    navContainer.empty();
+    
+    //get post headers
+    const headersArr = $('#postBody h1, h2, h3, h4, h5, h6').toArray();
+
+    const title = $('<div>',{
+        class: 'headersNavContainerTitle'
+    }).html('Post Navigation:').appendTo(navContainer);
+
+    const container = $('<div>', {
+        class: 'headersContainer'
+    }).appendTo(navContainer);
+
+    headersArr.forEach((header)=>{
+        //scroll position:
+        //get page wrapper margin top
+        const pageWrapperMargin = $('#pageWrapper').css('margin-top');
+        // add to page wrapper margin top the page container padding top
+        const topSpace = parseInt(pageWrapperMargin) + 84;
+        //get link text:
+        const text = header.textContent.replace(':', '');
+        //create header link element:
+        const hLink = $('<div>', {
+            class: 'headerContainer'
+        }).text(text).appendTo(container).click((e)=>{
+            //check if the header in the post body or not:
+            const temp = $("#"+header.id);
+            if(!temp.html()){
+                //header in the post body cant be found:
+                //remove header link:
+                hLink.remove();
+                return;
+            }
+            //animate scroll to header position + space top margin page wrapper and the page padding top:
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $("#"+header.id).offset().top - topSpace
+            }, 1000);
+        });
+    })
+    //toggle header navigator on links count >< 0 
+    if(headersArr.length == 0 ){
+        navContainer.hide('fast');
+    }else{
+        navContainer.show('fast');
+    }
+}
+
+
+
+//TODO FIX CHANGE MENU PLACE ISSUE
 
 //create post header
 function postHeader(postC) {
@@ -264,6 +336,9 @@ function createPostBody(postC) {
         else if( e.which == 9 ) {
             handlePostBodyTabClick();
         }
+
+        //check post headers to nav link:
+        extractHeadersLinks();
 
         /******************** colors font shortcuts *********************/
         //check color shortcut:
@@ -2261,8 +2336,6 @@ function insertNewItem(_type, extraData) {
         //get unique id :
         const id = getUniqueId();
         newElement = $('<' + type + '>').attr('id', id).css(getStyleCssProp());
-        //save id to headers Array:
-        headersArr.push(newElement);
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
@@ -2282,7 +2355,6 @@ function insertNewItem(_type, extraData) {
     }
 
     appendToCurrentCursor(newElement);
-    console.log($('#postBody').html())
     return;
 }
 
@@ -2568,7 +2640,6 @@ function createUpdatedItem(changeType, selectionText, extraData) {
         case 'heading':
             const id = getUniqueId();
             newElement = $('<h' + extraData.level + '>').attr('id', id).html(selectionText);
-            headersArr.push(newElement)
             header = false;
             break;
         case 'italic':
