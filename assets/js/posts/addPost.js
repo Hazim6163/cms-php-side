@@ -61,6 +61,9 @@ var lastTagsSearch = new Array();
 //toolbar vars:
 var toolbarOpened = true;
 var toolbarOnRight = false;
+//headers :
+//headers ids array:
+var headersArr = new Array();
 
 /******************* functions  *************/
 
@@ -487,7 +490,7 @@ function extractShortcutColor(c){
     return color;
 }
 
-//unique id creator:
+//unique string id creator:
 function getUniqueId(){
     //get time in millisecond
     var d = new Date();
@@ -2255,7 +2258,11 @@ function insertNewItem(_type, extraData) {
     //add new element to post body:
     var newElement;
     if (headerChecker()) {
-        newElement = $('<' + type + '>').css(getStyleCssProp());
+        //get unique id :
+        const id = getUniqueId();
+        newElement = $('<' + type + '>').attr('id', id).css(getStyleCssProp());
+        //save id to headers Array:
+        headersArr.push(newElement);
     } else if (type == 'span') {
         newElement = $('<span>').css(getStyleCssProp());
     } else if (type == 'ol') {
@@ -2275,6 +2282,7 @@ function insertNewItem(_type, extraData) {
     }
 
     appendToCurrentCursor(newElement);
+    console.log($('#postBody').html())
     return;
 }
 
@@ -2441,6 +2449,7 @@ function getStyleCssProp(item) {
             'background-color': backgroundColor,
             'color': fontColor
         };
+        return cssProp;
     }
 
     //set lists style
@@ -2557,7 +2566,9 @@ function createUpdatedItem(changeType, selectionText, extraData) {
             newElement = $('<span>').css('background-color', backgroundColor).html(selectionText);
             break;
         case 'heading':
-            newElement = $('<h' + extraData.level + '>').html(selectionText);
+            const id = getUniqueId();
+            newElement = $('<h' + extraData.level + '>').attr('id', id).html(selectionText);
+            headersArr.push(newElement)
             header = false;
             break;
         case 'italic':
