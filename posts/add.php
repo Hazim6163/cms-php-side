@@ -23,26 +23,6 @@ if(isset($_POST['savePost'])){
     return;
 }
 
-//get categories:
-if(isset($_POST['getCategories'])){
-    $url = 'http://localhost:3000/categories';
-    require('../classes/utils.php');
-    $res = Utils::getRequest($url);
-    
-    echo($res);
-    return;
-}
-
-//get tags: 
-if(isset($_POST['getTags'])){
-    $url = 'http://localhost:3000/tags';
-    require('../classes/utils.php');
-    $res = Utils::getRequest($url);
-    
-    echo($res);
-    return;
-}
-
 //search tag:
 if(isset($_POST['searchTag'])){
     $chars = $_POST['word'];
@@ -88,19 +68,41 @@ if(isset($_POST['savePostCopy'])){
     return;
 }
 
-//get post copy: 
-if(isset($_POST['getPostCopy'])){
+//get add post page data: 
+//categories, tags, post copy:
+if(isset($_POST['getData'])){
     session_start();
+    require('../classes/utils.php');
+    //get categories:
+    $categories = Utils::getCategories();
+    //get tags:
+    $tags = Utils::getTags();
+    //get post copy:
+    $postCopy = getPostCopy();
+    //merge all data:
+    //we need to convert the json data inside the array to php data because we need to encode the hole array letter 
+    $data = array(
+        "categories" => json_decode( $categories),
+        "tags" => json_decode($tags),
+        "postCopy" => json_decode($postCopy)
+    );
+    //convert data to json
+    $res = json_encode($data);
+
+    echo($res);
+    return;
+}
+
+//get post copy:
+function getPostCopy(){
     $copy = false;
     $res;
     if(isset($_SESSION['postCopy'])){
         $copy = true;
         $res = json_encode($_SESSION['postCopy']);
-        echo $res;
-        return ;
+        return $res;
     }
-    echo '{"false": false}';
-    return;
+    return '{"false": false}';
 }
 
 session_start();

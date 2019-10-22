@@ -136,6 +136,20 @@ class Utils{
 
         return $result;
     }
+
+    //get categories:
+    public static function getCategories(){
+        $url = 'http://localhost:3000/categories';
+        $res = Utils::getRequest($url);
+        return $res;
+    }
+
+    //get tags:
+    public static function getTags(){
+        $url = 'http://localhost:3000/tags';
+        $res = Utils::getRequest($url);
+        return $res;
+    }
 }
 
 ?>

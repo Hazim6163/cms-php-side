@@ -1,44 +1,22 @@
-//check if there is a post copy:
-var postCopy;
-function getPostCopy(nextFun){
-    $.post('./add.php', {getPostCopy: true}, (postC)=>{
-        nextFun(postC)
-    }, 'json');
-}
-
-//get categories:
-var categories;
-function getCategories(nextFun){
-    $.post('./add.php', {getCategories: true}, (categories)=>{
-        nextFun(categories);
-    }, 'json')
-}
-
-//get tags: 
-var tags;
-function getTags(nextFun){
-    $.post('./add.php', {getTags: true}, (tags)=>{
-        nextFun(tags);
+//get data:
+var data;
+function getData(nextFun){
+    $.post('./add.php', {getData: true}, (data)=>{
+        nextFun(data);
     }, 'json')
 }
 
 //get user info:
 getUserInfo((userInfo) => {
     //get categories:
-    getCategories((categories)=>{
-        //get tags:
-        getTags((tags)=>{
-            //get post copy:
-            getPostCopy((postC)=>{
-                if(!postC.false){
-                    //create main page:
-                    createPage(userInfo, categories, tags, postC)
-                }else{
-                    //create main page:
-                    createPage(userInfo, categories, tags, undefined)
-                }
-            })
-        })
+    getData((data)=>{
+        if(!data.postCopy.false){
+            //create main page:
+            createPage(userInfo, data.categories, data.tags, data.postCopy)
+        }else{
+            //create main page:
+            createPage(userInfo, data.categories, data.tags, undefined)
+        }
     })
     
 });
