@@ -289,6 +289,8 @@ function createPostBody(postC) {
         checkBodyFontSizeShortcut(postBody);
         //check font size color shortcuts::
         checkBodySizeColorShortcut(postBody);
+        //background-color shortcut:
+        checkBkShortcut(postBody);
     });
 
     //on focus remove default text:
@@ -376,6 +378,31 @@ $(document).keydown(function (e)
     }
 });
 
+
+//background color shortcut:
+//EX: !r:bk background-color: red
+//Ex: !1717:bk background-color: #1717
+function checkBkShortcut(postBody){
+    const pattern = new RegExp(/\!+([a-zA-z0-9]+)+:bk/, 'im');
+    var body = postBody.html();
+    const match = pattern.exec(body);
+    if(!match){
+        return;
+    }
+    //get color part:
+    const c = match[1];
+    const style = 'background-color: '+extractShortcutColor(c)+'; ';
+    const id = getUniqueId();
+    
+    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+    body = body.replace(pattern, req);
+    //update post body
+    postBody.html(body);
+    const e = $('#'+id);
+    e.trigger('focus');
+    cursorAtEndElement(e);
+}
+
 //font size color shortcut: 
 //Ex: !r-50:2cz -> color:red, font size: 50px 
 //Ex: !171717-20:2cz -> color:#171717, font size: 20px
@@ -449,6 +476,13 @@ function checkBodyColorShortcut(postBody){
 //get shortcut span style:
 // c : short cut color val
 function getShortCutSpanStyle(c){
+    var color = extractShortcutColor(c);
+    const style = 'color: '+color+';';
+    return style;
+}
+
+//extract shortcut color:
+function extractShortcutColor(c){
     var color;
     switch (c) {
         case 'r':
@@ -470,8 +504,7 @@ function getShortCutSpanStyle(c){
             color = '#'+c;
             break;
     }
-    const style = 'color: '+color+';';
-    return style;
+    return color;
 }
 
 //unique id creator:
