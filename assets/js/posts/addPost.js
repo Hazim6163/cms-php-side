@@ -40,7 +40,7 @@ var menuIsClicked = false;
 var mousedown = false;
 var mousedown_timer = '';
 //version controller:
-const docHistory = new Array();
+var docHistory = new Array();
 var historyPosition = 0;
 var changesArray = new Array();
 var changesArrayCurrentPosition = -1;
@@ -69,6 +69,8 @@ const createPage = (userInfo, categories, tags, postC) => {
     //check if there is post copy : 
     if(postC){
         isPostCopy = true;
+        //set the doc history array: //TODO FIX UNDO REDO ISSUE REBUILD SYSTEM
+        docHistory = postC.docHistory;
     }
     //page
     const page = $('#pageContainer');
@@ -1510,7 +1512,7 @@ function docSaver() {
         title = $('#postTitle').text();
         des = $('#postDes').text();
         //send save copy to php:
-        $.post('./add.php', {savePostCopy: true, title: title, des: des, body: postBody.html()}, (res)=>{
+        $.post('./add.php', {savePostCopy: true, title: title, des: des, body: postBody.html(), docHistory: docHistory}, (res)=>{
             //alert post saved
         }, 'json')
     }, 1000);
