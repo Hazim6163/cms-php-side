@@ -281,6 +281,14 @@ function createPostBody(postC) {
         else if( e.which == 9 ) {
             handlePostBodyTabClick();
         }
+
+        /******************** colors font shortcuts *********************/
+        //check color shortcut:
+        checkBodyColorShortcut(postBody);
+        //check font size shortcut:
+        checkBodyFontSizeShortcut(postBody);
+        //check font size color shortcuts::
+        checkBodySizeColorShortcut(postBody);
     });
 
     //on focus remove default text:
@@ -367,6 +375,141 @@ $(document).keydown(function (e)
         e.stopPropagation();
     }
 });
+
+//font size color shortcut: 
+//Ex: !r-50:2cz -> color:red, font size: 50px 
+//Ex: !171717-20:2cz -> color:#171717, font size: 20px
+function checkBodySizeColorShortcut(postBody){
+    const pattern = new RegExp(/\!+([a-zA-z0-9]+)+\-+([0-9]+)+:2cz/, 'im');
+    var body = postBody.html();
+    const match = pattern.exec(body);
+    if(!match){
+        return;
+    }
+    //get color part:
+    const c = match[1];
+    const z = match[2];
+    var style = 'font-size: '+z+'px; ';
+    style = style + getShortCutSpanStyle(c);
+    const id = getUniqueId();
+    
+    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+    body = body.replace(pattern, req);
+    //update post body
+    postBody.html(body);
+    const e = $('#'+id);
+    e.trigger('focus');
+    cursorAtEndElement(e);
+}
+
+//font size body shortcut: !15:z 15px font size
+function checkBodyFontSizeShortcut(postBody){
+    const pattern = new RegExp(/\!+([0-9]+)+:z/, 'im');
+    var body = postBody.html();
+    const match = pattern.exec(body);
+    if(!match){
+        return;
+    }
+    //get color part:
+    const z = match[1];
+    const style = 'font-size: '+z+'px;';
+    const id = getUniqueId();
+    
+    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+    body = body.replace(pattern, req);
+    //update post body
+    postBody.html(body);
+    const e = $('#'+id);
+    e.trigger('focus');
+    cursorAtEndElement(e);
+}
+
+//colors body shortcuts: !(r - b - g - y- 0 - 171717):c
+function checkBodyColorShortcut(postBody){
+    const pattern = new RegExp(/\!+([a-zA-z0-9]+)+:c/, 'im');
+    var body = postBody.html();
+    const match = pattern.exec(body);
+    if(!match){
+        return;
+    }
+    //get color part:
+    const c = match[1];
+    const style = getShortCutSpanStyle(c);
+    const id = getUniqueId();
+    
+    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+    body = body.replace(pattern, req);
+    //update post body
+    postBody.html(body);
+    const e = $('#'+id);
+    e.trigger('focus');
+    cursorAtEndElement(e);
+}
+
+//get shortcut span style:
+// c : short cut color val
+function getShortCutSpanStyle(c){
+    var color;
+    switch (c) {
+        case 'r':
+            color = 'red';
+            break;
+        case 'b':
+            color = 'blue'
+            break;
+        case 'g':
+            color = 'green'
+            break;
+        case '0':
+            color = 'black'
+            break;
+        case 'y':
+            color = 'yellow'
+            break;
+        default:
+            color = '#'+c;
+            break;
+    }
+    const style = 'color: '+color+';';
+    return style;
+}
+
+//unique id creator:
+function getUniqueId(){
+    //get time in millisecond
+    var d = new Date();
+    d = d.getTime();
+    //create chars array
+    const chars = new Array();
+    chars.push(
+        "A","a","B","b","C","c","D","d","E","e","F","f","G","g","H","h","I","i","J","j","K","k","L","l","M","m","N","n","O","o","P","p","Q","q","R","r","S","s","T","t","U","u","V","v","W","w","X","x","Y","y","Z","z"
+    );
+    //scuffle the datetime with chars
+    d = JSON.stringify(d);
+    //create id array:
+    var id = new Array();
+    for (let i = 0; i < d.length; i++) {
+        const num = d[i];
+        //get divided by 2 numbers:
+        if(i%2 == 0){
+            id.push(num+1);
+            id.push(num+5);
+            id.push(num+10);
+            var randChar = chars[Math.floor(Math.random()*chars.length)];
+            var randChar2 = chars[Math.floor(Math.random()*chars.length)];
+            id.push(randChar, randChar2);
+        }
+        id.push(num);
+    }
+    //convert id to string:
+    var temp = '';
+    id.forEach((c)=>{
+        temp = temp + c;
+    })
+    id = temp
+
+    return id;
+}
 
 //auto close Braces:
 function autoCloseBraces(){
