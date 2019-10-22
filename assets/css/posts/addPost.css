@@ -55,7 +55,7 @@
     white-space: pre-wrap;
 }
 
-.postBody div{
+.postBody div {
     padding: 0px 0px 8px 0px;
 }
 
@@ -537,7 +537,7 @@
     padding: 16px;
 }
 
-.after-anchor{
+.after-anchor {
     display: inline;
 }
 
@@ -550,14 +550,16 @@
 .headersContainer {
     display: flex;
     flex-direction: column;
-  }
-  .headersNavContainerTitle {
+}
+
+.headersNavContainerTitle {
     font-size: 1.5rem;
     margin: 8px 0px;
-  }
+}
+
 .headerContainer {
     padding: 8px 8px 0px 8px;
-    margin: 8px;
+    margin-left: 8px;
     border-radius: 10px;
     color: darkblue;
     max-width: 50%;
@@ -565,6 +567,7 @@
     font-size: 1.1rem;
 
 }
+
 .headerContainer:hover {
     color: darkorchid;
     transition: .5s;
@@ -608,7 +611,8 @@
     #editorFooterContainer {
         width: 600px;
     }
-    .headerContainer{
+
+    .headerContainer {
         max-width: 70%;
     }
 }
@@ -669,7 +673,8 @@
         padding: 16px;
         box-sizing: border-box;
     }
-    .headerContainer{
+
+    .headerContainer {
         max-width: 70%;
     }
 }

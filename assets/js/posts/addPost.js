@@ -89,9 +89,13 @@ const createPage = (userInfo, categories, tags, postC) => {
     //create post header 
     postContainer.append(postHeader(postC));
     //post Body:
-    //create post headers navigation:
-    postBody.prepend(postNav());
     postBody.appendTo(postContainer);
+    //check if there is post headers navigator already appended
+    const navigator = $('#navigationContainer');
+    if(!navigator.html()){
+        //create post headers navigation:
+        postBody.prepend(postNav());
+    }
     //post body navigation append headers links:
     extractHeadersLinks();
     //editor footer:
