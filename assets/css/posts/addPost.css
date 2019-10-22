@@ -54,6 +54,16 @@
     min-height: 20vh;
 }
 
+.postBody div{
+    padding: 0px 0px 8px 0px;
+}
+
+.postBody a {
+    text-decoration: none;
+    color: #099fa4;
+    cursor: pointer;
+}
+
 .toolbarContainer {
     width: 25%;
     position: fixed;
@@ -524,6 +534,10 @@
 #tagsInputContainer {
     font-weight: normal;
     padding: 16px;
+}
+
+.after-anchor{
+    display: inline;
 }
 
 /********************** responsive layout ********************/

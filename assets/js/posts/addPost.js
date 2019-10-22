@@ -33,7 +33,6 @@ getUserInfo((userInfo) => {
                 if(!postC.false){
                     //create main page:
                     createPage(userInfo, categories, tags, postC)
-                    console.log(postC)
                 }else{
                     //create main page:
                     createPage(userInfo, categories, tags, undefined)
@@ -263,6 +262,9 @@ function createPostBody(postC) {
 
         //save current cursor position:
         lastSelection = document.getSelection().getRangeAt(0);
+
+        //check for anchors 
+        checkBodyAnchors(postBody);
     });
 
     //on focus remove default text:
@@ -281,6 +283,30 @@ function createPostBody(postC) {
     })
 
     return postBody;
+}
+
+//to match the pattern (link name)[link in the post body]
+function checkBodyAnchors(postBody){
+    const pattern = new RegExp(/\(([^)]+)\)+\[([^)]+)\]/, 'im')
+
+    var body = postBody.html();
+    const match = pattern.exec(body);
+    if(!match){
+        return;
+    }
+    //get first part name part:
+    const name = match[1];
+    //get link part :
+    const link = match[2];
+
+    const req = '<a href="'+link+'">'+name+'&nbsp;</a><span id="afterAnchor'+name+link+'"> </span>'
+    body = body.replace(pattern, req);
+    //update post body
+    postBody.html(body);
+    const e = $('#afterAnchor'+name+link)
+    e.trigger('focus');
+    cursorAtEndElement(e);
+    
 }
 
 //create editor footer:
@@ -854,6 +880,7 @@ function submitEmbed(embedType){
 //resize iframe:
 function resizeIframe(obj) {
     obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+    obj.style.maxWidth = '90%';
 }
 
 //add html section to post body:
