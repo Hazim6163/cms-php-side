@@ -244,7 +244,7 @@ function createPostBody(postC) {
     }
 
     //create on key up listener to set the place holder
-    postBody.on('keyup', () => {
+    postBody.on('keyup', (e) => {
         if (postBody.html() === '<br>' || postBody.html() == '') {
             postBody.html('Add Post Body');
 
@@ -265,6 +265,22 @@ function createPostBody(postC) {
 
         //check for anchors 
         checkBodyAnchors(postBody);
+
+        /*********** auto close () [] {} ************/
+        //check parenthesis:
+        autoCloseParenthesis();
+        //check brackets:
+        autoCloseBrackets();
+        //check braces:
+        autoCloseBraces();
+
+        //handle shift tab:
+        if(e.shiftKey && e.keyCode == 9){
+            handleShiftTabBodyClick();
+        }//on tab key click inside post body:
+        else if( e.which == 9 ) {
+            handlePostBodyTabClick();
+        }
     });
 
     //on focus remove default text:
@@ -283,6 +299,127 @@ function createPostBody(postC) {
     })
 
     return postBody;
+}
+
+//handle shift tab click:
+function handleShiftTabBodyClick(){
+    const endContainer = lastSelection.endContainer;
+    var text = endContainer.textContent;
+    //text need to append
+    const req = '';
+    //get start end cursor index 
+    const start = lastSelection.endOffset - 4;
+    const end = lastSelection.endOffset;
+    try {
+        //get last 4 chars:
+        target = text.substring(start, end);
+        //check if the first 2 chars not spaces then return
+        if(target.charAt(0) != ' ' || target.charAt(1) != ' '){
+            return;
+        }
+        //get the white space in this section:
+        const regex = new RegExp(/\s/,'g');
+        text1 = target.replace(regex, '')
+        //push the new text to old text and remove the target section
+        const part1 = text.slice(0, start);
+        const part2 = text.slice(end, text.length);
+        //set end container new text:
+        endContainer.textContent = part1 + text1 + part2;
+        //focus the end container
+        const e = $(endContainer);
+        e.trigger('focus');
+        //set cursor:
+        cursorAtEndElement(e, -part2.length);
+    } catch (error) {
+        console.log('error\n'+error)
+    }
+    
+}
+
+//handle tab click inside post body
+function handlePostBodyTabClick(){
+    const endContainer = lastSelection.endContainer;
+    var text = endContainer.textContent;
+    //text need to append
+    const req = '    ';
+    //part 1 text before append
+    const part1 = text.slice(0, lastSelection.endOffset);
+    //part 2 text after append
+    const part2 = text.slice(lastSelection.endOffset, text.length);
+    //full new text
+    text = part1 + req + part2;
+    //get end container jquery obj:
+    const e = $(endContainer)
+    //set end container new text
+    endContainer.textContent = text;
+    //focus the end container
+    e.trigger('focus');
+    //set cursor:
+    cursorAtEndElement(e, -part2.length);
+}
+
+//remove default behavior on tab click
+$(document).keydown(function (e) 
+{
+    var keycode1 = (e.keyCode ? e.keyCode : e.which);
+    if (keycode1 == 0 || keycode1 == 9) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+});
+
+//auto close Braces:
+function autoCloseBraces(){
+    const pattern = new RegExp(/\{$/, 'im');
+    //get current text obj
+    const endContainer = lastSelection.endContainer;
+    var text = endContainer.textContent;
+    const match = pattern.exec(text);
+    if(!match){
+        return;
+    }
+    req = '{}';
+    text = text.replace(pattern, req);
+    endContainer.textContent = text;
+    const e = $(endContainer)
+    e.trigger('focus');
+    cursorAtEndElement(e, -1);
+}
+
+//auto close brackets:
+function autoCloseBrackets(){
+    const pattern = new RegExp(/\[$/, 'im');
+    //get current text obj
+    const endContainer = lastSelection.endContainer;
+    var text = endContainer.textContent;
+    const match = pattern.exec(text);
+    if(!match){
+        return;
+    }
+    req = '[]';
+    text = text.replace(pattern, req);
+    endContainer.textContent = text;
+    const e = $(endContainer)
+    e.trigger('focus');
+    cursorAtEndElement(e, -1);
+}
+
+//auto close parenthesis:
+function autoCloseParenthesis(){
+    const pattern = new RegExp(/\($/, 'im');
+    //get current text obj
+    const endContainer = lastSelection.endContainer;
+    var text = endContainer.textContent;
+    const match = pattern.exec(text);
+    if(!match){
+        return;
+    }
+    req = '()';
+    text = text.replace(pattern, req);
+    endContainer.textContent = text;
+    const e = $(endContainer)
+    e.trigger('focus');
+    cursorAtEndElement(e, -1);
 }
 
 //to match the pattern (link name)[link in the post body]
@@ -2082,11 +2219,15 @@ function closeCustomizeMenu2() {
 }
 
 // to set the cursor inside the element:
-function cursorAtEndElement(element) {
+function cursorAtEndElement(element, translate = 0) {
     //convert element to jquery if not:
     if (!element.jquery) { element = $(element) }
     //get element text
-    const innerText = element.get(0).innerText;
+    var innerText = element.get(0).innerText;
+    //check if the element is text element:
+    if(!innerText){
+        innerText = element.get(0).textContent;
+    }
     //get element text range:
     const length = innerText.length;
     //check if the element has text first child or not 
@@ -2096,8 +2237,8 @@ function cursorAtEndElement(element) {
     }
     //create the range at the end of the element:
     const range = new Range();
-    range.setStart(element.get(0), length);
-    range.setEnd(element.get(0), length);
+    range.setStart(element.get(0), length + translate);
+    range.setEnd(element.get(0), length + translate);
 
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
