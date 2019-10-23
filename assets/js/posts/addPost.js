@@ -21,7 +21,9 @@ getUserInfo((userInfo) => {
     
 });
 
-
+/**
+ * TODO : save tags category img to php session
+ */
 
 //post body editor vars:
 var fontColor = '#000000';
@@ -879,7 +881,7 @@ function createTagsContainer(tags){
         //send post request to add tag:
         $.post('./add.php', {tagSubmit: true, name: tagInput.val()}, (tag)=>{
             if(!tag._id){
-                //TODO error modal
+                sendError('tagInput', tag.error)
                 return;
             }
             addTag(tag, false);
@@ -1180,6 +1182,8 @@ function sendError(type, qMsg){
         case 'postSave':
             msg.html('Post Can\'t be Saved :<br><br>'+qMsg)
             break;
+        case 'tagInput':
+            msg.html('Tag can\'t be Saved :<br><br>' + qMsg)
         default:
             break;
     }

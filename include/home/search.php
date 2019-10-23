@@ -197,8 +197,7 @@
                                 '<div class="searchItem" id="'+post._id+'"><h4>'+post.title+'</h4><p>'+post.des+'</p><div class="lineBreak"></div></div>'
                             );
                             $('#'+post._id).click(function (){
-                                //TODO create post page 
-                                window.location.href = 'error.php?id='+post._id;
+                                window.location.href = './posts/post.php?id='+post._id;
                             });
                         });
                         //create tags search items:
