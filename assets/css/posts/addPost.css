@@ -710,7 +710,39 @@
     border-radius: 9px;
     font-size: .7rem;
 }
+/* alert modal */
+#alertModal {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}.alertModal-content {
+    background-color: white;
+    width: 500px;
+    padding: 1em;
+    border-radius: 15px;
+    user-select: none;
+    margin-bottom: 1em;}
 
+.alertModalFooter {
+  text-align: right;
+  margin-right: 32px;
+  margin-top: 2em;
+}
+.alertOkBtn {
+    display: inline;
+    background-color: darkgreen;
+    color: white;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 /********************** responsive layout ********************/
 @media only screen and (min-width: 1000px) {
     #chooseTagsContainer {

@@ -160,6 +160,26 @@ include('../include/v2/nav.php');
         </div>
     </div>
 </div><!-- crop img dialog -->
+<!-- alert dialog -->
+<div class="alertModal" id="alertModal" style="display: none">
+    <div class="alertModal-content">
+        <div class="alertModal-body">
+            <div class="closeModalContainer">
+                <span class="close" id="alertClose">&times;</span>
+            </div>
+            <div class="alertModalContent">
+                <div class="alertMessage" id="alertMsg">
+                    alert message
+                </div>
+            </div>
+            <div class="alertModalFooter">
+                <div class="alertOkBtn" id="alertOk">
+                    OK
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- alert dialog -->
 
 <!--croppie script -->
 <script type="text/javascript" src="../assets/js/croppie.js"></script>

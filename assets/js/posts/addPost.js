@@ -66,7 +66,10 @@ var toolbarOnRight = false;
 var headersArr = new Array();
 //show post in last posts:
 var showInActivity = 1;
-
+//post holders
+const emptyPostDes = 'Add Post Description';
+const emptyPostTitle = 'Post Title';
+const emptyPostBody = 'Add Post Body';
 /******************* functions  *************/
 
 //main page:
@@ -303,7 +306,7 @@ function createPostTitle(postC) {
     const postTitle = $('<div>', {
         class: 'postTitle',
         id: 'postTitle'
-    }).html('Post Title').appendTo(postTitleContainer).attr('contenteditable', 'true');
+    }).html(emptyPostTitle).appendTo(postTitleContainer).attr('contenteditable', 'true');
     if(isPostCopy){
         if(postC.title != ''){
             postTitle.html(postC.title);
@@ -314,7 +317,7 @@ function createPostTitle(postC) {
     postTitle.on('keyup', () => {
         //check if the div is clear:
         if (postTitle.html() === '<br>') {
-            postTitle.html('Post Title');
+            postTitle.html(emptyPostTitle);
 
             const range = new Range();
             range.setStart(postTitle.get(0).firstChild, 0);
@@ -327,7 +330,7 @@ function createPostTitle(postC) {
 
     //on focus remove default text:
     postTitle.on('focus', () => {
-        if (postTitle.html() === 'Post Title') {
+        if (postTitle.html() === emptyPostTitle) {
             postTitle.html('');
         }
 
@@ -335,7 +338,7 @@ function createPostTitle(postC) {
     //set default place holder:
     postTitle.on('focusout', () => {
         if (postTitle.html() === '') {
-            postTitle.html('Post Title');
+            postTitle.html(emptyPostTitle);
         }
 
     });
@@ -354,7 +357,7 @@ function createPostDes(postC) {
     const postDes = $('<div>', {
         class: 'postDes',
         id: 'postDes'
-    }).html('Add Post Description').appendTo(postDesContainer).attr('contenteditable', 'true');
+    }).html(emptyPostDes).appendTo(postDesContainer).attr('contenteditable', 'true');
     //check if there is post copy
     if(isPostCopy){
         if(postC.des != ''){
@@ -364,7 +367,7 @@ function createPostDes(postC) {
     //create on key up listener to set the place holder
     postDes.on('keyup', () => {
         if (postDes.html() === '<br>') {
-            postDes.html('Add Post Description');
+            postDes.html(emptyPostDes);
 
             const range = new Range();
             range.setStart(postDes.get(0).firstChild, 0);
@@ -377,7 +380,7 @@ function createPostDes(postC) {
 
     //on focus remove default text:
     postDes.on('focus', () => {
-        if (postDes.html() === 'Add Post Description') {
+        if (postDes.html() === emptyPostDes) {
             postDes.html('');
         }
 
@@ -385,7 +388,7 @@ function createPostDes(postC) {
     //set default place holder:
     postDes.on('focusout', () => {
         if (postDes.html() === '') {
-            postDes.html('Add Post Description');
+            postDes.html(emptyPostDes);
         }
 
     })
@@ -400,7 +403,7 @@ function createPostBody(postC) {
     const postBody = $('<div>', {
         class: 'postBody',
         id: 'postBody'
-    }).attr('contenteditable', 'true').html('Add Post Body');
+    }).attr('contenteditable', 'true').html(emptyPostBody);
     //check if there is post copy
     if(isPostCopy){
         if(postC.body != ''){
@@ -411,7 +414,7 @@ function createPostBody(postC) {
     //create on key up listener to set the place holder
     postBody.on('keyup', (e) => {
         if (postBody.html() === '<br>' || postBody.html() == '') {
-            postBody.html('Add Post Body');
+            postBody.html(emptyPostBody);
 
             const range = new Range();
             range.setStart(postBody.get(0).firstChild, 0);
@@ -463,7 +466,7 @@ function createPostBody(postC) {
 
     //on focus remove default text:
     postBody.on('focus', () => {
-        if (postBody.html() === 'Add Post Body') {
+        if (postBody.html() === emptyPostBody) {
             postBody.html('');
         }
         //save current cursor position:
@@ -472,7 +475,7 @@ function createPostBody(postC) {
     //set default place holder
     postBody.on('focusout', () => {
         if (postBody.html() === '') {
-            postBody.html('Add Post Body');
+            postBody.html(emptyPostBody);
         }
     })
 
@@ -1088,6 +1091,10 @@ function extractNestedCategories(_category, categoryContainer){
 
 //send the post to the server:
 function savePostToServer(){
+    //check post data:
+    if(!checkPostData()){
+        return;
+    }
     //get post title :
     const title = $('#postTitle').html();
     const des = $('#postDes').html();
@@ -1095,13 +1102,82 @@ function savePostToServer(){
     const category = $("input[name='category']:checked").val();
     const tags = getPostTags();
     const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
-    //CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
     // HANDEL POST SAVED ->> 7
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity, img: img}, (res)=>{
         console.log(res)
     }, 'json')
+}
+
+//check post data:
+function checkPostData(){
+    var checked = true;
+
+    //check post title:
+    const title = $('#postTitle').html();
+    if(title.length == 0 || title == emptyPostTitle){
+        checked = false;
+        sendError('title');
+    }
+    //check post des:
+    const des = $('#postDes').html();
+    if(des.length == 0 || des == emptyPostDes){
+        checked = false;
+        sendError('des');
+    }
+    //check post body:
+    const body = $('#postBody').text();
+    if(body.length == 0 || body == emptyPostBody){
+        checked = false;
+        sendError('body');
+    }
+    //check post category
+    const category = $("input[name='category']:checked").val();
+    if(!category){
+        checked = false;
+        sendError('category');
+    }
+
+    return checked;
+}
+
+//alert modal:
+function sendError(type){
+    //get alert objects:
+    const alertModal = $('#alertModal');
+    const ok = $('#alertOk');
+    const cancel = $('#alertClose');
+    const msg = $('#alertMsg');
+
+    //set listeners:
+    ok.click(()=>{
+        alertModal.css('display', 'none');
+    })
+    cancel.click(()=>{
+        alertModal.css('display', 'none');
+    });
+
+    //set msg:
+    switch (type) {
+        case 'title':
+            msg.text('Post Title cant be Empty')
+            break;
+        case 'des':
+            msg.text('Post Des cant be Empty')
+            break;
+        case 'body':
+            msg.text('Post Body cant be Empty')
+            break;
+        case 'category':
+            msg.text('Make sure to Choose the Post Category')
+            break;
+        default:
+            break;
+    }
+
+    //show modal:
+    alertModal.css('display', 'flex');
 }
 
 //get post tags before save the post :
@@ -2544,7 +2620,7 @@ function getLastNestedChild(element) {
 function postBodyCleanUp() {
     //remove place holder:
     const postBody = $('#postBody');
-    if (postBody.get(0).innerText == 'Add Post Body') {
+    if (postBody.get(0).innerText == emptyPostBody) {
         postBody.get(0).innerText = '';
     }
     //remove br from post body:
