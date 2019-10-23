@@ -13,6 +13,12 @@ if(isset($_POST['savePost'])){
         'parentId' => $_POST['category'],
         'showInActivity' => $_POST['showInActivity'],
     );
+    //check if the post has img:
+    if(!empty($_POST['img'])){
+        // create the img file : 
+        $file = curl_file_create ( realpath($_POST['img']) );
+        $postData['img'] = $file;
+    }
     $requestHeaders = array(
         'Authorization: '.$_SESSION['token']
     );

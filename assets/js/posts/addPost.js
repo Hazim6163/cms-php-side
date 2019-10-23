@@ -1077,7 +1077,6 @@ function savePostToServer(){
     const tags = getPostTags();
     const showInActivity = 1;
     const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
-    //CREATE IMG HOLDER ->> 4
     //CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
     // HANDEL POST SAVED ->> 7
