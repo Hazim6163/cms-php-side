@@ -398,8 +398,6 @@ function createPostDes(postC) {
 
 //create Post Body:
 function createPostBody(postC) {
-    //version control tool
-    docSaver();
     const postBody = $('<div>', {
         class: 'postBody',
         id: 'postBody'
@@ -1102,11 +1100,18 @@ function savePostToServer(){
     const category = $("input[name='category']:checked").val();
     const tags = getPostTags();
     const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
-    //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
-    // HANDEL POST SAVED ->> 7
 
     $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity, img: img}, (res)=>{
-        console.log(res)
+        //handel post save:
+        if(!res._id){
+            sendError('postSave', res.error);
+        }else{
+            //send clean cache request:
+            $.post('./add.php', {cleanup: true}, (res2)=>{
+                //redirect to post page:
+                window.location.href = './post.php?id='+res._id
+            })
+        }
     }, 'json')
 }
 
@@ -1143,7 +1148,7 @@ function checkPostData(){
 }
 
 //alert modal:
-function sendError(type){
+function sendError(type, qMsg){
     //get alert objects:
     const alertModal = $('#alertModal');
     const ok = $('#alertOk');
@@ -1171,6 +1176,9 @@ function sendError(type){
             break;
         case 'category':
             msg.text('Make sure to Choose the Post Category')
+            break;
+        case 'postSave':
+            msg.html('Post Can\'t be Saved :<br><br>'+qMsg)
             break;
         default:
             break;

@@ -111,6 +111,7 @@ function getPostCopy(){
     return '{"false": false}';
 }
 
+//save post img locally 
 if(isset($_POST["saveImg"])){
 	$data = $_POST["image"];
 	$image_array_1 = explode(";", $data);
@@ -121,6 +122,17 @@ if(isset($_POST["saveImg"])){
 	file_put_contents($imageName, $data);
     echo $imageName;
     
+    return;
+}
+
+//remove post copy:
+if(isset($_POST['cleanup'])){
+    session_start();
+    //remove post from session:
+    unset($_SESSION['postCopy']);
+
+    $res = json_encode('done');
+    echo $res;
     return;
 }
 
