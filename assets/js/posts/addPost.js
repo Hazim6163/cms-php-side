@@ -133,13 +133,16 @@ function extractHeadersLinks(){
     }).appendTo(navContainer);
 
     headersArr.forEach((header)=>{
+        if(header.textContent == ''){
+            return;
+        }
         //scroll position:
         //get page wrapper margin top
         const pageWrapperMargin = $('#pageWrapper').css('margin-top');
         // add to page wrapper margin top the page container padding top
         const topSpace = parseInt(pageWrapperMargin) + 84;
         //get link text:
-        const text = header.textContent.replace(':', '');
+        var text = header.textContent.replace(':', '');
         //create header link element:
         const hLink = $('<a>', {
             class: 'headerContainer'
