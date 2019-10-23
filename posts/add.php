@@ -105,6 +105,19 @@ function getPostCopy(){
     return '{"false": false}';
 }
 
+if(isset($_POST["saveImg"])){
+	$data = $_POST["image"];
+	$image_array_1 = explode(";", $data);
+	$image_array_2 = explode(",", $image_array_1[1]);
+	$data = base64_decode($image_array_2[1]);
+
+	$imageName = './postsImages/'. time() . '.png';
+	file_put_contents($imageName, $data);
+    echo $imageName;
+    
+    return;
+}
+
 session_start();
 
 //check if the user logged in 
@@ -116,7 +129,7 @@ $title = 'Add Post';
 $custom_headers = '
 <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" href="../assets/css/posts/addPost.css">
-<script src="../assets/js/posts/addPost.js"></script>
+<link rel="stylesheet" href="../assets/css/croppie.css" type="text/css">
 ';
 
 include('../include/v2/head.php');
@@ -127,6 +140,24 @@ include('../include/v2/nav.php');
     <div class="sideNavigate" id="sideNavigate"></div>
     <div class="pageContainer" id="pageContainer"></div>
 </div>
+<!-- crop img modal dialog -->
+<div class="modalDialogCrop" id="modalDialogCrop">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="closeModalContainer">
+                <span class="close" id="closeModalBtn">&times;</span>
+            </div>
+            <div id="image_demo" style="width:350px; margin-top:30px"></div>
+            <button class="mdc-button mdc-button--raised" id="crop_image">
+                <span>Save</span>
+            </button>
+        </div>
+    </div>
+</div><!-- crop img dialog -->
+
+<!--croppie script -->
+<script type="text/javascript" src="../assets/js/croppie.js"></script>
+<script src="../assets/js/posts/addPost.js"></script>
 
 <?php 
 include('../include/v2/footer.php');

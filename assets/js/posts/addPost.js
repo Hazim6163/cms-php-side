@@ -193,16 +193,104 @@ function postHeader(postC) {
 
 //create post image section
 function createPostImage(postC){
+    //post img container
     const postImgContainer = $('<div>',{
         class: 'postImgContainer',
         id: 'postImgContainer'
     });
-
+    
+    //remove img icon:
+    const removeImgIconContainer = $('<div>',{
+        class: 'removeImgIconContainer'
+    });
+    const removeImgIcon = $('<span>',{
+        class: 'removeImgIcon',
+        id: 'removeImgIcon'
+    }).appendTo(removeImgIconContainer);
+    removeImgIcon.html('<i class="far fa-trash-alt"></i>');
+    //check if there is img 
+    if($('#postImg').attr('src')){
+        removeImgIconContainer.appendTo(postImgContainer);
+    }
+    //img 
+    const imgHolder = $('<img>',{
+        class: 'postImg',
+        id: 'postImg'
+    }).hide().appendTo(postImgContainer).click(()=>{
+        imgInput.trigger('click');
+    });
+    //icon container
     const iconContainer = $('<div>',{
         class: 'postImgIconContainer',
         id: 'postImgIconContainer'
-    }).html('<i class="far fa-image"></i>');
+    }).html('<i class="far fa-image"></i>').click(()=>{
+        imgInput.trigger('click');
+    });
     postImgContainer.append(iconContainer);
+
+    // where the img will cropped
+    $image_crop = $('#image_demo').croppie({
+        enableExif: true,
+        viewport: {
+        width: 500,
+        height: 300,
+        type: 'square' //circle square
+        },
+        boundary: {
+        width: 500,
+        height: 500
+        }
+    });
+    //img input
+    const imgInput = $('<input>',{
+        id: 'postImgInput'
+    }).attr('type', 'file').attr('accept', 'image/*').hide();
+    imgInput.change(()=>{
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          $image_crop.croppie('bind', {
+            url: event.target.result
+          })
+        }
+        reader.readAsDataURL(imgInput.get(0).files[0]);
+        $('#modalDialogCrop').css('display', 'block');
+    });
+    //get close modal btn: 
+    $('#closeModalBtn').click(()=>{
+        $('#modalDialogCrop').css('display', 'none');
+    })
+    //save btn:
+    // on crop opr finish and click on the save btn
+    $('#crop_image').click( () => {
+        $image_crop.croppie('result', {
+        type: 'canvas',
+        size: 'viewport'
+        }).then(function (response) {
+        $.ajax({
+            url: "./add.php",
+            type: "POST",
+            data: {
+                "saveImg": true,
+                "image": response
+            },
+            success: function (data) {
+                $('#modalDialogCrop').css('display', 'none');
+                iconContainer.hide('fast');
+                imgHolder.attr('src', data).show('fast');
+                postImgContainer.prepend(removeImgIconContainer).click(()=>{
+                    //remove post img from img
+                    $('#postImg').attr('src', null);
+                    //remove remove icon 
+                    removeImgIconContainer.remove();
+                    //remove img container:
+                    $('#postImg').hide('fast');
+                    //show choose img icon container:
+                    iconContainer.show('fast');
+                });
+            }
+        });
+        })
+    });
 
     return postImgContainer;
 }
@@ -988,13 +1076,13 @@ function savePostToServer(){
     const category = $("input[name='category']:checked").val();
     const tags = getPostTags();
     const showInActivity = 1;
-    const img = null;
+    const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
     //CREATE IMG HOLDER ->> 4
     //CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
     // HANDEL POST SAVED ->> 7
 
-    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity,  }, (res)=>{
+    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity, img: img}, (res)=>{
         console.log(res)
     }, 'json')
 }
