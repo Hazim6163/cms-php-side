@@ -64,6 +64,8 @@ var toolbarOnRight = false;
 //headers :
 //headers ids array:
 var headersArr = new Array();
+//show post in last posts:
+var showInActivity = 1;
 
 /******************* functions  *************/
 
@@ -105,8 +107,6 @@ function postNav(){
 
     return navigationContainer;
 }
-
-
 
 //extract headers containers :
 function extractHeadersLinks(){
@@ -169,8 +169,6 @@ function extractHeadersLinks(){
         navContainer.show('fast');
     }
 }
-
-
 
 //TODO FIX CHANGE MENU PLACE ISSUE
 
@@ -813,6 +811,27 @@ function createEditorFooter(categories, tags, userInfo){
     }).appendTo(editorFooterContainer).html('Tags:<br>');
     createTagsContainer(tags).appendTo(chooseTagsContainer);
 
+    //show in last posts:
+    const lastPostC = $('<div>', {
+        class: 'checkLastPostC',
+        id: 'checkLastPostC'
+    }).appendTo(editorFooterContainer).click(()=>{
+        if(showInActivity == 0){
+            lPBox.html('<i class="fas fa-check"></i>');
+            showInActivity = 1 
+        }else{
+            lPBox.html('') ;
+            showInActivity = 0 
+        }
+    });
+    const lPBox = $('<div>',{
+        class: 'lPBox',
+        id: 'lPBox'
+    }).appendTo(lastPostC).html('<i class="fas fa-check"></i>');
+    const lPLabel = $('<div>',{
+        class: 'lPLabel'
+    }).appendTo(lastPostC).html('Show In Last Posts');
+
     const saveButton = $('<div>',{
         class: 'eFSaveBtn',
         id: 'eFSaveBtn'
@@ -1075,7 +1094,6 @@ function savePostToServer(){
     const body = $('#postBody').html();
     const category = $("input[name='category']:checked").val();
     const tags = getPostTags();
-    const showInActivity = 1;
     const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
     //CREATE TOGGLE SHOW IN RECENT POSTS ->> 5
     //CREATE ALERT ON NON SELECTED CATEGORY ->> 6 
