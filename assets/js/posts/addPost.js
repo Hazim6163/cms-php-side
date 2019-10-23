@@ -181,14 +181,30 @@ function postHeader(postC) {
         id: 'pageHeader'
     });
 
-    //TODO  CREATE POST IMG SECTION
-
+    //post image:
+    createPostImage(postC).appendTo(pageHeader);
     //post title section
     createPostTitle(postC).appendTo(pageHeader);
     //post description section:
     createPostDes(postC).appendTo(pageHeader);
 
     return pageHeader;
+}
+
+//create post image section
+function createPostImage(postC){
+    const postImgContainer = $('<div>',{
+        class: 'postImgContainer',
+        id: 'postImgContainer'
+    });
+
+    const iconContainer = $('<div>',{
+        class: 'postImgIconContainer',
+        id: 'postImgIconContainer'
+    }).html('<i class="far fa-image"></i>');
+    postImgContainer.append(iconContainer);
+
+    return postImgContainer;
 }
 
 //create post title section;
