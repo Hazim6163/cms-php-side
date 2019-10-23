@@ -90,12 +90,6 @@ const createPage = (userInfo, categories, tags, postC) => {
     postContainer.append(postHeader(postC));
     //post Body:
     postBody.appendTo(postContainer);
-    //check if there is post headers navigator already appended
-    const navigator = $('#navigationContainer');
-    if(!navigator.html()){
-        //create post headers navigation:
-        postBody.prepend(postNav());
-    }
     //post body navigation append headers links:
     extractHeadersLinks();
     //editor footer:
@@ -107,7 +101,7 @@ function postNav(){
     const navigationContainer = $('<div>',{
         class: 'navigationContainer',
         id: 'navigationContainer'
-    }).show();
+    }).hide().attr('contenteditable', 'false');
 
     return navigationContainer;
 }
@@ -117,6 +111,12 @@ function postNav(){
 //extract headers containers :
 function extractHeadersLinks(){
     const navContainer = $('#navigationContainer');
+    //check if there is post headers navigator not appended
+    if(navContainer.html() == undefined){
+        const postBody = $('#postBody');
+        //create post headers navigation:
+        postBody.prepend(postNav());
+    }
 
     //clean up the navContainer:
     navContainer.empty();
@@ -141,9 +141,10 @@ function extractHeadersLinks(){
         //get link text:
         const text = header.textContent.replace(':', '');
         //create header link element:
-        const hLink = $('<div>', {
+        const hLink = $('<a>', {
             class: 'headerContainer'
-        }).text(text).appendTo(container).click((e)=>{
+        }).text(text).appendTo(container).attr('href', '#'+header.id).click((e)=>{
+            e.preventDefault();
             //check if the header in the post body or not:
             const temp = $("#"+header.id);
             if(!temp.html()){
@@ -991,7 +992,7 @@ function getPostTags(){
         tags += t + ', ';
     }
     if(tags == ''){
-        tags = undefined
+        tags = null
     }
 
     return tags;

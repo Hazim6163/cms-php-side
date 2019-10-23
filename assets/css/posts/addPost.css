@@ -542,7 +542,7 @@
 }
 
 .navigationContainer {
-    padding: 16px;
+    padding: 0px 0px 8px 16px !important;
     margin-bottom: 1em;
     box-sizing: border-box;
 }
