@@ -172,6 +172,18 @@
 
 /* end tool bar */
 
+
+/* menu toolbar */
+.menuContainer {
+    position: fixed;
+    background-color: #d5dde3;
+    color: #13456f;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+/* end menu container */
+
 .non-select {
     /* non select */
     -moz-user-select: -moz-none;
@@ -835,7 +847,7 @@
 
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 415px) {
     .rightTB {
         border-radius: 15px 0px 0px 15px;
         box-sizing: border-box;

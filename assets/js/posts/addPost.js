@@ -1237,7 +1237,7 @@ function createToolbar() {
     const menuContainer = $('<div>', {
         class: 'menuContainer',
         id: 'menuContainer'
-    }).appendTo(toolbarContainer);
+    }).appendTo($('body'));
 
     //save doc:
     toolbarSaveDocTool().appendTo(toolsContainer);
@@ -1287,8 +1287,93 @@ function createToolbar() {
     return toolbarContainer;
 }
 
+//set toolbar menu position:
+function setTbmPosition(){
+    if($(window).width() > 800){
+        console.log('done')
+        //on large screen :
+        tbmPositionOnLarge();
+    }else{
+        //on med small screens: 
+        tbmPositionOnSmall();
+    }
+}
+
+//to set tool bar menu position on large screens:
+function tbmPositionOnLarge(){
+    const menu = $('#menuContainer');
+    const bar = $('#toolbarContainer');
+    const nMenu = $('#customizeMenu');
+     
+    //get the toolbar position
+    const bLeft = bar.offset().left;
+    const bTop = bar.offset().top;
+    //on left of the toolbar
+    if(toolbarOnRight){
+        //set menu position:
+        const left = bLeft - nMenu.width() - 16
+        menu.css('left', left + 'px');
+        //get diff between menu height and the toolbar height:
+        const diff = getDiffHeights(bar, menu);
+        menu.css('top', bTop + (diff / 2) + 'px');
+    }else if(toolbarOnLeft){
+        //set menu position:
+        const left = bLeft + bar.width() + 50 + 'px'
+        menu.css('left', left);
+        //get diff between menu height and the toolbar height:
+        const diff = getDiffHeights(bar, menu);
+        const top = bTop + (diff / 2) + 'px'
+        menu.css('top', top);
+    }else{
+        //get bar height
+        const bh = bar.height()
+        //set menu y
+        const top =  bh + bTop + 50;
+        menu.css('top', top + 'px')
+        const left = bar.offset().left + (getDiffWidths(bar, menu) / 2);
+        menu.css('left', left + 'px')
+    }
+}
+
+//to set toolbar menu position on small screens :
+function tbmPositionOnSmall(){
+    const menu = $('#menuContainer');
+    const toolbar = $('#toolbarContainer');
+
+    const top = toolbar.offset().top + 'px'; 
+    
+    var mw = menu.width();
+    //set x position on small screens
+    $(window).width() < 400 ? mw = mw + 50 : mw = mw;
+    const left = ($(window).width() / 2) - (mw / 2) + 'px';
+
+    menu.css('left', left);
+    menu.css('top', top);
+    menu.css('max-height', toolbar.height())
+}
+
+//get diff height between 2 elements:
+//if e2 bigger will return minus
+function getDiffHeights(e1, e2){
+    const e1h = e1.height();
+    const e2h = e2.height();
+    
+    return e1h - e2h;
+}
+
+//get diff width between 2 elements:
+//if e2 bigger will return minus
+function getDiffWidths(e1, e2){
+    const e1h = e1.width();
+    const e2h = e2.width();
+    
+    return e1h - e2h;
+}
+
 //minimize toolbar
 function toggleToolbar(){
+    const toolbarContainer = $('#toolbarContainer');
+    const toolsContainer = $('#toolsContainer');
     toolbarOpened = !toolbarOpened;
     toolsContainer.toggle()
     toolbarContainer.toggleClass('hiddenTb')
@@ -2442,8 +2527,9 @@ function customizeMenuInflater(items, menuType) {
     });
     openedCustomizeMenuType = menuType;
     customizeMenuInflaterOpened = true;
-
-
+    
+    //set toolbar menu position:
+    setTbmPosition();
 }
 
 //to close the customize menu:
@@ -2491,6 +2577,8 @@ function onLongPress(element) {
                 'left': getToolbarXPosition(e, element),
                 'top': getToolbarYPosition(e, element)
             });
+            //set toolbar menu position:
+            setTbmPosition();
         }
     }
 }
