@@ -2034,7 +2034,10 @@ function toolbarFontColorTool() {
             element.click(() => {
                 fontColor = element.css('background-color');
                 onFontColorIconClick();
-            })
+            });
+            element.hover((e) =>{
+                onColorPlatteHover(e, element.css('background-color'));
+            });
         }
         //append plate to plates container:
         platesContainer.append(plate);
@@ -2079,6 +2082,9 @@ function toolbarBackgroundColorTool() {
             element.click(() => {
                 backgroundColor = element.css('background-color');
                 onBackGroundColorIconClick();
+            });
+            element.hover((e) =>{
+                onColorPlatteHover(e, element.css('background-color'));
             })
         }
         //append plate to plates container:
@@ -2092,6 +2098,36 @@ function toolbarBackgroundColorTool() {
     })
 
     return backgroundColorContainer;
+}
+
+//on color platte hover : 
+function onColorPlatteHover(e, color){
+    //clean old color overview if founded:
+    if($('#colorOverview').html()){
+        $('#colorOverview').remove();
+    }
+
+    //get mouse position:
+    const x = e.clientX - 70;
+    const y = e.clientY;
+    
+    //create color element:
+    const container = $('<div>', {
+        class: 'colorOverview',
+        id: 'colorOverview'
+    }).appendTo($('body')).css('background-color', color).html('.');
+    container.css('left', x+'px');
+    container.css('top', y+'px');
+    container.css('position', 'fixed');
+    container.css({'width': '70px', 'height': '70px', 'border-radius': '15px'})
+    container.hover(()=>{
+        container.remove();
+    })
+
+    setTimeout(()=>{
+        container.remove();
+    }, 1000)
+
 }
 
 //on background color icon click
