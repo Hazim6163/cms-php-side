@@ -75,6 +75,16 @@ const emptyPostTitle = 'Post Title';
 const emptyPostBody = 'Add Post Body';
 /******************* functions  *************/
 
+//on window size change : 
+$(window).resize(()=>{
+    //reposition right tool bar
+    if(toolbarOnRight){
+        resizeRightTb();
+    }
+    //reposition toolbar menu position
+    setTbmPosition();
+})
+
 //main page:
 const createPage = (userInfo, categories, tags, postC) => {
     //check if there is post copy : 
@@ -102,6 +112,25 @@ const createPage = (userInfo, categories, tags, postC) => {
     extractHeadersLinks();
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
+}
+
+//resize right toolbar:
+function resizeRightTb(){
+    const element = $('#toolbarContainer');
+    const x = $(window).width() - getTbWidth(element) ;
+        element.addClass('rightTB')
+        element.removeClass('floatTB')
+        toolbarOnRight = true;
+        toolbarOnLeft = false;
+        //check if the tool bar hidden and add hidden class
+        if(!toolbarOpened){
+            element.addClass('hiddenTbRight');
+            element.removeClass('hiddenTbLeft');
+        }else{
+            element.removeClass('hiddenTbRight');
+            element.removeClass('hiddenTbLeft');
+        }
+    element.css('left', x+'px')
 }
 
 //post headers navigation:
@@ -175,8 +204,6 @@ function extractHeadersLinks(){
         navContainer.show('fast');
     }
 }
-
-//TODO FIX CHANGE MENU PLACE ISSUE
 
 //create post header
 function postHeader(postC) {
