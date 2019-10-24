@@ -119,9 +119,6 @@
 }
 
 /* tool bar container*/
-/* 
-    toolbar-container todo:
-*/
 .toolbar {
     position: fixed;
     background-color: #e1e3d5;
@@ -158,8 +155,31 @@
     margin-right: auto;
 }
 
+.hiddenTb {
+    width: auto !important;
+    height: auto !important;
+    padding-bottom: 0px;
+}
+
+.hiddenTbRight {
+    border-radius: 15px 0px 0px 15px;
+}
+
+.hiddenTbLeft {
+    border-radius: 0px 15px 15px 0px;
+}
+
 
 /* end tool bar */
+
+.non-select {
+    /* non select */
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
 
 .toolIcon {
     text-align: center;
@@ -173,7 +193,6 @@
 
 .toolbar-tool:hover {
     width: 30px;
-    height: 30px;
     font-size: 1.3rem;
 }
 
@@ -771,10 +790,13 @@
 }
 
 @media only screen and (max-width: 800px) {
-    .floatTB {}
-
     .rightTB {
         border-radius: 15px 0px 0px 15px;
+        box-sizing: border-box;
+    }
+
+    .leftTB {
+        box-sizing: border-box;
     }
 
     .navbarToggleActiveToolbar {
@@ -814,10 +836,13 @@
 }
 
 @media only screen and (max-width: 400px) {
-    .floatTB {}
-
     .rightTB {
         border-radius: 15px 0px 0px 15px;
+        box-sizing: border-box;
+    }
+
+    .leftTB {
+        box-sizing: border-box;
     }
 
     .toolbar-tool {

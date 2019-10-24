@@ -62,7 +62,8 @@ var postTagsArr = new Array();
 var lastTagsSearch = new Array();
 //toolbar vars:
 var toolbarOpened = true;
-var toolbarOnRight = false;
+var toolbarOnRight = true;
+var toolbarOnLeft = false;
 //headers :
 //headers ids array:
 var headersArr = new Array();
@@ -1213,7 +1214,7 @@ function getPostTags(){
 //create toolbar
 function createToolbar() {
     const toolbarContainer = $('<div>', {
-        class: 'toolbar rightTB',
+        class: 'toolbar rightTB non-select',
         id: 'toolbarContainer'
     });
 
@@ -1288,20 +1289,20 @@ function createToolbar() {
 
 //minimize toolbar
 function toggleToolbar(){
-    const toolbarContainer = $('#toolbarContainer');
-    const toolsContainer = $('#toolsContainer');
-    const toggleBtn = $('#toggleToolBarBtn');
-
-    //hide tools container
-    toolsContainer.toggle('fast');
-    //apply hide class to toolbar container
-    toolbarContainer.toggleClass('toolbarContainerHidden');
     toolbarOpened = !toolbarOpened;
-    //change btn content:
-    if(toolbarOpened){
-        toggleBtn.html('<i class="far fa-eye-slash toggleToolbarIcon"></i>').css('color', 'rosybrown')
+    toolsContainer.toggle()
+    toolbarContainer.toggleClass('hiddenTb')
+    //check if the tool bar is closed to add the hidden right left classes:
+    if(!toolbarOpened){
+        if(toolbarOnRight){
+            toolbarContainer.addClass('hiddenTbRight');
+        }
+        if(toolbarOnLeft){
+            toolbarContainer.addClass('hiddenTbLeft');
+        }
     }else{
-        toggleBtn.html('<i class="fas fa-ellipsis-h toggleToolbarIcon"></i>').css('color', '#13456f')
+        toolbarContainer.removeClass('hiddenTbRight');
+        toolsContainer.removeClass('hiddenTbLeft');
     }
 }
 
@@ -2499,46 +2500,67 @@ function getToolbarXPosition(e, element){
     var x; // present element left position
     var saveX = 5 // to be sure the cursor is in the element
     const viewPortWidth = $( window ).width();
-    var fromRightMargin = 52;
 
     //check if the -x out the page
-    if(e.pageX < 15){
+    if(e.pageX < 70){
         x = 0;
-        //set element width to 50px
-        element.width('50');
         //apply pinned to left class
-        element.addClass('toolbarToLeft')
+        element.addClass('leftTB')
+        element.removeClass('floatTB')
+        toolbarOnLeft = true;
+        toolbarOnRight = false;
+        //check if the tool bar hidden and add hidden class
+        if(!toolbarOpened){
+            element.addClass('hiddenTbLeft');
+            element.removeClass('hiddenTbRight');
+        }else{
+            element.removeClass('hiddenTbRight');
+            element.removeClass('hiddenTbLeft');
+        }
         return x;
     }
 
     //check if the +x out page:
-    if(e.pageX > viewPortWidth - 50){
-        //set element width to 50px
-        element.width('70');
-        //open tool bar if closed
+    if(e.pageX > viewPortWidth - 70){
+        x = viewPortWidth - getTbWidth(element) ;
+        element.addClass('rightTB')
+        element.removeClass('floatTB')
+        toolbarOnRight = true;
+        toolbarOnLeft = false;
+        //check if the tool bar hidden and add hidden class
         if(!toolbarOpened){
-            toggleToolbar();
-            toolbarOpened = true;
+            element.addClass('hiddenTbRight');
+            element.removeClass('hiddenTbLeft');
+        }else{
+            element.removeClass('hiddenTbRight');
+            element.removeClass('hiddenTbLeft');
         }
-        x = viewPortWidth - 50 - fromRightMargin;
-        element.addClass('toolbarToRight')
         return x;
     }
 
     // x is on the page 
     x = e.pageX - saveX;
     //remove classes right left
-    element.removeClass('toolbarToRight')
-    element.removeClass('toolbarToLeft')
-    //remove margin:
-    element.css('margin-left', '0px')
-    if(toolbarOpened){
-        element.width('25%');
-    }else{
-        element.width('auto');
-    }
+    element.removeClass('rightTB')
+    element.removeClass('leftTB')
+    element.addClass('floatTB')
+    //remove hidden classes
+    element.removeClass('hiddenTbRight');
+    element.removeClass('hiddenTbLeft');
+    toolbarOnLeft = false;
+    toolbarOnRight = false;
 
     return x ;
+}
+
+//to get tool bar width:
+function getTbWidth(element){
+    element = element.get(0);
+    var scrollBarWidth = element.offsetWidth - element.clientWidth;
+    // 70 == element width in css right tool bar
+    const width  = 70 + scrollBarWidth;
+    
+    return width;
 }
 
 //get y position for toolbar:
