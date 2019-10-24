@@ -66,64 +66,24 @@
 }
 
 .toolbarContainer {
+    width: 25%;
+    position: fixed;
+    top: 130px;
+    left: 50%;
+    margin-left: -12.5%;
     max-height: 381px;
-    height: auto;
-    border-radius: 15px;
-    position: fixed;
-    top: 130px;
-    overflow-y: auto;
-    padding: 16px;
-    background-color: #fbffe4;
-    box-shadow: 0px 0px 3px
-}
-
-.defaultToolBar {
-    position: fixed;
-    top: 130px;
     overflow-y: auto;
     padding: 16px;
     background-color: #fbffe4;
     box-shadow: 0px 0px 3px black;
-    border-radius: 15px 0px 0px 15px;
+    border-radius: 15px;
     color: #4c107d;
-    right: 0px;
-    width: 60px;
-    height: 70vh;
-}
-
-.toolbarToLeft {
-    position: fixed;
-    top: 130px;
-    height: 50vh;
-    padding: 16px;
-    overflow-y: auto;
-    border-radius: 0px;
-    border-radius: 0px 15px 15px 0px;
-    background-color: #fbffe4;
-    box-shadow: 0px 0px 3px
-}
-
-.toolbarToRight {
-    overflow-y: auto;
-    max-height: 50%;
-    border-radius: 15px 0px 0px 15px;
-}
-
-
-.toolbarContainerHidden {
-    width: auto !important;
-    padding: 8px 8px 0px 8px;
-    margin: 0px 16px 0px 16px;
-    text-align: center;
-}
-
-
-.non-select {
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
     user-select: none;
+    overflow: hidden;
 }
 
 .toolsContainer {
@@ -166,9 +126,8 @@
     width: 50px;
     border: 1px solid #9b9b9b;
     margin: 0px 4px;
-    color: gray;
+    color: #13456f;
     text-align: center;
-    border-radius: 6px;
 }
 
 #customFontSizeIPx {
@@ -208,8 +167,6 @@
     border-radius: 5px;
     flex: 1px;
     margin: 2px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
 }
 
 .platesColorContainer {
@@ -552,6 +509,26 @@
     color: rosybrown;
 }
 
+.toolbarContainerHidden {
+    width: auto !important;
+    padding: 8px 8px 0px 8px;
+    margin: 0px 16px 0px 16px;
+    text-align: center;
+}
+
+.toolbarToLeft {
+    overflow-y: auto;
+    border-radius: 0px;
+    max-height: 50%;
+    border-radius: 0px 15px 15px 0px;
+}
+
+.toolbarToRight {
+    overflow-y: auto;
+    max-height: 50%;
+    border-radius: 15px 0px 0px 15px;
+}
+
 .inputForm {
     margin: 16px 0px 0px 0px;
 }
@@ -733,7 +710,6 @@
     border-radius: 9px;
     font-size: .7rem;
 }
-
 /* alert modal */
 #alertModal {
     position: fixed;
@@ -744,23 +720,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.alertModal-content {
+}.alertModal-content {
     background-color: white;
     width: 500px;
     padding: 1em;
     border-radius: 15px;
     user-select: none;
-    margin-bottom: 1em;
-}
+    margin-bottom: 1em;}
 
 .alertModalFooter {
-    text-align: right;
-    margin-right: 32px;
-    margin-top: 2em;
+  text-align: right;
+  margin-right: 32px;
+  margin-top: 2em;
 }
-
 .alertOkBtn {
     display: inline;
     background-color: darkgreen;
@@ -770,20 +742,7 @@
     cursor: pointer;
     padding-left: 16px;
     padding-right: 16px;
-}
-
-#menuContainer {
-    position: fixed;
-    top: 160px;
-    max-height: 75vh;
-    left: 1520px;
-    overflow: auto;
-    box-shadow: 0px 0px 5px goldenrod;
-    border-radius: 15px;
-    background-color: #fbffe4;
-    color: #171717;
-}
-
+  }
 /********************** responsive layout ********************/
 @media only screen and (min-width: 1000px) {
     #chooseTagsContainer {

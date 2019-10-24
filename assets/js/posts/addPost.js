@@ -63,8 +63,6 @@ var lastTagsSearch = new Array();
 //toolbar vars:
 var toolbarOpened = true;
 var toolbarOnRight = false;
-var eMenuRight = true;
-var eMenuLeft = false;
 //headers :
 //headers ids array:
 var headersArr = new Array();
@@ -1215,7 +1213,7 @@ function getPostTags(){
 //create toolbar
 function createToolbar() {
     const toolbarContainer = $('<div>', {
-        class: 'defaultToolBar',
+        class: 'toolbarContainer',
         id: 'toolbarContainer'
     });
 
@@ -1231,11 +1229,10 @@ function createToolbar() {
         class: 'toolsContainer',
         id: 'toolsContainer'
     }).appendTo(toolbarContainer);
-
     const menuContainer = $('<div>', {
         class: 'menuContainer',
         id: 'menuContainer'
-    }).appendTo($('body'));
+    }).appendTo(toolbarContainer);
 
     //save doc:
     toolbarSaveDocTool().appendTo(toolsContainer);
@@ -1301,10 +1298,6 @@ function toggleToolbar(){
         toggleBtn.html('<i class="far fa-eye-slash toggleToolbarIcon"></i>').css('color', 'rosybrown')
     }else{
         toggleBtn.html('<i class="fas fa-ellipsis-h toggleToolbarIcon"></i>').css('color', '#13456f')
-        //close nested menu if opened:
-        if(customizeMenuInflaterOpened){
-            closeCustomizeMenu2();
-        }
     }
 }
 
@@ -2419,7 +2412,7 @@ function customizeMenuInflater(items, menuType) {
                 class: 'customizeMenu',
                 id: 'customizeMenu'
             })
-        ).css('opacity', '0');
+        );
     }
 
     if (customizeMenuInflaterOpened) {
@@ -2433,7 +2426,7 @@ function customizeMenuInflater(items, menuType) {
         }
         //opened menu is other than requested menu:
         //clean up the menu container:
-        $('#customizeMenu').empty();
+        $('#customizeMenu').remove();
         //inflate new menu 
         customizeMenuInflaterOpened = false;
         customizeMenuInflater(items, menuType);
@@ -2444,70 +2437,7 @@ function customizeMenuInflater(items, menuType) {
     });
     openedCustomizeMenuType = menuType;
     customizeMenuInflaterOpened = true;
-    $('#menuContainer').animate({
-        opacity: "1"
-    }, 1000)
-    //set menu position:
-    setEMPosition();
-}
 
-//to set the edit menu position:
-function setEMPosition(){
-    const menu = $('#menuContainer');
-    const bar = $('#toolbarContainer');
-    const nMenu = $('#customizeMenu');
-     
-    //get the toolbar position
-    const bLeft = bar.offset().left;
-    const bTop = bar.offset().top;
-    //on left of the toolbar
-    if(eMenuRight){
-        //set menu position:
-        const left = bLeft - nMenu.width() - 16
-        menu.css('left', left + 'px');
-        //check heights : 
-        const mH = menu.height();
-        const bH = bar.height();
-        const diff = (bH - mH)/2;
-        if(mH > bH){
-            const top = bTop + diff;
-            menu.css('top', top + 'px');
-        }else{
-            const top = bTop + (diff * -1);
-            menu.css('top', top + 'px');
-        }
-    }else if(eMenuLeft){
-        //in the left side bar: bar height is 50vh:
-        const bH = $( window ).height() / 2;
-        //set menu position:
-        const left = bLeft + bar.width() + 50
-        menu.css('left', left + 'px');
-        //check heights : 
-        const mH = menu.height();
-        const diff = (bH - mH)/2;
-        console.log('bar height: '+ bH);
-        console.log('menu height: '+mH);
-        console.log('diff: '+diff);
-        if(mH > bH){
-            const top = bTop + (diff * -1);
-            console.log('mh > bh')
-            menu.css('top', top + 'px');
-        }else{
-            const top = bTop + diff;
-            console.log(' mh < bh');
-            console.log('bar top: '+ bTop);
-            console.log('menu top: '+ top)
-            menu.css('top', top + 'px');
-        }
-    }else{
-        //get toolbar y
-        const bY = bar.offset().top;
-        //set menu y
-        const top =  bY 
-        menu.css('top', top + 'px')
-        const left = bar.offset().left + bar.width() + 50;
-        menu.css('left', left + 'px')
-    }
 
 }
 
@@ -2556,7 +2486,6 @@ function onLongPress(element) {
                 'left': getToolbarXPosition(e, element),
                 'top': getToolbarYPosition(e, element)
             });
-            setEMPosition()
         }
     }
 }
@@ -2566,42 +2495,37 @@ function getToolbarXPosition(e, element){
     var x; // present element left position
     var saveX = 5 // to be sure the cursor is in the element
     const viewPortWidth = $( window ).width();
-    var fromRightMargin = getTBRightMargin();
+    var fromRightMargin = 52;
 
     //check if the -x out the page
     if(e.pageX < 15){
         x = 0;
         //set element width to 50px
         element.width('50');
-        element.css('height','50vh')
         //apply pinned to left class
         element.addClass('toolbarToLeft')
-        element.removeClass('toolbarContainer')
-        element.removeClass('defaultToolBar')
-        eMenuLeft = true;
-        eMenuRight = false;
         return x;
     }
 
     //check if the +x out page:
     if(e.pageX > viewPortWidth - 50){
         //set element width to 50px
-        element.width('50');
+        element.width('70');
+        //open tool bar if closed
+        if(!toolbarOpened){
+            toggleToolbar();
+            toolbarOpened = true;
+        }
         x = viewPortWidth - 50 - fromRightMargin;
-        element.addClass('defaultToolBar')
-        element.removeClass('toolbarContainer')
-        element.removeClass('toolbarToLeft')
-        eMenuRight = true;
-        eMenuLeft = false;
+        element.addClass('toolbarToRight')
         return x;
     }
 
     // x is on the page 
     x = e.pageX - saveX;
     //remove classes right left
-    element.removeClass('defaultToolBar')
+    element.removeClass('toolbarToRight')
     element.removeClass('toolbarToLeft')
-    element.addClass('toolbarContainer')
     //remove margin:
     element.css('margin-left', '0px')
     if(toolbarOpened){
@@ -2609,15 +2533,8 @@ function getToolbarXPosition(e, element){
     }else{
         element.width('auto');
     }
-    eMenuLeft = false;
-    eMenuRight = false;
 
     return x ;
-}
-
-//to get the tool bar right margin on pc i-pads mobile
-function getTBRightMargin(){
-    return 0;
 }
 
 //get y position for toolbar:
