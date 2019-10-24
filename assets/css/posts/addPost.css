@@ -65,32 +65,10 @@
     cursor: pointer;
 }
 
-.toolbarContainer {
-    width: 25%;
-    position: fixed;
-    top: 130px;
-    left: 50%;
-    margin-left: -12.5%;
-    max-height: 381px;
-    overflow-y: auto;
-    padding: 16px;
-    background-color: #fbffe4;
-    box-shadow: 0px 0px 3px black;
-    border-radius: 15px;
-    color: #4c107d;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    overflow: hidden;
-}
-
 .toolsContainer {
     /*TODO style tools container */
     display: flex;
     flex-wrap: wrap;
-    min-height: 128px;
     justify-content: center;
     overflow: hidden;
 }
@@ -140,9 +118,48 @@
     cursor: pointer;
 }
 
-.navbarToggleActiveToolbar {
-    top: 76px;
+/* tool bar container*/
+/* 
+    toolbar-container todo:
+*/
+.toolbar {
+    position: fixed;
+    background-color: #e1e3d5;
 }
+
+.rightTB {
+    right: 0px;
+    width: 70px;
+    height: 50vh;
+    direction: rtl;
+    overflow: auto;
+    padding: 8px;
+}
+
+.leftTB {
+    left: 0px;
+    width: 70px;
+    height: 50vh;
+    overflow: auto;
+    padding: 8px;
+}
+
+.floatTB {
+    width: 400px;
+    padding: 16px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.tBTogglerContainerOpen {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* end tool bar */
 
 .toolIcon {
     text-align: center;
@@ -504,30 +521,6 @@
     padding: 4px;
 }
 
-.toggleToolBarIconActive {
-    margin: 8px auto 16px auto;
-    color: rosybrown;
-}
-
-.toolbarContainerHidden {
-    width: auto !important;
-    padding: 8px 8px 0px 8px;
-    margin: 0px 16px 0px 16px;
-    text-align: center;
-}
-
-.toolbarToLeft {
-    overflow-y: auto;
-    border-radius: 0px;
-    max-height: 50%;
-    border-radius: 0px 15px 15px 0px;
-}
-
-.toolbarToRight {
-    overflow-y: auto;
-    max-height: 50%;
-    border-radius: 15px 0px 0px 15px;
-}
 
 .inputForm {
     margin: 16px 0px 0px 0px;
@@ -710,6 +703,7 @@
     border-radius: 9px;
     font-size: .7rem;
 }
+
 /* alert modal */
 #alertModal {
     position: fixed;
@@ -720,19 +714,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}.alertModal-content {
+}
+
+.alertModal-content {
     background-color: white;
     width: 500px;
     padding: 1em;
     border-radius: 15px;
     user-select: none;
-    margin-bottom: 1em;}
+    margin-bottom: 1em;
+}
 
 .alertModalFooter {
-  text-align: right;
-  margin-right: 32px;
-  margin-top: 2em;
+    text-align: right;
+    margin-right: 32px;
+    margin-top: 2em;
 }
+
 .alertOkBtn {
     display: inline;
     background-color: darkgreen;
@@ -742,7 +740,8 @@
     cursor: pointer;
     padding-left: 16px;
     padding-right: 16px;
-  }
+}
+
 /********************** responsive layout ********************/
 @media only screen and (min-width: 1000px) {
     #chooseTagsContainer {
@@ -761,14 +760,21 @@
         width: 90% !important;
         max-width: 90% !important;
     }
+
+    .leftTB {
+        height: 70vh;
+    }
+
+    .rightTB {
+        height: 70vh;
+    }
 }
 
 @media only screen and (max-width: 800px) {
-    .toolbarContainer {
-        top: 196px;
-        width: 75%;
-        margin-left: -37.5%;
-        box-sizing: border-box;
+    .floatTB {}
+
+    .rightTB {
+        border-radius: 15px 0px 0px 15px;
     }
 
     .navbarToggleActiveToolbar {
@@ -796,14 +802,31 @@
         max-width: 100% !important;
     }
 
+    .toolbar-tool {
+        margin-right: 0px;
+    }
+
+    #tBTogglerContainer {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 }
 
 @media only screen and (max-width: 400px) {
-    .toolbarContainer {
-        top: 196px;
-        width: 75%;
-        margin-left: -37.5%;
-        box-sizing: border-box;
+    .floatTB {}
+
+    .rightTB {
+        border-radius: 15px 0px 0px 15px;
+    }
+
+    .toolbar-tool {
+        margin-right: 0px;
+    }
+
+    #tBTogglerContainer {
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .postContainer {

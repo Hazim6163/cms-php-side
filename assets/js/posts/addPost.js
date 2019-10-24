@@ -1213,15 +1213,19 @@ function getPostTags(){
 //create toolbar
 function createToolbar() {
     const toolbarContainer = $('<div>', {
-        class: 'toolbarContainer',
+        class: 'toolbar rightTB',
         id: 'toolbarContainer'
     });
 
-    //toggle toolbar:
-    const toggleBar = $('<div>', {
-        class: 'toggleToolBarIconActive toolbar-tool',
-        id: 'toggleToolBarBtn'
-    }).html('<i class="far fa-eye-slash toggleToolbarIcon"></i>').appendTo(toolbarContainer).click(()=>{
+    //toolbar toggler:
+    const tBTogglerWrapper = $('<div>',{
+        class: 'tBTogglerWrapperOpen',
+        id: 'tBTogglerWrapper'
+    }).appendTo(toolbarContainer);
+    const tBTogglerContainer = $('<div>', {
+        class: 'tBTogglerContainerOpen toolbar-tool',
+        id: 'tBTogglerContainer'
+    }).html('<i class="far fa-eye-slash tBTogglerIcon"></i>').appendTo(tBTogglerWrapper).click(()=>{
         toggleToolbar();
     });
 
