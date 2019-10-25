@@ -3,7 +3,7 @@
 
 ?>
 
-<div class="navbar" id="navbar">
+<div class="navbar non-select" id="navbar">
     <div class="navContainer">
         <div class="brand">C M S</div>
         <div class="menu">
