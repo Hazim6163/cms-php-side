@@ -120,11 +120,13 @@ const createPage = (userInfo, categories, tags, postC) => {
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
     //check if there is tags history:
-    const ts = JSON.parse(postC.tags);
-    if (ts.length > 0) {
-        ts.forEach((t) => {
-            addTag(t, false);
-        })
+    if(postC.tags || postC.tags != ''){
+        const ts = JSON.parse(postC.tags);
+        if (ts.length > 0) {
+            ts.forEach((t) => {
+                addTag(t, false);
+            })
+        }
     }
 }
 
@@ -338,7 +340,7 @@ function createPostImage(postC) {
     });
 
     //check if the post copy has img:
-    if (postC.img != '') {
+    if (postC.img && postC.img != '') {
         iconContainer.hide('fast');
         imgHolder.attr('src', postC.img).show('fast');
         postImgContainer.prepend(removeImgIconContainer).click(() => {

@@ -1627,3 +1627,337 @@ function createLikersModal(likers) {
         likersModal.remove();
     });
 }
+
+// add section:
+const menu = $('#addMenu');
+var menuOpened = false;
+//on add btn click
+$('#addBtn').click(()=>{
+    menuOpened = !menuOpened;
+    menuOpened ? menu.css('visibility', 'visible') : menu.css('visibility', 'hidden');
+})
+const addPost = $('#addPost');
+const addCat = $('#addCat');
+
+addPost.click(()=>{
+    window.location.href = './posts/add.php';
+});
+
+var addCMOpened = false;
+addCat.click(()=>{
+    toggleCatModal();
+});
+
+//toggle CatModal : 
+function toggleCatModal(){
+    //check if the modal already opened:
+    if(addCMOpened){
+        $('#addCModal').remove();
+    }
+    //create modal:
+    const modal = $('<div>',{
+        class: 'addCModal',
+        id: 'addCModal'
+    }).appendTo($('body'));
+
+    //modal content:
+    const modalContent = $('<div>', {
+        class: 'addCMContent',
+        id: 'addCMContent'
+    }).appendTo(modal);
+
+    //modal header
+    const header = $('<div>', {
+        class: 'cMHeader'
+    }).append(getCMHeaderContent()).appendTo(modalContent);
+
+    //choose parent category:
+    modalContent.append(getCMContent())
+
+    //category modal content after parent category:
+    modalContent.append(getCMCAfterCategories());
+    //toggle:
+    addCMOpened = !addCMOpened;
+}
+
+//get category modal content:
+function getCMContent(){
+    const chooseCategoryContainer = $('<div>', {
+        class: 'chooseCategoryContainer',
+        id: 'chooseCategoryContainer'
+    }).html('Parent Category: ')
+    //get categories: 
+    $.post('./index.php', {getCategories: true}, (categories)=>{
+        extractCategories(categories).appendTo(chooseCategoryContainer);
+        chooseCategoryContainer.append(getNextBtn(1));
+    }, 'json')
+
+    return chooseCategoryContainer;
+}
+
+//modal next btn:
+function getNextBtn(step){
+    const nextContainer = $('<div>', {
+        class: 'modalNextBtnContainer',
+        id: 'modalNextBtnContainer'+step
+    });
+
+    const next = $('<div>', {
+        class: 'modalNextBtn',
+        id: 'modalNextStep'+step
+    }).html('Next').appendTo(nextContainer).click(()=>{
+        $('#chooseCategoryContainer').toggle('fast');
+        $('#cMInputSection').toggle('fast');
+        $('#cMStep1').toggleClass('activeStep');
+        $('#cMStep2').toggleClass('activeStep');
+    });
+
+    return nextContainer;
+}
+
+//category modal header:
+function getCMHeaderContent(){
+    const container  = $('<div>', {
+        class: 'cMHeaderContent'
+    });
+
+    const step1 = $('<div>', {
+        class: 'cMHeaderStep1 headerStep activeStep',
+        id: 'cMStep1'
+    }).text('1').appendTo(container);
+
+    const step2 = $('<div>', {
+        class: 'cMHeaderStep2 headerStep',
+        id: 'cMStep2'
+    }).text('2').appendTo(container);
+
+    return container;
+}
+
+
+//extract categories and nested categories:
+function extractCategories(categories) {
+    const categoriesGroupContainer = $('<div>', {
+        class: 'categoriesGroupContainer'
+    });
+    categories.forEach((category) => {
+        //filter root categories
+        if (!category.parentId) {
+            //create category container
+            const categoryContainer = $('<div>', {
+                class: 'rootCategoryContainer',
+                id: 'rootCategoryContainer' + category._id
+            }).appendTo(categoriesGroupContainer).css('margin-left', '30px');
+            //category radio
+            const categoryRadio = $('<input type="radio" name="category" value="' + category._id + '">', {
+                class: 'categoryRadio',
+                id: 'categoryRadio' + category._id
+            }).appendTo(categoryContainer);
+            //category label
+            const label = $('<span>').html(category.title + '<br>');
+            categoryContainer.append(label);
+            //check if the category has nested categories:
+            if (category.nestedCategories.length > 0) {
+                // edit label
+                label.html(category.title);
+                // create dropdown;
+                const dropDown = $('<span>', {
+                    class: 'dropDownIcon'
+                }).html('<i class="fas fa-chevron-circle-down"></i><br>');
+                categoryContainer.append(dropDown);
+                //nested container:
+                const nestedCatContainer = $('<div>', {
+                    class: 'nestedCatContainer',
+                    id: 'nestedCatContainer' + category._id
+                }).appendTo(categoryContainer).hide();
+                dropDown.click(() => {
+                    nestedCatContainer.toggle('fast');
+                });
+                //extract nested categories:
+                extractNestedCategories(category, nestedCatContainer);
+            }
+        }
+
+    });
+
+    return categoriesGroupContainer;
+}
+
+//extract nested categories:
+function extractNestedCategories(_category, categoryContainer) {
+    _category.nestedCategories.forEach((category) => {
+        const container = $('<div>', {
+            class: 'categoryContainer',
+            id: 'categoryContainer' + category._id
+        }).css('margin-left', '30px');
+        const categoryRadio = $('<input type="radio" name="category" value="' + category._id + '">', {
+            class: 'categoryRadio',
+            id: 'categoryRadio' + category._id
+        }).appendTo(container);
+        const label = $('<span>').html(category.title + '<br>');
+        container.append(label);
+        categoryContainer.append(container);
+        if (category.nestedCategories.length > 0) {
+            // edit label
+            label.html(category.title);
+            // create dropdown;
+            const dropDown = $('<span>', {
+                class: 'dropDownIcon'
+            }).html('<i class="fas fa-chevron-circle-down"></i><br>');
+            container.append(dropDown);
+            //nested container:
+            const nestedCatContainer = $('<div>', {
+                class: 'nestedCatContainer',
+                id: 'nestedCatContainer' + category._id
+            }).appendTo(categoryContainer).css('margin-left', '30px').hide();
+            dropDown.click(() => {
+                nestedCatContainer.toggle('fast');
+            });
+            extractNestedCategories(category, nestedCatContainer);
+        }
+    });
+}
+
+//category modal content after categories:
+function getCMCAfterCategories(){
+    const wrapper = $('<div>',{
+        class: 'inputSectionWrapper',
+        id: 'cMInputSection'
+    }).hide().html('New Category :');
+
+    const container = $('<div>',{
+        class: 'inputSection'
+    }).appendTo(wrapper);
+
+    const imgLabel = $('<div>', {
+        class: 'catImgLabel'
+    }).text('Category Image:')
+
+    const catImg = $('<input>', {
+        class: 'catImgI',
+        id: 'catImgI'
+    }).attr('type', 'file');
+
+    const nameLabel = $('<div>', {
+        class: 'catNameLabel'
+    }).text('Category Name:')
+
+    const input = $('<input>', {
+        class: 'catNameI',
+        id: 'catNameI'
+    });
+
+    const desLabel = $('<div>', {
+        class: 'catDesLabel'
+    }).text('Category Description:')
+
+    const des = $('<textarea>',{
+        class: 'catDesI',
+        id: 'catDesI'
+    })
+
+    const footer = $('<div>',{
+        class: 'cMFooter'
+    });
+
+    const err = $('<div>',{
+        class: 'cMIErr',
+        id: 'cMIErr'
+    })
+
+    const back = $('<div>', {
+        class:'cMBack',
+        id: 'cMBack'
+    }).html('Back').click(()=>{
+        $('#chooseCategoryContainer').toggle('fast');
+        $('#cMInputSection').toggle('fast');
+        $('#cMStep1').toggleClass('activeStep');
+        $('#cMStep2').toggleClass('activeStep');
+    })
+
+    const submit = $('<div>', {
+        class: 'catISubmit',
+        id: 'catISubmit'
+    }).html('Save').click(()=>{
+        saveNewCat();
+    })
+
+    const cancel = $('<div>', {
+        class: 'catMCancel',
+        id: 'catMCancel'
+    }).html('Cancel').click(()=>{
+        $('#addCModal').remove();
+    })
+
+    container.append(imgLabel)
+    container.append(catImg);
+    container.append(nameLabel);
+    container.append(input);
+    container.append(desLabel);
+    container.append(des);
+    wrapper.append(footer);
+    footer.append(err);
+    footer.append(back);
+    footer.append(cancel);
+    footer.append(submit);
+
+    return wrapper;
+}
+
+//save category :
+function saveNewCat(){
+    //form: 
+    const form = new FormData();
+    form.append('saveCat', true);
+    //modal:
+    const m = $('#addCModal');
+    //input name description:
+    const i = $('#catNameI');
+    form.append('title', i.val());
+    const des = $('#catDesI');
+    form.append('des', des.val());
+    //img
+    const img = $('#catImgI');
+    //check if there is an img:
+    if(img.val().length != 0){
+        form.append('img', img.get(0).files[0]);
+    }
+    //error:
+    const e = $('#cMIErr');
+    //parent category:
+    const pCat =  $("input[name='category']:checked").val();
+    //check if there is parent category:
+    if(pCat != undefined){
+        form.append('pCat', pCat);
+    }
+
+    //validate name
+    if(i.val().replace(' ', '').length <= 0){
+        e.text('Category Name cant be Empty .');
+        setTimeout(()=>{
+            e.text('');
+        }, 2000)
+        return;
+    }
+    //validate description
+    if(des.val().replace(' ', '').replace('\n', '').length <= 0){
+        e.text('Category Description cant be Empty .');
+        setTimeout(()=>{
+            e.text('');
+        }, 2000)
+        return;
+    }
+    
+    //send post request:
+    $.ajax({
+        url: './index.php',
+        type: 'POST',
+        processData: false, // important
+        contentType: false, // important
+        data: form,
+        success: (res)=>{
+            $('#addCModal').remove();
+        }
+      });
+
+}
