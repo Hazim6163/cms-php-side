@@ -1,7 +1,7 @@
 //get data:
 var data;
-function getData(nextFun){
-    $.post('./add.php', {getData: true}, (data)=>{
+function getData(nextFun) {
+    $.post('./add.php', { getData: true }, (data) => {
         nextFun(data);
     }, 'json')
 }
@@ -9,17 +9,17 @@ function getData(nextFun){
 //get user info:
 getUserInfo((userInfo) => {
     //get categories:
-    getData((data)=>{
-        if(!data.postCopy.false){
+    getData((data) => {
+        if (!data.postCopy.false) {
             //create main page:
             createPage(userInfo, data.categories, data.tags, data.postCopy)
-        }else{
+        } else {
             //create main page:
             createPage(userInfo, data.categories, data.tags, undefined)
         }
         docSaver();
     })
-    
+
 });
 
 //post body editor vars:
@@ -79,9 +79,9 @@ const emptyPostBody = 'Add Post Body';
 /******************* functions  *************/
 
 //on window size change : 
-$(window).resize(()=>{
+$(window).resize(() => {
     //reposition right tool bar
-    if(toolbarOnRight){
+    if (toolbarOnRight) {
         resizeRightTb();
     }
     //reposition toolbar menu position
@@ -91,10 +91,10 @@ $(window).resize(()=>{
 //main page:
 const createPage = (userInfo, categories, tags, postC) => {
     //check if there is post copy : 
-    if(postC){
+    if (postC) {
         isPostCopy = true;
         //set the doc history array: //TODO FIX UNDO REDO ISSUE REBUILD SYSTEM
-        if(postC.docHistory != undefined){
+        if (postC.docHistory != undefined) {
             docHistory = postC.docHistory;
         }
         //check if there is saved category:
@@ -121,35 +121,35 @@ const createPage = (userInfo, categories, tags, postC) => {
     createEditorFooter(categories, tags, userInfo).appendTo(page);
     //check if there is tags history:
     const ts = JSON.parse(postC.tags);
-    if(ts.length > 0){
-        ts.forEach((t)=>{
+    if (ts.length > 0) {
+        ts.forEach((t) => {
             addTag(t, false);
         })
     }
 }
 
 //resize right toolbar:
-function resizeRightTb(){
+function resizeRightTb() {
     const element = $('#toolbarContainer');
-    const x = $(window).width() - getTbWidth(element) ;
-        element.addClass('rightTB')
-        element.removeClass('floatTB')
-        toolbarOnRight = true;
-        toolbarOnLeft = false;
-        //check if the tool bar hidden and add hidden class
-        if(!toolbarOpened){
-            element.addClass('hiddenTbRight');
-            element.removeClass('hiddenTbLeft');
-        }else{
-            element.removeClass('hiddenTbRight');
-            element.removeClass('hiddenTbLeft');
-        }
-    element.css('left', x+'px')
+    const x = $(window).width() - getTbWidth(element);
+    element.addClass('rightTB')
+    element.removeClass('floatTB')
+    toolbarOnRight = true;
+    toolbarOnLeft = false;
+    //check if the tool bar hidden and add hidden class
+    if (!toolbarOpened) {
+        element.addClass('hiddenTbRight');
+        element.removeClass('hiddenTbLeft');
+    } else {
+        element.removeClass('hiddenTbRight');
+        element.removeClass('hiddenTbLeft');
+    }
+    element.css('left', x + 'px')
 }
 
 //post headers navigation:
-function postNav(){
-    const navigationContainer = $('<div>',{
+function postNav() {
+    const navigationContainer = $('<div>', {
         class: 'navigationContainer',
         id: 'navigationContainer'
     }).hide().attr('contenteditable', 'false');
@@ -158,10 +158,10 @@ function postNav(){
 }
 
 //extract headers containers :
-function extractHeadersLinks(){
+function extractHeadersLinks() {
     const navContainer = $('#navigationContainer');
     //check if there is post headers navigator not appended
-    if(navContainer.html() == undefined){
+    if (navContainer.html() == undefined) {
         const postBody = $('#postBody');
         //create post headers navigation:
         postBody.prepend(postNav());
@@ -169,11 +169,11 @@ function extractHeadersLinks(){
 
     //clean up the navContainer:
     navContainer.empty();
-    
+
     //get post headers
     const headersArr = $('#postBody h1, h2, h3, h4, h5, h6').toArray();
 
-    const title = $('<div>',{
+    const title = $('<div>', {
         class: 'headersNavContainerTitle'
     }).html('Post Navigation:').appendTo(navContainer);
 
@@ -181,8 +181,8 @@ function extractHeadersLinks(){
         class: 'headersContainer'
     }).appendTo(navContainer);
 
-    headersArr.forEach((header)=>{
-        if(header.textContent == ''){
+    headersArr.forEach((header) => {
+        if (header.textContent == '') {
             return;
         }
         //scroll position:
@@ -195,11 +195,11 @@ function extractHeadersLinks(){
         //create header link element:
         const hLink = $('<a>', {
             class: 'headerContainer'
-        }).text(text).appendTo(container).attr('href', '#'+header.id).click((e)=>{
+        }).text(text).appendTo(container).attr('href', '#' + header.id).click((e) => {
             e.preventDefault();
             //check if the header in the post body or not:
-            const temp = $("#"+header.id);
-            if(!temp.html()){
+            const temp = $("#" + header.id);
+            if (!temp.html()) {
                 //header in the post body cant be found:
                 //remove header link:
                 hLink.remove();
@@ -207,14 +207,14 @@ function extractHeadersLinks(){
             }
             //animate scroll to header position + space top margin page wrapper and the page padding top:
             $([document.documentElement, document.body]).animate({
-                scrollTop: $("#"+header.id).offset().top - topSpace
+                scrollTop: $("#" + header.id).offset().top - topSpace
             }, 1000);
         });
     })
     //toggle header navigator on links count >< 0 
-    if(headersArr.length == 0 ){
+    if (headersArr.length == 0) {
         navContainer.hide('fast');
-    }else{
+    } else {
         navContainer.show('fast');
     }
 }
@@ -237,38 +237,38 @@ function postHeader(postC) {
 }
 
 //create post image section
-function createPostImage(postC){
+function createPostImage(postC) {
     //post img container
-    const postImgContainer = $('<div>',{
+    const postImgContainer = $('<div>', {
         class: 'postImgContainer',
         id: 'postImgContainer'
     });
-    
+
     //remove img icon:
-    const removeImgIconContainer = $('<div>',{
+    const removeImgIconContainer = $('<div>', {
         class: 'removeImgIconContainer'
     });
-    const removeImgIcon = $('<span>',{
+    const removeImgIcon = $('<span>', {
         class: 'removeImgIcon',
         id: 'removeImgIcon'
     }).appendTo(removeImgIconContainer);
     removeImgIcon.html('<i class="far fa-trash-alt"></i>');
     //check if there is img 
-    if($('#postImg').attr('src')){
+    if ($('#postImg').attr('src')) {
         removeImgIconContainer.appendTo(postImgContainer);
     }
     //img 
-    const imgHolder = $('<img>',{
+    const imgHolder = $('<img>', {
         class: 'postImg',
         id: 'postImg'
-    }).hide().appendTo(postImgContainer).click(()=>{
+    }).hide().appendTo(postImgContainer).click(() => {
         imgInput.trigger('click');
     });
     //icon container
-    const iconContainer = $('<div>',{
+    const iconContainer = $('<div>', {
         class: 'postImgIconContainer',
         id: 'postImgIconContainer'
-    }).html('<i class="far fa-image"></i>').click(()=>{
+    }).html('<i class="far fa-image"></i>').click(() => {
         imgInput.trigger('click');
     });
     postImgContainer.append(iconContainer);
@@ -277,71 +277,71 @@ function createPostImage(postC){
     $image_crop = $('#image_demo').croppie({
         enableExif: true,
         viewport: {
-        width: 500,
-        height: 300,
-        type: 'square' //circle square
+            width: 500,
+            height: 300,
+            type: 'square' //circle square
         },
         boundary: {
-        width: 500,
-        height: 500
+            width: 500,
+            height: 500
         }
     });
     //img input
-    const imgInput = $('<input>',{
+    const imgInput = $('<input>', {
         id: 'postImgInput'
     }).attr('type', 'file').attr('accept', 'image/*').hide();
-    imgInput.change(()=>{
+    imgInput.change(() => {
         var reader = new FileReader();
         reader.onload = function (event) {
-          $image_crop.croppie('bind', {
-            url: event.target.result
-          })
+            $image_crop.croppie('bind', {
+                url: event.target.result
+            })
         }
         reader.readAsDataURL(imgInput.get(0).files[0]);
         $('#modalDialogCrop').css('display', 'block');
     });
     //get close modal btn: 
-    $('#closeModalBtn').click(()=>{
+    $('#closeModalBtn').click(() => {
         $('#modalDialogCrop').css('display', 'none');
     })
     //save btn:
     // on crop opr finish and click on the save btn
-    $('#crop_image').click( () => {
+    $('#crop_image').click(() => {
         $image_crop.croppie('result', {
-        type: 'canvas',
-        size: 'viewport'
+            type: 'canvas',
+            size: 'viewport'
         }).then(function (response) {
-        $.ajax({
-            url: "./add.php",
-            type: "POST",
-            data: {
-                "saveImg": true,
-                "image": response
-            },
-            success: function (data) {
-                $('#modalDialogCrop').css('display', 'none');
-                iconContainer.hide('fast');
-                imgHolder.attr('src', data).show('fast');
-                postImgContainer.prepend(removeImgIconContainer).click(()=>{
-                    //remove post img from img
-                    $('#postImg').attr('src', null);
-                    //remove remove icon 
-                    removeImgIconContainer.remove();
-                    //remove img container:
-                    $('#postImg').hide('fast');
-                    //show choose img icon container:
-                    iconContainer.show('fast');
-                });
-            }
-        });
+            $.ajax({
+                url: "./add.php",
+                type: "POST",
+                data: {
+                    "saveImg": true,
+                    "image": response
+                },
+                success: function (data) {
+                    $('#modalDialogCrop').css('display', 'none');
+                    iconContainer.hide('fast');
+                    imgHolder.attr('src', data).show('fast');
+                    postImgContainer.prepend(removeImgIconContainer).click(() => {
+                        //remove post img from img
+                        $('#postImg').attr('src', null);
+                        //remove remove icon 
+                        removeImgIconContainer.remove();
+                        //remove img container:
+                        $('#postImg').hide('fast');
+                        //show choose img icon container:
+                        iconContainer.show('fast');
+                    });
+                }
+            });
         })
     });
 
     //check if the post copy has img:
-    if(postC.img != ''){
+    if (postC.img != '') {
         iconContainer.hide('fast');
         imgHolder.attr('src', postC.img).show('fast');
-        postImgContainer.prepend(removeImgIconContainer).click(()=>{
+        postImgContainer.prepend(removeImgIconContainer).click(() => {
             //remove post img from img
             $('#postImg').attr('src', null);
             //remove remove icon 
@@ -367,8 +367,8 @@ function createPostTitle(postC) {
         class: 'postTitle',
         id: 'postTitle'
     }).html(emptyPostTitle).appendTo(postTitleContainer).attr('contenteditable', 'true');
-    if(isPostCopy){
-        if(postC.title != ''){
+    if (isPostCopy) {
+        if (postC.title != '') {
             postTitle.html(postC.title);
         }
     }
@@ -419,8 +419,8 @@ function createPostDes(postC) {
         id: 'postDes'
     }).html(emptyPostDes).appendTo(postDesContainer).attr('contenteditable', 'true');
     //check if there is post copy
-    if(isPostCopy){
-        if(postC.des != ''){
+    if (isPostCopy) {
+        if (postC.des != '') {
             postDes.html(postC.des);
         }
     }
@@ -463,8 +463,8 @@ function createPostBody(postC) {
         id: 'postBody'
     }).attr('contenteditable', 'true').html(emptyPostBody);
     //check if there is post copy
-    if(isPostCopy){
-        if(postC.body != ''){
+    if (isPostCopy) {
+        if (postC.body != '') {
             postBody.html(postC.body);
         }
     }
@@ -501,10 +501,10 @@ function createPostBody(postC) {
         autoCloseBraces();
 
         //handle shift tab:
-        if(e.shiftKey && e.keyCode == 9){
+        if (e.shiftKey && e.keyCode == 9) {
             handleShiftTabBodyClick();
         }//on tab key click inside post body:
-        else if( e.which == 9 ) {
+        else if (e.which == 9) {
             handlePostBodyTabClick();
         }
 
@@ -541,7 +541,7 @@ function createPostBody(postC) {
 }
 
 //handle shift tab click:
-function handleShiftTabBodyClick(){
+function handleShiftTabBodyClick() {
     const endContainer = lastSelection.endContainer;
     var text = endContainer.textContent;
     //text need to append
@@ -553,11 +553,11 @@ function handleShiftTabBodyClick(){
         //get last 4 chars:
         target = text.substring(start, end);
         //check if the first 2 chars not spaces then return
-        if(target.charAt(0) != ' ' || target.charAt(1) != ' '){
+        if (target.charAt(0) != ' ' || target.charAt(1) != ' ') {
             return;
         }
         //get the white space in this section:
-        const regex = new RegExp(/\s/,'g');
+        const regex = new RegExp(/\s/, 'g');
         text1 = target.replace(regex, '')
         //push the new text to old text and remove the target section
         const part1 = text.slice(0, start);
@@ -570,13 +570,13 @@ function handleShiftTabBodyClick(){
         //set cursor:
         cursorAtEndElement(e, -part2.length);
     } catch (error) {
-        console.log('error\n'+error)
+        console.log('error\n' + error)
     }
-    
+
 }
 
 //handle tab click inside post body
-function handlePostBodyTabClick(){
+function handlePostBodyTabClick() {
     const endContainer = lastSelection.endContainer;
     var text = endContainer.textContent;
     //text need to append
@@ -598,8 +598,7 @@ function handlePostBodyTabClick(){
 }
 
 //remove default behavior on tab click
-$(document).keydown(function (e) 
-{
+$(document).keydown(function (e) {
     var keycode1 = (e.keyCode ? e.keyCode : e.which);
     if (keycode1 == 0 || keycode1 == 9) {
         e.preventDefault();
@@ -611,23 +610,23 @@ $(document).keydown(function (e)
 //background color shortcut:
 //EX: !r:bk background-color: red
 //Ex: !1717:bk background-color: #1717
-function checkBkShortcut(postBody){
+function checkBkShortcut(postBody) {
     const pattern = new RegExp(/\!+([a-zA-z0-9]+)+:bk/, 'im');
     var body = postBody.html();
     const match = pattern.exec(body);
-    if(!match){
+    if (!match) {
         return;
     }
     //get color part:
     const c = match[1];
-    const style = 'background-color: '+extractShortcutColor(c)+'; ';
+    const style = 'background-color: ' + extractShortcutColor(c) + '; ';
     const id = getUniqueId();
-    
-    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+
+    const req = '<span style="' + style + '" id="' + id + '"> </span>'
     body = body.replace(pattern, req);
     //update post body
     postBody.html(body);
-    const e = $('#'+id);
+    const e = $('#' + id);
     e.trigger('focus');
     cursorAtEndElement(e);
 }
@@ -635,83 +634,83 @@ function checkBkShortcut(postBody){
 //font size color shortcut: 
 //Ex: !r-50:2cz -> color:red, font size: 50px 
 //Ex: !171717-20:2cz -> color:#171717, font size: 20px
-function checkBodySizeColorShortcut(postBody){
+function checkBodySizeColorShortcut(postBody) {
     const pattern = new RegExp(/\!+([a-zA-z0-9]+)+\-+([0-9]+)+:2cz/, 'im');
     var body = postBody.html();
     const match = pattern.exec(body);
-    if(!match){
+    if (!match) {
         return;
     }
     //get color part:
     const c = match[1];
     const z = match[2];
-    var style = 'font-size: '+z+'px; ';
+    var style = 'font-size: ' + z + 'px; ';
     style = style + getShortCutSpanStyle(c);
     const id = getUniqueId();
-    
-    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+
+    const req = '<span style="' + style + '" id="' + id + '"> </span>'
     body = body.replace(pattern, req);
     //update post body
     postBody.html(body);
-    const e = $('#'+id);
+    const e = $('#' + id);
     e.trigger('focus');
     cursorAtEndElement(e);
 }
 
 //font size body shortcut: !15:z 15px font size
-function checkBodyFontSizeShortcut(postBody){
+function checkBodyFontSizeShortcut(postBody) {
     const pattern = new RegExp(/\!+([0-9]+)+:z/, 'im');
     var body = postBody.html();
     const match = pattern.exec(body);
-    if(!match){
+    if (!match) {
         return;
     }
     //get color part:
     const z = match[1];
-    const style = 'font-size: '+z+'px;';
+    const style = 'font-size: ' + z + 'px;';
     const id = getUniqueId();
-    
-    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+
+    const req = '<span style="' + style + '" id="' + id + '"> </span>'
     body = body.replace(pattern, req);
     //update post body
     postBody.html(body);
-    const e = $('#'+id);
+    const e = $('#' + id);
     e.trigger('focus');
     cursorAtEndElement(e);
 }
 
 //colors body shortcuts: !(r - b - g - y- 0 - 171717):c
-function checkBodyColorShortcut(postBody){
+function checkBodyColorShortcut(postBody) {
     const pattern = new RegExp(/\!+([a-zA-z0-9]+)+:c/, 'im');
     var body = postBody.html();
     const match = pattern.exec(body);
-    if(!match){
+    if (!match) {
         return;
     }
     //get color part:
     const c = match[1];
     const style = getShortCutSpanStyle(c);
     const id = getUniqueId();
-    
-    const req = '<span style="'+style+'" id="'+id+'"> </span>'
+
+    const req = '<span style="' + style + '" id="' + id + '"> </span>'
     body = body.replace(pattern, req);
     //update post body
     postBody.html(body);
-    const e = $('#'+id);
+    const e = $('#' + id);
     e.trigger('focus');
     cursorAtEndElement(e);
 }
 
 //get shortcut span style:
 // c : short cut color val
-function getShortCutSpanStyle(c){
+function getShortCutSpanStyle(c) {
     var color = extractShortcutColor(c);
-    const style = 'color: '+color+';';
+    const style = 'color: ' + color + ';';
     return style;
 }
 
 //extract shortcut color:
-function extractShortcutColor(c){
+function extractShortcutColor(c) {
     var color;
     switch (c) {
         case 'r':
@@ -730,21 +729,21 @@ function extractShortcutColor(c){
             color = 'yellow'
             break;
         default:
-            color = '#'+c;
+            color = '#' + c;
             break;
     }
     return color;
 }
 
 //unique string id creator:
-function getUniqueId(){
+function getUniqueId() {
     //get time in millisecond
     var d = new Date();
     d = d.getTime();
     //create chars array
     const chars = new Array();
     chars.push(
-        "A","a","B","b","C","c","D","d","E","e","F","f","G","g","H","h","I","i","J","j","K","k","L","l","M","m","N","n","O","o","P","p","Q","q","R","r","S","s","T","t","U","u","V","v","W","w","X","x","Y","y","Z","z"
+        "A", "a", "B", "b", "C", "c", "D", "d", "E", "e", "F", "f", "G", "g", "H", "h", "I", "i", "J", "j", "K", "k", "L", "l", "M", "m", "N", "n", "O", "o", "P", "p", "Q", "q", "R", "r", "S", "s", "T", "t", "U", "u", "V", "v", "W", "w", "X", "x", "Y", "y", "Z", "z"
     );
     //scuffle the datetime with chars
     d = JSON.stringify(d);
@@ -753,19 +752,19 @@ function getUniqueId(){
     for (let i = 0; i < d.length; i++) {
         const num = d[i];
         //get divided by 2 numbers:
-        if(i%2 == 0){
-            id.push(num+1);
-            id.push(num+5);
-            id.push(num+10);
-            var randChar = chars[Math.floor(Math.random()*chars.length)];
-            var randChar2 = chars[Math.floor(Math.random()*chars.length)];
+        if (i % 2 == 0) {
+            id.push(num + 1);
+            id.push(num + 5);
+            id.push(num + 10);
+            var randChar = chars[Math.floor(Math.random() * chars.length)];
+            var randChar2 = chars[Math.floor(Math.random() * chars.length)];
             id.push(randChar, randChar2);
         }
         id.push(num);
     }
     //convert id to string:
     var temp = '';
-    id.forEach((c)=>{
+    id.forEach((c) => {
         temp = temp + c;
     })
     id = temp
@@ -774,13 +773,13 @@ function getUniqueId(){
 }
 
 //auto close Braces:
-function autoCloseBraces(){
+function autoCloseBraces() {
     const pattern = new RegExp(/\{$/, 'im');
     //get current text obj
     const endContainer = lastSelection.endContainer;
     var text = endContainer.textContent;
     const match = pattern.exec(text);
-    if(!match){
+    if (!match) {
         return;
     }
     req = '{}';
@@ -792,13 +791,13 @@ function autoCloseBraces(){
 }
 
 //auto close brackets:
-function autoCloseBrackets(){
+function autoCloseBrackets() {
     const pattern = new RegExp(/\[$/, 'im');
     //get current text obj
     const endContainer = lastSelection.endContainer;
     var text = endContainer.textContent;
     const match = pattern.exec(text);
-    if(!match){
+    if (!match) {
         return;
     }
     req = '[]';
@@ -810,13 +809,13 @@ function autoCloseBrackets(){
 }
 
 //auto close parenthesis:
-function autoCloseParenthesis(){
+function autoCloseParenthesis() {
     const pattern = new RegExp(/\($/, 'im');
     //get current text obj
     const endContainer = lastSelection.endContainer;
     var text = endContainer.textContent;
     const match = pattern.exec(text);
-    if(!match){
+    if (!match) {
         return;
     }
     req = '()';
@@ -828,12 +827,12 @@ function autoCloseParenthesis(){
 }
 
 //to match the pattern (link name)[link in the post body]
-function checkBodyAnchors(postBody){
+function checkBodyAnchors(postBody) {
     const pattern = new RegExp(/\(([^)]+)\)+\[([^)]+)\]/, 'im')
 
     var body = postBody.html();
     const match = pattern.exec(body);
-    if(!match){
+    if (!match) {
         return;
     }
     //get first part name part:
@@ -841,32 +840,32 @@ function checkBodyAnchors(postBody){
     //get link part :
     const link = match[2];
 
-    const req = '<a href="'+link+'">'+name+'&nbsp;</a><span id="afterAnchor'+name+link+'"> </span>'
+    const req = '<a href="' + link + '">' + name + '&nbsp;</a><span id="afterAnchor' + name + link + '"> </span>'
     body = body.replace(pattern, req);
     //update post body
     postBody.html(body);
-    const e = $('#afterAnchor'+name+link)
+    const e = $('#afterAnchor' + name + link)
     e.trigger('focus');
     cursorAtEndElement(e);
-    
+
 }
 
 //create editor footer:
-function createEditorFooter(categories, tags, userInfo){
-    const editorFooterContainer = $('<div>',{
+function createEditorFooter(categories, tags, userInfo) {
+    const editorFooterContainer = $('<div>', {
         class: 'editorFooterContainer',
         id: 'editorFooterContainer'
     });
 
     //categories container:
-    const chooseCategoryContainer = $('<div>',{
+    const chooseCategoryContainer = $('<div>', {
         class: 'chooseCategoryContainer',
         id: 'chooseCategoryContainer'
     }).appendTo(editorFooterContainer).html('Post Category:<br>');
     extractCategories(categories).appendTo(chooseCategoryContainer);
 
     //tags container:
-    const chooseTagsContainer = $('<div>',{
+    const chooseTagsContainer = $('<div>', {
         class: 'chooseTagsContainer',
         id: 'chooseTagsContainer'
     }).appendTo(editorFooterContainer).html('Tags:<br>');
@@ -876,27 +875,27 @@ function createEditorFooter(categories, tags, userInfo){
     const lastPostC = $('<div>', {
         class: 'checkLastPostC',
         id: 'checkLastPostC'
-    }).appendTo(editorFooterContainer).click(()=>{
-        if(showInActivity == 0){
+    }).appendTo(editorFooterContainer).click(() => {
+        if (showInActivity == 0) {
             lPBox.html('<i class="fas fa-check"></i>');
-            showInActivity = 1 
-        }else{
-            lPBox.html('') ;
-            showInActivity = 0 
+            showInActivity = 1
+        } else {
+            lPBox.html('');
+            showInActivity = 0
         }
     });
-    const lPBox = $('<div>',{
+    const lPBox = $('<div>', {
         class: 'lPBox',
         id: 'lPBox'
     }).appendTo(lastPostC).html('<i class="fas fa-check"></i>');
-    const lPLabel = $('<div>',{
+    const lPLabel = $('<div>', {
         class: 'lPLabel'
     }).appendTo(lastPostC).html('Show In Last Posts');
 
-    const saveButton = $('<div>',{
+    const saveButton = $('<div>', {
         class: 'eFSaveBtn',
         id: 'eFSaveBtn'
-    }).html('Save').appendTo(editorFooterContainer).click(()=>{
+    }).html('Save').appendTo(editorFooterContainer).click(() => {
         savePostToServer();
     });
 
@@ -905,40 +904,40 @@ function createEditorFooter(categories, tags, userInfo){
 }
 
 //create tags input container:
-function createTagsContainer(tags){
-    const container = $('<div>',{
+function createTagsContainer(tags) {
+    const container = $('<div>', {
         class: 'tagsInputContainer',
         id: 'tagsInputContainer'
     });
 
-    const tagsContainer = $('<div>',{
+    const tagsContainer = $('<div>', {
         class: 'tagsContainer',
         id: 'postTagsContainer'
     }).appendTo(container);
 
     //add tags form
-    const tagsForm = $('<form>',{
+    const tagsForm = $('<form>', {
         class: 'inputForm'
     }).appendTo(container).attr('autocomplete', 'off');
     //input 
-    const tagInput = $('<input>',{
+    const tagInput = $('<input>', {
         class: 'tagInput',
         id: 'tagInput'
-    }).attr({'type':'text', 'name': 'name'}).appendTo(tagsForm);
+    }).attr({ 'type': 'text', 'name': 'name' }).appendTo(tagsForm);
     //to get suggests:
-    tagInput.on('keyup', ()=>{
+    tagInput.on('keyup', () => {
         getTagsSuggests(tagInput.val());
     })
     //submit
-    const tagSubmit = $('<input>',{
+    const tagSubmit = $('<input>', {
         class: 'tagSubmit'
-    }).attr({'type':'submit', 'value': 'Add', 'autocomplete': 'off'}).appendTo(tagsForm);
+    }).attr({ 'type': 'submit', 'value': 'Add', 'autocomplete': 'off' }).appendTo(tagsForm);
     //on form submit
-    tagsForm.on('submit', (e)=>{
+    tagsForm.on('submit', (e) => {
         e.preventDefault();
         //send post request to add tag:
-        $.post('./add.php', {tagSubmit: true, name: tagInput.val()}, (tag)=>{
-            if(!tag._id){
+        $.post('./add.php', { tagSubmit: true, name: tagInput.val() }, (tag) => {
+            if (!tag._id) {
                 sendError('tagInput', tag.error)
                 return;
             }
@@ -947,14 +946,14 @@ function createTagsContainer(tags){
         }, 'json')
     })
     //const suggests:
-    const suggests = $('<div>',{
+    const suggests = $('<div>', {
         class: 'tagInputSuggests',
         id: 'tagInputSuggests'
     }).appendTo(container).hide();
-    tagInput.on('focus', ()=>{
+    tagInput.on('focus', () => {
         suggests.show('fast');
     });
-    tagInput.on('focusout', ()=>{
+    tagInput.on('focusout', () => {
         suggests.hide('fast');
     })
 
@@ -962,21 +961,21 @@ function createTagsContainer(tags){
 }
 
 //get tags suggests:
-function getTagsSuggests(word){
+function getTagsSuggests(word) {
     //clean up the suggests container:
     const suggests = $('#tagInputSuggests');
     const input = $('#tagInput')
     //check if the word not empty 
-    if(!word || word == ''){
+    if (!word || word == '') {
         suggests.html('');
         return;
     }
     //replace space with +:
     word = encodeURIComponent(word)
     //send search request:
-    $.post('./add.php', {searchTag: true, word: word}, (tags)=>{
+    $.post('./add.php', { searchTag: true, word: word }, (tags) => {
         // check if the last result is the same:
-        if(JSON.stringify(tags) == JSON.stringify(lastTagsSearch)){
+        if (JSON.stringify(tags) == JSON.stringify(lastTagsSearch)) {
             return;
         }
         //save search result:
@@ -990,25 +989,25 @@ function getTagsSuggests(word){
             var added = false;
             for (let i = 0; i < postTagsArr.length; i++) {
                 const at = postTagsArr[i];
-                if (tag.name === at){
+                if (tag.name === at) {
                     added = true;
                 }
             }
-            if(added){
+            if (added) {
                 continue;
             }
             //create tag result container
-            const tagResult = $('<div>',{
+            const tagResult = $('<div>', {
                 class: 'tagResultContainer',
                 id: tag._id
             }).appendTo(suggests);
             //on tag result click
-            tagResult.click(()=>{
+            tagResult.click(() => {
                 addTag(tag, true);
                 input.val('');
                 input.trigger('focus');
             })
-            tagResult.on('focus', ()=>{
+            tagResult.on('focus', () => {
                 suggests.show('fast');
             })
             // tag result icon
@@ -1016,11 +1015,11 @@ function getTagsSuggests(word){
                 class: 'searchTagResultIcon'
             }).html('<i class="fas fa-tag searchTagIcon"></i>').appendTo(tagResult);
             // tag result name
-            const name = $('<div>',{
+            const name = $('<div>', {
                 class: 'tagResultName'
             }).appendTo(tagResult).html(tag.name);
             // tag result posts count
-            const postsCount = $('<div>',{
+            const postsCount = $('<div>', {
                 class: 'tagResultPostsCount'
             }).appendTo(tagResult).html(tag.postsCount + ' Posts');
         }
@@ -1028,7 +1027,7 @@ function getTagsSuggests(word){
 }
 
 //add tag by search:
-function addTag(tag, bySearch){
+function addTag(tag, bySearch) {
     //add the tag to post tags names array: 
     postTagsArr.push(tag.name);
     //add tag to tags array:
@@ -1036,17 +1035,17 @@ function addTag(tag, bySearch){
     //add tag to post tags container:
     const container = $('#postTagsContainer');
     //create tag container
-    const tagContainer = $('<div>',{
+    const tagContainer = $('<div>', {
         class: 'tagContainer'
-    }).appendTo(container).click(()=>{
+    }).appendTo(container).click(() => {
         //on click remove tag from container
         tagContainer.remove();
         //on click remove tag from post array tags:
-        postTagsArr = postTagsArr.filter((t)=>{
+        postTagsArr = postTagsArr.filter((t) => {
             return t != tag.name
         });
         //remove tag from post tags array
-        tagsArray = tagsArray.filter((t)=>{
+        tagsArray = tagsArray.filter((t) => {
             return t.name != tag.name;
         })
     });
@@ -1055,48 +1054,48 @@ function addTag(tag, bySearch){
         class: 'tagIcon'
     }).html('<i class="fas fa-tag searchTagIcon"></i>').appendTo(tagContainer);
     // tag name
-    const name = $('<div>',{
+    const name = $('<div>', {
         class: 'tagName'
     }).appendTo(tagContainer).html(tag.name);
 
-    if(bySearch){
+    if (bySearch) {
         //if by search remove tag from the search result:
-        $('#'+tag._id).remove();
+        $('#' + tag._id).remove();
     }
 }
 
 //extract categories and nested categories:
-function extractCategories(categories, nested = false, parentContainer){
+function extractCategories(categories, nested = false, parentContainer) {
     //check if nested: 
-    if(nested){
+    if (nested) {
         parentContainer.append(extractCategories(categories));
         return;
     }
-    const categoriesGroupContainer = $('<div>',{
+    const categoriesGroupContainer = $('<div>', {
         class: 'categoriesGroupContainer'
     });
-    categories.forEach((category)=>{
+    categories.forEach((category) => {
         //filter root categories
-        if(!category.parentId){
+        if (!category.parentId) {
             //create category container
-            const categoryContainer = $('<div>',{
+            const categoryContainer = $('<div>', {
                 class: 'rootCategoryContainer',
                 id: 'rootCategoryContainer' + category._id
             }).appendTo(categoriesGroupContainer).css('margin-left', '30px');
             //category radio
-            const categoryRadio = $('<input type="radio" name="category" value="'+category._id+'">',{
+            const categoryRadio = $('<input type="radio" name="category" value="' + category._id + '">', {
                 class: 'categoryRadio',
-                id: 'categoryRadio'+category._id
+                id: 'categoryRadio' + category._id
             }).appendTo(categoryContainer);
             //check if the category is saved in the post copy:
-            if(category._id == savedCat){
+            if (category._id == savedCat) {
                 categoryRadio.prop('checked', true);
             }
             //category label
-            const label = $('<span>').html(category.title+'<br>');
+            const label = $('<span>').html(category.title + '<br>');
             categoryContainer.append(label);
             //check if the category has nested categories:
-            if(category.nestedCategories.length > 0){
+            if (category.nestedCategories.length > 0) {
                 // edit label
                 label.html(category.title);
                 // create dropdown;
@@ -1105,38 +1104,38 @@ function extractCategories(categories, nested = false, parentContainer){
                 }).html('<i class="fas fa-chevron-circle-down"></i><br>');
                 categoryContainer.append(dropDown);
                 //nested container:
-                const nestedCatContainer = $('<div>',{
+                const nestedCatContainer = $('<div>', {
                     class: 'nestedCatContainer',
                     id: 'nestedCatContainer' + category._id
                 }).appendTo(categoryContainer).hide();
-                dropDown.click(()=>{
+                dropDown.click(() => {
                     nestedCatContainer.toggle('fast');
                 });
                 //extract nested categories:
                 extractNestedCategories(category, nestedCatContainer);
             }
         }
-        
+
     });
 
     return categoriesGroupContainer;
 }
 
 //extract nested categories:
-function extractNestedCategories(_category, categoryContainer){
-    _category.nestedCategories.forEach((category)=>{
-        const container = $('<div>',{
+function extractNestedCategories(_category, categoryContainer) {
+    _category.nestedCategories.forEach((category) => {
+        const container = $('<div>', {
             class: 'categoryContainer',
             id: 'categoryContainer' + category._id
         }).css('margin-left', '30px');
-        const categoryRadio = $('<input type="radio" name="category" value="'+category._id+'">',{
+        const categoryRadio = $('<input type="radio" name="category" value="' + category._id + '">', {
             class: 'categoryRadio',
-            id: 'categoryRadio'+category._id
+            id: 'categoryRadio' + category._id
         }).appendTo(container);
-        const label = $('<span>').html(category.title+'<br>');
+        const label = $('<span>').html(category.title + '<br>');
         container.append(label);
         categoryContainer.append(container);
-        if(category.nestedCategories.length > 0){
+        if (category.nestedCategories.length > 0) {
             // edit label
             label.html(category.title);
             // create dropdown;
@@ -1145,21 +1144,21 @@ function extractNestedCategories(_category, categoryContainer){
             }).html('<i class="fas fa-chevron-circle-down"></i><br>');
             container.append(dropDown);
             //nested container:
-            const nestedCatContainer = $('<div>',{
+            const nestedCatContainer = $('<div>', {
                 class: 'nestedCatContainer',
                 id: 'nestedCatContainer' + category._id
             }).appendTo(categoryContainer).css('margin-left', '30px').hide();
-            dropDown.click(()=>{
+            dropDown.click(() => {
                 nestedCatContainer.toggle('fast');
             });
             extractNestedCategories(category, nestedCatContainer);
         }
         //check if the category is saved in the post copy:
         var tempParent = categoryContainer.get(0);
-        if(category._id == savedCat){
+        if (category._id == savedCat) {
             categoryRadio.prop('checked', true);
             //show the top categories containers :
-            while(tempParent.classList.contains('nestedCatContainer')){
+            while (tempParent.classList.contains('nestedCatContainer')) {
                 $(tempParent).show();
                 tempParent = tempParent.parentNode;
             }
@@ -1168,9 +1167,9 @@ function extractNestedCategories(_category, categoryContainer){
 }
 
 //send the post to the server:
-function savePostToServer(){
+function savePostToServer() {
     //check post data:
-    if(!checkPostData()){
+    if (!checkPostData()) {
         return;
     }
     //get post title :
@@ -1181,45 +1180,45 @@ function savePostToServer(){
     const tags = getPostTags();
     const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
 
-    $.post('./add.php', {savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity, img: img}, (res)=>{
+    $.post('./add.php', { savePost: true, title: title, des: des, body: body, category: category, tags: tags, showInActivity: showInActivity, img: img }, (res) => {
         //handel post save:
-        if(!res._id){
+        if (!res._id) {
             sendError('postSave', res.error);
-        }else{
+        } else {
             //send clean cache request:
-            $.post('./add.php', {cleanup: true}, (res2)=>{
+            $.post('./add.php', { cleanup: true }, (res2) => {
                 //redirect to post page:
-                window.location.href = './post.php?id='+res._id
+                window.location.href = './post.php?id=' + res._id
             })
         }
     }, 'json')
 }
 
 //check post data:
-function checkPostData(){
+function checkPostData() {
     var checked = true;
 
     //check post title:
     const title = $('#postTitle').html();
-    if(title.length == 0 || title == emptyPostTitle){
+    if (title.length == 0 || title == emptyPostTitle) {
         checked = false;
         sendError('title');
     }
     //check post des:
     const des = $('#postDes').html();
-    if(des.length == 0 || des == emptyPostDes){
+    if (des.length == 0 || des == emptyPostDes) {
         checked = false;
         sendError('des');
     }
     //check post body:
     const body = $('#postBody').text();
-    if(body.length == 0 || body == emptyPostBody){
+    if (body.length == 0 || body == emptyPostBody) {
         checked = false;
         sendError('body');
     }
     //check post category
     const category = $("input[name='category']:checked").val();
-    if(!category){
+    if (!category) {
         checked = false;
         sendError('category');
     }
@@ -1228,7 +1227,7 @@ function checkPostData(){
 }
 
 //alert modal:
-function sendError(type, qMsg){
+function sendError(type, qMsg) {
     //get alert objects:
     const alertModal = $('#alertModal');
     const ok = $('#alertOk');
@@ -1236,10 +1235,10 @@ function sendError(type, qMsg){
     const msg = $('#alertMsg');
 
     //set listeners:
-    ok.click(()=>{
+    ok.click(() => {
         alertModal.css('display', 'none');
     })
-    cancel.click(()=>{
+    cancel.click(() => {
         alertModal.css('display', 'none');
     });
 
@@ -1258,7 +1257,7 @@ function sendError(type, qMsg){
             msg.text('Make sure to Choose the Post Category')
             break;
         case 'postSave':
-            msg.html('Post Can\'t be Saved :<br><br>'+qMsg)
+            msg.html('Post Can\'t be Saved :<br><br>' + qMsg)
             break;
         case 'tagInput':
             msg.html('Tag can\'t be Saved :<br><br>' + qMsg)
@@ -1271,17 +1270,17 @@ function sendError(type, qMsg){
 }
 
 //get post tags before save the post :
-function getPostTags(){
+function getPostTags() {
     var tags = '';
     for (let i = 0; i < postTagsArr.length; i++) {
         const t = postTagsArr[i];
-        if(i == postTagsArr.length-1){
-            tags += t ;
+        if (i == postTagsArr.length - 1) {
+            tags += t;
             break;
         }
         tags += t + ', ';
     }
-    if(tags == ''){
+    if (tags == '') {
         tags = null
     }
 
@@ -1296,14 +1295,14 @@ function createToolbar() {
     });
 
     //toolbar toggler:
-    const tBTogglerWrapper = $('<div>',{
+    const tBTogglerWrapper = $('<div>', {
         class: 'tBTogglerWrapperOpen',
         id: 'tBTogglerWrapper'
     }).appendTo(toolbarContainer);
     const tBTogglerContainer = $('<div>', {
         class: 'tBTogglerContainerOpen toolbar-tool',
         id: 'tBTogglerContainer'
-    }).html('<i class="far fa-eye-slash tBTogglerIcon"></i>').appendTo(tBTogglerWrapper).click(()=>{
+    }).html('<i class="far fa-eye-slash tBTogglerIcon"></i>').appendTo(tBTogglerWrapper).click(() => {
         toggleToolbar();
     });
 
@@ -1365,34 +1364,34 @@ function createToolbar() {
 }
 
 //set toolbar menu position:
-function setTbmPosition(){
-    if($(window).width() > 800){
+function setTbmPosition() {
+    if ($(window).width() > 800) {
         //on large screen :
         tbmPositionOnLarge();
-    }else{
+    } else {
         //on med small screens: 
         tbmPositionOnSmall();
     }
 }
 
 //to set tool bar menu position on large screens:
-function tbmPositionOnLarge(){
+function tbmPositionOnLarge() {
     const menu = $('#menuContainer');
     const bar = $('#toolbarContainer');
     const nMenu = $('#customizeMenu');
-     
+
     //get the toolbar position
-    const bLeft =  parseFloat(bar.css('left'));
+    const bLeft = parseFloat(bar.css('left'));
     const bTop = parseFloat(bar.css('top'));
     //on left of the toolbar
-    if(toolbarOnRight){
+    if (toolbarOnRight) {
         //set menu position:
         const left = bLeft - nMenu.width() - 16
         menu.css('left', left + 'px');
         //get diff between menu height and the toolbar height:
         const diff = getDiffHeights(bar, menu);
         menu.css('top', bTop + (diff / 2) + 'px');
-    }else if(toolbarOnLeft){
+    } else if (toolbarOnLeft) {
         //set menu position:
         const left = bLeft + bar.width() + 50 + 'px'
         menu.css('left', left);
@@ -1400,11 +1399,11 @@ function tbmPositionOnLarge(){
         const diff = getDiffHeights(bar, menu);
         const top = bTop + (diff / 2) + 'px'
         menu.css('top', top);
-    }else{
+    } else {
         //get bar height
         const bh = bar.height()
         //set menu y
-        const top =  bh + bTop + 50;
+        const top = bh + bTop + 50;
         menu.css('top', top + 'px')
         const left = bar.offset().left + (getDiffWidths(bar, menu) / 2);
         menu.css('left', left + 'px')
@@ -1412,12 +1411,12 @@ function tbmPositionOnLarge(){
 }
 
 //to set toolbar menu position on small screens :
-function tbmPositionOnSmall(){
+function tbmPositionOnSmall() {
     const menu = $('#menuContainer');
     const toolbar = $('#toolbarContainer');
 
-    const top = toolbar.offset().top + 'px'; 
-    
+    const top = toolbar.offset().top + 'px';
+
     var mw = menu.width();
     //set x position on small screens
     $(window).width() < 400 ? mw = mw + 50 : mw = mw;
@@ -1430,45 +1429,45 @@ function tbmPositionOnSmall(){
 
 //get diff height between 2 elements:
 //if e2 bigger will return minus
-function getDiffHeights(e1, e2){
+function getDiffHeights(e1, e2) {
     const e1h = e1.height();
     const e2h = e2.height();
-    
+
     return e1h - e2h;
 }
 
 //get diff width between 2 elements:
 //if e2 bigger will return minus
-function getDiffWidths(e1, e2){
+function getDiffWidths(e1, e2) {
     const e1h = e1.width();
     const e2h = e2.width();
-    
+
     return e1h - e2h;
 }
 
 //minimize toolbar
-function toggleToolbar(){
+function toggleToolbar() {
     const toolbarContainer = $('#toolbarContainer');
     const toolsContainer = $('#toolsContainer');
     toolbarOpened = !toolbarOpened;
     toolsContainer.toggle()
     toolbarContainer.toggleClass('hiddenTb')
     //check if the tool bar is closed to add the hidden right left classes:
-    if(!toolbarOpened){
-        if(toolbarOnRight){
+    if (!toolbarOpened) {
+        if (toolbarOnRight) {
             toolbarContainer.addClass('hiddenTbRight');
         }
-        if(toolbarOnLeft){
+        if (toolbarOnLeft) {
             toolbarContainer.addClass('hiddenTbLeft');
         }
-    }else{
+    } else {
         toolbarContainer.removeClass('hiddenTbRight');
         toolsContainer.removeClass('hiddenTbLeft');
     }
 }
 
 //embed:
-function toolbarEmbedTool(){
+function toolbarEmbedTool() {
     const embedContainer = $('<div>', {
         class: 'embedContainer toolbar-tool',
         id: 'embedContainer'
@@ -1481,28 +1480,28 @@ function toolbarEmbedTool(){
         id: 'embedsContainer'
     });
 
-    const youTubeEmbedTool  = $('<div>', {
+    const youTubeEmbedTool = $('<div>', {
         class: 'youTubeEmbedTool toolbar-tool',
         id: 'youTubeEmbedTool'
-    }).html('<i class="fab fa-youtube toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+    }).html('<i class="fab fa-youtube toolIcon"></i>').appendTo(embedsContainer).click(() => {
         embedToolClick('YouTube');
     });
-    const gistEmbedTool  = $('<div>', {
+    const gistEmbedTool = $('<div>', {
         class: 'gistEmbedTool toolbar-tool',
         id: 'gistEmbedTool'
-    }).html('<i class="fab fa-github toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+    }).html('<i class="fab fa-github toolIcon"></i>').appendTo(embedsContainer).click(() => {
         embedToolClick('gist');
     });
-    const imageEmbedTool  = $('<div>', {
+    const imageEmbedTool = $('<div>', {
         class: 'imageEmbedTool toolbar-tool',
         id: 'imageEmbedTool'
-    }).html('<i class="fas fa-image toolIcon"></i>').appendTo(embedsContainer).click(()=>{
+    }).html('<i class="fas fa-image toolIcon"></i>').appendTo(embedsContainer).click(() => {
         embedToolClick('Image');
     });
 
     items.push(embedsContainer);
 
-    embedContainer.click(()=>{
+    embedContainer.click(() => {
         customizeMenuInflater(items, 'embeds')
     })
 
@@ -1510,30 +1509,30 @@ function toolbarEmbedTool(){
 }
 
 //embed tool click : 
-function embedToolClick(eType){
+function embedToolClick(eType) {
     //check if the modal already opened;
-    if(embedModalOpened){
+    if (embedModalOpened) {
         $('#embedModalContainer').remove();
         //toggle opened:
         embedModalOpened = !embedModalOpened;
         return;
     }
     //create the modal:
-    const modalContainer = $('<div>',{
+    const modalContainer = $('<div>', {
         class: 'embedModalContainer',
         id: 'embedModalContainer'
     });
     //input: 
     const holder = extractHolderMsg(eType);
-    const input = $('<div>',{
+    const input = $('<div>', {
         class: 'embedModalInput',
         id: 'embedModalInput'
     }).attr('contenteditable', 'true').appendTo(modalContainer).text(holder);
     //submit:
-    const submit = $('<div>',{
+    const submit = $('<div>', {
         class: 'embedModalSubmitBtn',
         id: 'embedModalSubmitBtn'
-    }).appendTo(modalContainer).text('Submit').click(()=>{
+    }).appendTo(modalContainer).text('Submit').click(() => {
         submitEmbed(eType);
     });
 
@@ -1554,7 +1553,7 @@ function embedToolClick(eType){
 }
 
 //to set the input holder:
-function extractHolderMsg(eType){
+function extractHolderMsg(eType) {
     switch (eType) {
         case 'YouTube':
             return 'video ID';
@@ -1568,7 +1567,7 @@ function extractHolderMsg(eType){
 }
 
 //on submit embed click
-function submitEmbed(embedType){
+function submitEmbed(embedType) {
     const inputText = $('#embedModalInput').text();
     var iframe;
     switch (embedType) {
@@ -1577,17 +1576,17 @@ function submitEmbed(embedType){
             iframe.attr({
                 'width': '560',
                 'height': '315',
-                'src': 'https://www.youtube.com/embed/'+inputText,
+                'src': 'https://www.youtube.com/embed/' + inputText,
                 'frameborder': '0',
                 'allow': 'encrypted-media',
-                'allowfullscreen':''
+                'allowfullscreen': ''
             }).css({
                 'display': 'block',
                 'margin': '16px auto',
                 'border-radius': '20px',
                 'box-shadow': '0px 0px 3px black'
             });
-            insertNewItem('y-iframe', {target: iframe});
+            insertNewItem('y-iframe', { target: iframe });
             break;
         case 'gist':
             iframe = $('<iframe>');
@@ -1596,7 +1595,7 @@ function submitEmbed(embedType){
                 'scrolling': 'no',
                 'seamless': 'seamless',
                 'onload': 'resizeIframe(this)',
-                'srcdoc': '<html><body><script src="'+inputText+'.js"></script><style type="text/css">.gist .gist-data {} .gist-file{border: 0px !important; padding-bottom: 16px} /** custom style: */.gist .gist-data {  background-color: #171717;  border-bottom: 1px solid #171717;  padding-bottom: 16px;}.gist .highlight {  color: wheat;  background: #171717;}.gist .gist-meta {  color: #171717;  background-color: #171717;}.gist .pl-pds, .gist .pl-s, .gist .pl-s .pl-pse .pl-s1, .gist .pl-sr, .gist .pl-sr .pl-cce, .gist .pl-sr .pl-sra, .gist .pl-sr .pl-sre {  color: #90a21f;}.gist .pl-c1, .gist .pl-s .pl-v {  color: #7ab8ff;}.gist .blob-code-inner {  color: white;}.gist .pl-s .pl-s1, .gist .pl-smi {  color: #ff7878;}html {background-color: #171717;scrollbar-width: thin;scrollbar-color:black#171717; }::-webkit-scrollbar-track {background: #171717; }::-webkit-scrollbar-thumb {background: #000; }::-webkit-scrollbar {width: 10px;}::-webkit-scrollbar-arrow-color{background: gray}.gist .blob-num::before {color: wheat;}.gist .blob-wrapper table {border-collapse:collapse;margin-bottom: 16px;}</style></body></html>'
+                'srcdoc': '<html><body><script src="' + inputText + '.js"></script><style type="text/css">.gist .gist-data {} .gist-file{border: 0px !important; padding-bottom: 16px} /** custom style: */.gist .gist-data {  background-color: #171717;  border-bottom: 1px solid #171717;  padding-bottom: 16px;}.gist .highlight {  color: wheat;  background: #171717;}.gist .gist-meta {  color: #171717;  background-color: #171717;}.gist .pl-pds, .gist .pl-s, .gist .pl-s .pl-pse .pl-s1, .gist .pl-sr, .gist .pl-sr .pl-cce, .gist .pl-sr .pl-sra, .gist .pl-sr .pl-sre {  color: #90a21f;}.gist .pl-c1, .gist .pl-s .pl-v {  color: #7ab8ff;}.gist .blob-code-inner {  color: white;}.gist .pl-s .pl-s1, .gist .pl-smi {  color: #ff7878;}html {background-color: #171717;scrollbar-width: thin;scrollbar-color:black#171717; }::-webkit-scrollbar-track {background: #171717; }::-webkit-scrollbar-thumb {background: #000; }::-webkit-scrollbar {width: 10px;}::-webkit-scrollbar-arrow-color{background: gray}.gist .blob-num::before {color: wheat;}.gist .blob-wrapper table {border-collapse:collapse;margin-bottom: 16px;}</style></body></html>'
             });
             iframe.css({
                 'display': 'block',
@@ -1605,7 +1604,7 @@ function submitEmbed(embedType){
                 'border-radius': '20px',
                 'box-shadow': '0px 0px 3px black'
             });
-            insertNewItem('g-iframe', {target: iframe});
+            insertNewItem('g-iframe', { target: iframe });
             break;
         case 'Image':
             const image = $('<img>');
@@ -1613,7 +1612,7 @@ function submitEmbed(embedType){
                 'src': inputText,
                 'frameborder': '0',
                 'allow': 'encrypted-media',
-                'allowfullscreen':''
+                'allowfullscreen': ''
             }).css({
                 //TODO TAKE HEIGHT WIDTH FROM MODAL
                 'max-width': '100%',
@@ -1622,7 +1621,7 @@ function submitEmbed(embedType){
                 'border-radius': '20px',
                 'box-shadow': '0px 0px 3px black'
             });
-            insertNewItem('image', {target: image});
+            insertNewItem('image', { target: image });
             break;
         default:
             break;
@@ -1638,13 +1637,13 @@ function resizeIframe(obj) {
 }
 
 //add html section to post body:
-function toolbarAddHtmlTool(){
+function toolbarAddHtmlTool() {
     const addHtmlContainer = $('<div>', {
         class: 'addHtmlContainer toolbar-tool',
         id: 'addHtmlContainer'
     }).html('<i class="fas fa-code toolIcon"></i>');
 
-    addHtmlContainer.click(()=>{
+    addHtmlContainer.click(() => {
         //create modal 
         addHtmlModal();
     })
@@ -1653,16 +1652,16 @@ function toolbarAddHtmlTool(){
 }
 
 //add html to post body modal:
-function addHtmlModal(){
+function addHtmlModal() {
     //check if the modal already opened;
-    if(htmlModalOpened){
+    if (htmlModalOpened) {
         $('#htmlModalContainer').remove();
         //toggle opened:
         htmlModalOpened = !htmlModalOpened;
         return;
     }
     //create the modal:
-    const modalContainer = $('<div>',{
+    const modalContainer = $('<div>', {
         class: 'htmlModalContainer',
         id: 'htmlModalContainer'
     });
@@ -1672,25 +1671,25 @@ function addHtmlModal(){
         id: 'htmlModalEditorArea'
     }).attr('contenteditable', 'true').attr('spellcheck', 'false').appendTo(modalContainer);
 
-    const btnsContainer = $('<div>',{
+    const btnsContainer = $('<div>', {
         class: 'htmlModalBtnsContainer',
         id: 'htmlModalBtnsContainer'
     }).appendTo(modalContainer)
 
-    const addBtn = $('<div>',{
+    const addBtn = $('<div>', {
         class: 'htmlModalAddBtn',
         id: 'htmlModalAddBtn'
-    }).appendTo(btnsContainer).html('Save').click(()=>{
+    }).appendTo(btnsContainer).html('Save').click(() => {
         saveHtmlToPostBody();
         $('#htmlModalContainer').remove();
         //toggle opened:
         htmlModalOpened = !htmlModalOpened;
     });
 
-    const cancelBtn = $('<div>',{
+    const cancelBtn = $('<div>', {
         class: 'htmlModalCancelBtn',
         id: 'htmlModalCancelBtn'
-    }).appendTo(btnsContainer).html('Cancel').click(()=>{
+    }).appendTo(btnsContainer).html('Cancel').click(() => {
         $('#htmlModalContainer').remove();
         //toggle opened:
         htmlModalOpened = !htmlModalOpened;
@@ -1707,9 +1706,9 @@ function addHtmlModal(){
 }
 
 //to add html from modal to post body
-function saveHtmlToPostBody(){
+function saveHtmlToPostBody() {
     const editor = $('#htmlModalEditorArea');
-    const newDivTarget = $('<div>',{
+    const newDivTarget = $('<div>', {
         class: 'newDivTarget'
     }).html(editor.text());
     const extraData = {
@@ -1721,7 +1720,7 @@ function saveHtmlToPostBody(){
 }
 
 //text align tool:
-function toolbarTextAlignTool(){
+function toolbarTextAlignTool() {
     const textAlignContainer = $('<div>', {
         class: 'textAlignContainer toolbar-tool',
         id: 'textAlignContainer'
@@ -1738,7 +1737,7 @@ function toolbarTextAlignTool(){
     const alignLeft = $('<div>', {
         class: 'textAlignTool textAlign-tool',
         id: 'textAlignLeftAlign'
-    }).html('<i class="fas fa-align-left toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+    }).html('<i class="fas fa-align-left toolIcon"></i>').appendTo(positionsContainer).click(() => {
         textAlign = 'left';
         onTextAlignToolClick();
     });
@@ -1746,7 +1745,7 @@ function toolbarTextAlignTool(){
     const alignCenter = $('<div>', {
         class: 'textAlignTool textAlign-tool',
         id: 'textAlignCenterAlign'
-    }).html('<i class="fas fa-align-center toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+    }).html('<i class="fas fa-align-center toolIcon"></i>').appendTo(positionsContainer).click(() => {
         textAlign = 'center';
         onTextAlignToolClick();
     });
@@ -1754,7 +1753,7 @@ function toolbarTextAlignTool(){
     const alignRight = $('<div>', {
         class: 'textAlignTool textAlign-tool',
         id: 'textAlignRightAlign'
-    }).html('<i class="fas fa-align-right toolIcon"></i>').appendTo(positionsContainer).click(()=>{
+    }).html('<i class="fas fa-align-right toolIcon"></i>').appendTo(positionsContainer).click(() => {
         textAlign = 'right';
         onTextAlignToolClick();
     });
@@ -1762,7 +1761,7 @@ function toolbarTextAlignTool(){
     //append to menu items 
     menuItems.push(positionsContainer);
     //open items menu on click:
-    textAlignContainer.click(()=>{
+    textAlignContainer.click(() => {
         customizeMenuInflater(menuItems, 'text-align');
     })
 
@@ -1770,17 +1769,17 @@ function toolbarTextAlignTool(){
 }
 
 //text align tools:
-function onTextAlignToolClick(){
-   //check if there is selected text
-   const selection = checkIfSelection();
+function onTextAlignToolClick() {
+    //check if there is selected text
+    const selection = checkIfSelection();
 
-   if (selection.isSelected) {
-       //there is selected text
-       updateSelection(selection.selection, 'text-align');
-   } else {
-       //insert new item to post body
-       insertNewItem('div');
-   } 
+    if (selection.isSelected) {
+        //there is selected text
+        updateSelection(selection.selection, 'text-align');
+    } else {
+        //insert new item to post body
+        insertNewItem('div');
+    }
 }
 
 //unordered list:
@@ -1970,14 +1969,14 @@ function docSaver() {
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
         //send save copy to php:
-        $.post('./add.php', getDocSaverData(), (res)=>{
+        $.post('./add.php', getDocSaverData(), (res) => {
             //alert post saved
         }, 'json')
     }, 1000);
 }
 
 //to get doc saver method post data:
-function getDocSaverData(){
+function getDocSaverData() {
     const postBody = $('#postBody');
     const title = $('#postTitle').text();
     const des = $('#postDes').text();
@@ -1995,7 +1994,7 @@ function getDocSaverData(){
         category: category,
         img: img
     }
-    
+
     return data;
 }
 
@@ -2131,7 +2130,7 @@ function toolbarFontColorTool() {
                 fontColor = element.css('background-color');
                 onFontColorIconClick();
             });
-            element.hover((e) =>{
+            element.hover((e) => {
                 onColorPlatteHover(e, element.css('background-color'));
             });
         }
@@ -2179,7 +2178,7 @@ function toolbarBackgroundColorTool() {
                 backgroundColor = element.css('background-color');
                 onBackGroundColorIconClick();
             });
-            element.hover((e) =>{
+            element.hover((e) => {
                 onColorPlatteHover(e, element.css('background-color'));
             })
         }
@@ -2197,30 +2196,30 @@ function toolbarBackgroundColorTool() {
 }
 
 //on color platte hover : 
-function onColorPlatteHover(e, color){
+function onColorPlatteHover(e, color) {
     //clean old color overview if founded:
-    if($('#colorOverview').html()){
+    if ($('#colorOverview').html()) {
         $('#colorOverview').remove();
     }
 
     //get mouse position:
     const x = e.clientX - 70;
     const y = e.clientY;
-    
+
     //create color element:
     const container = $('<div>', {
         class: 'colorOverview',
         id: 'colorOverview'
     }).appendTo($('body')).css('background-color', color).html('.');
-    container.css('left', x+'px');
-    container.css('top', y+'px');
+    container.css('left', x + 'px');
+    container.css('top', y + 'px');
     container.css('position', 'fixed');
-    container.css({'width': '70px', 'height': '70px', 'border-radius': '15px'})
-    container.hover(()=>{
+    container.css({ 'width': '70px', 'height': '70px', 'border-radius': '15px' })
+    container.hover(() => {
         container.remove();
     })
 
-    setTimeout(()=>{
+    setTimeout(() => {
         container.remove();
     }, 1000)
 
@@ -2659,7 +2658,7 @@ function customizeMenuInflater(items, menuType) {
     });
     openedCustomizeMenuType = menuType;
     customizeMenuInflaterOpened = true;
-    
+
     //set toolbar menu position:
     setTbmPosition();
 }
@@ -2716,13 +2715,13 @@ function onLongPress(element) {
 }
 
 //get x position for tool bar:
-function getToolbarXPosition(e, element){
+function getToolbarXPosition(e, element) {
     var x; // present element left position
     var saveX = 5 // to be sure the cursor is in the element
-    const viewPortWidth = $( window ).width();
+    const viewPortWidth = $(window).width();
 
     //check if the -x out the page
-    if(e.clientX < 70){
+    if (e.clientX < 70) {
         x = 0;
         //apply pinned to left class
         element.addClass('leftTB')
@@ -2730,10 +2729,10 @@ function getToolbarXPosition(e, element){
         toolbarOnLeft = true;
         toolbarOnRight = false;
         //check if the tool bar hidden and add hidden class
-        if(!toolbarOpened){
+        if (!toolbarOpened) {
             element.addClass('hiddenTbLeft');
             element.removeClass('hiddenTbRight');
-        }else{
+        } else {
             element.removeClass('hiddenTbRight');
             element.removeClass('hiddenTbLeft');
         }
@@ -2741,17 +2740,17 @@ function getToolbarXPosition(e, element){
     }
 
     //check if the +x out page:
-    if(e.clientX > viewPortWidth - 70){
-        x = viewPortWidth - getTbWidth(element) ;
+    if (e.clientX > viewPortWidth - 70) {
+        x = viewPortWidth - getTbWidth(element);
         element.addClass('rightTB')
         element.removeClass('floatTB')
         toolbarOnRight = true;
         toolbarOnLeft = false;
         //check if the tool bar hidden and add hidden class
-        if(!toolbarOpened){
+        if (!toolbarOpened) {
             element.addClass('hiddenTbRight');
             element.removeClass('hiddenTbLeft');
-        }else{
+        } else {
             element.removeClass('hiddenTbRight');
             element.removeClass('hiddenTbLeft');
         }
@@ -2770,21 +2769,21 @@ function getToolbarXPosition(e, element){
     toolbarOnLeft = false;
     toolbarOnRight = false;
 
-    return x ;
+    return x;
 }
 
 //to get tool bar width:
-function getTbWidth(element){
+function getTbWidth(element) {
     element = element.get(0);
     var scrollBarWidth = element.offsetWidth - element.clientWidth;
     // 70 == element width in css right tool bar
-    const width  = 70 + scrollBarWidth;
-    
+    const width = 70 + scrollBarWidth;
+
     return width;
 }
 
 //get y position for toolbar:
-function getToolbarYPosition(e, element){
+function getToolbarYPosition(e, element) {
     var y = e.clientY - 15
     return y;
 }
@@ -2924,13 +2923,13 @@ function cursorAtEndElement(element, translate = 0) {
     //get element text
     var innerText = element.get(0).innerText;
     //check if the element is text element:
-    if(!innerText){
+    if (!innerText) {
         innerText = element.get(0).textContent;
     }
     //get element text range:
     const length = innerText.length;
     //check if the element has text first child or not 
-    if(element.get(0).firstChild){
+    if (element.get(0).firstChild) {
         element = element.get(0).firstChild;
         element = $(element);
     }
@@ -2993,7 +2992,7 @@ function getStyleCssProp(item) {
     }
 
     //set div style:
-    if(item == 'div'){
+    if (item == 'div') {
         cssProp['text-align'] = textAlign;
     }
 
