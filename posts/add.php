@@ -63,7 +63,10 @@ if(isset($_POST['savePostCopy'])){
         'title'=> $_POST['title'],
         'body'=> $_POST['body'],
         'des'=> $_POST['des'],
-        'docHistory' => $_POST['docHistory']
+        'docHistory' => $_POST['docHistory'],
+        'tags' => $_POST['tags'],
+        'category' => $_POST['category'],
+        'img' => $_POST['img']
     );
 
     //save post to session:

@@ -17,13 +17,10 @@ getUserInfo((userInfo) => {
             //create main page:
             createPage(userInfo, data.categories, data.tags, undefined)
         }
+        docSaver();
     })
     
 });
-
-/**
- * TODO : save tags category img to php session
- */
 
 //post body editor vars:
 var fontColor = '#000000';
@@ -51,6 +48,8 @@ var alreadyChangesSaved = false;
 var redoArray = new Array();
 var redoCurrentPosition = 0;
 var isPostCopy = false;
+//saved category from post copy:
+var savedCat;
 //cursor vars:
 var lastSelection;
 //html modal:
@@ -58,8 +57,12 @@ var htmlModalOpened = false;
 //embed modal:
 var embedModalOpened = false;
 //post tags:
+//content post tags names array
 var postTagsArr = new Array();
+//tags search box array
 var lastTagsSearch = new Array();
+//post tags array
+var tagsArray = new Array();
 //toolbar vars:
 var toolbarOpened = true;
 var toolbarOnRight = true;
@@ -91,7 +94,11 @@ const createPage = (userInfo, categories, tags, postC) => {
     if(postC){
         isPostCopy = true;
         //set the doc history array: //TODO FIX UNDO REDO ISSUE REBUILD SYSTEM
-        docHistory = postC.docHistory;
+        if(postC.docHistory != undefined){
+            docHistory = postC.docHistory;
+        }
+        //check if there is saved category:
+        savedCat = postC.category;
     }
     //page
     const page = $('#pageContainer');
@@ -112,6 +119,13 @@ const createPage = (userInfo, categories, tags, postC) => {
     extractHeadersLinks();
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
+    //check if there is tags history:
+    const ts = JSON.parse(postC.tags);
+    if(ts.length > 0){
+        ts.forEach((t)=>{
+            addTag(t, false);
+        })
+    }
 }
 
 //resize right toolbar:
@@ -322,6 +336,22 @@ function createPostImage(postC){
         });
         })
     });
+
+    //check if the post copy has img:
+    if(postC.img != ''){
+        iconContainer.hide('fast');
+        imgHolder.attr('src', postC.img).show('fast');
+        postImgContainer.prepend(removeImgIconContainer).click(()=>{
+            //remove post img from img
+            $('#postImg').attr('src', null);
+            //remove remove icon 
+            removeImgIconContainer.remove();
+            //remove img container:
+            $('#postImg').hide('fast');
+            //show choose img icon container:
+            iconContainer.show('fast');
+        });
+    }
 
     return postImgContainer;
 }
@@ -999,8 +1029,10 @@ function getTagsSuggests(word){
 
 //add tag by search:
 function addTag(tag, bySearch){
-    //add the tag to post tags array: 
+    //add the tag to post tags names array: 
     postTagsArr.push(tag.name);
+    //add tag to tags array:
+    tagsArray.push(tag);
     //add tag to post tags container:
     const container = $('#postTagsContainer');
     //create tag container
@@ -1013,6 +1045,10 @@ function addTag(tag, bySearch){
         postTagsArr = postTagsArr.filter((t)=>{
             return t != tag.name
         });
+        //remove tag from post tags array
+        tagsArray = tagsArray.filter((t)=>{
+            return t.name != tag.name;
+        })
     });
     //tag icon : 
     const icon = $('<div>', {
@@ -1052,6 +1088,10 @@ function extractCategories(categories, nested = false, parentContainer){
                 class: 'categoryRadio',
                 id: 'categoryRadio'+category._id
             }).appendTo(categoryContainer);
+            //check if the category is saved in the post copy:
+            if(category._id == savedCat){
+                categoryRadio.prop('checked', true);
+            }
             //category label
             const label = $('<span>').html(category.title+'<br>');
             categoryContainer.append(label);
@@ -1113,6 +1153,16 @@ function extractNestedCategories(_category, categoryContainer){
                 nestedCatContainer.toggle('fast');
             });
             extractNestedCategories(category, nestedCatContainer);
+        }
+        //check if the category is saved in the post copy:
+        var tempParent = categoryContainer.get(0);
+        if(category._id == savedCat){
+            categoryRadio.prop('checked', true);
+            //show the top categories containers :
+            while(tempParent.classList.contains('nestedCatContainer')){
+                $(tempParent).show();
+                tempParent = tempParent.parentNode;
+            }
         }
     });
 }
@@ -1317,7 +1367,6 @@ function createToolbar() {
 //set toolbar menu position:
 function setTbmPosition(){
     if($(window).width() > 800){
-        console.log('done')
         //on large screen :
         tbmPositionOnLarge();
     }else{
@@ -1333,8 +1382,8 @@ function tbmPositionOnLarge(){
     const nMenu = $('#customizeMenu');
      
     //get the toolbar position
-    const bLeft = bar.offset().left;
-    const bTop = bar.offset().top;
+    const bLeft =  parseFloat(bar.css('left'));
+    const bTop = parseFloat(bar.css('top'));
     //on left of the toolbar
     if(toolbarOnRight){
         //set menu position:
@@ -1920,14 +1969,34 @@ function docSaver() {
         docHistory.push({ position: historyPosition++, change: change });
         alreadyChangesSaved = true;
         $('#toolbarSaveDocTool').addClass('changesSaved').removeClass('rotate');
-        //get post title description:
-        title = $('#postTitle').text();
-        des = $('#postDes').text();
         //send save copy to php:
-        $.post('./add.php', {savePostCopy: true, title: title, des: des, body: postBody.html(), docHistory: docHistory}, (res)=>{
+        $.post('./add.php', getDocSaverData(), (res)=>{
             //alert post saved
         }, 'json')
     }, 1000);
+}
+
+//to get doc saver method post data:
+function getDocSaverData(){
+    const postBody = $('#postBody');
+    const title = $('#postTitle').text();
+    const des = $('#postDes').text();
+    const category = $("input[name='category']:checked").val();
+    const tags = JSON.stringify(tagsArray);
+    const img = $('#postImg').attr('src') ? $('#postImg').attr('src') : '';
+
+    const data = {
+        savePostCopy: true,
+        title: title,
+        des: des,
+        body: postBody.html(),
+        docHistory: docHistory,
+        tags: tags,
+        category: category,
+        img: img
+    }
+    
+    return data;
 }
 
 //toolbar italic tool:
@@ -2653,7 +2722,7 @@ function getToolbarXPosition(e, element){
     const viewPortWidth = $( window ).width();
 
     //check if the -x out the page
-    if(e.pageX < 70){
+    if(e.clientX < 70){
         x = 0;
         //apply pinned to left class
         element.addClass('leftTB')
@@ -2672,7 +2741,7 @@ function getToolbarXPosition(e, element){
     }
 
     //check if the +x out page:
-    if(e.pageX > viewPortWidth - 70){
+    if(e.clientX > viewPortWidth - 70){
         x = viewPortWidth - getTbWidth(element) ;
         element.addClass('rightTB')
         element.removeClass('floatTB')
@@ -2690,7 +2759,7 @@ function getToolbarXPosition(e, element){
     }
 
     // x is on the page 
-    x = e.pageX - saveX;
+    x = e.clientX - saveX;
     //remove classes right left
     element.removeClass('rightTB')
     element.removeClass('leftTB')
@@ -2716,7 +2785,7 @@ function getTbWidth(element){
 
 //get y position for toolbar:
 function getToolbarYPosition(e, element){
-    var y = e.pageY - 15
+    var y = e.clientY - 15
     return y;
 }
 
