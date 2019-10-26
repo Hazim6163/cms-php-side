@@ -91,7 +91,7 @@ if(isset($_POST['getData'])){
     //merge all data:
     //we need to convert the json data inside the array to php data because we need to encode the hole array letter 
     $data = array(
-        "categories" => json_decode( $categories),
+        "categories" => json_decode($categories)->request,
         "tags" => json_decode($tags),
         "postCopy" => json_decode($postCopy)
     );

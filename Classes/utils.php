@@ -139,7 +139,7 @@ class Utils{
 
     //get categories:
     public static function getCategories(){
-        $url = 'http://localhost:3000/categories';
+        $url = 'http://localhost:3000/categories/nested';
         $res = Utils::getRequest($url);
         return $res;
     }

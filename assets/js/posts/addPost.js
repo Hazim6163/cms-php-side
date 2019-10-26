@@ -1067,16 +1067,12 @@ function addTag(tag, bySearch) {
 }
 
 //extract categories and nested categories:
-function extractCategories(categories, nested = false, parentContainer) {
-    //check if nested: 
-    if (nested) {
-        parentContainer.append(extractCategories(categories));
-        return;
-    }
+function extractCategories(categories) {
     const categoriesGroupContainer = $('<div>', {
         class: 'categoriesGroupContainer'
     });
-    categories.forEach((category) => {
+    categories.forEach((data) => {
+        category = data.category
         //filter root categories
         if (!category.parentId) {
             //create category container
@@ -1096,8 +1092,8 @@ function extractCategories(categories, nested = false, parentContainer) {
             //category label
             const label = $('<span>').html(category.title + '<br>');
             categoryContainer.append(label);
-            //check if the category has nested categories:
-            if (category.nestedCategories.length > 0) {
+            // check if the category has nested categories:
+            if (data.nestedCats.length > 0) {
                 // edit label
                 label.html(category.title);
                 // create dropdown;
@@ -1113,8 +1109,7 @@ function extractCategories(categories, nested = false, parentContainer) {
                 dropDown.click(() => {
                     nestedCatContainer.toggle('fast');
                 });
-                //extract nested categories:
-                extractNestedCategories(category, nestedCatContainer);
+                extractNestedCategories(data.nestedCats, nestedCatContainer, categories);
             }
         }
 
@@ -1124,8 +1119,8 @@ function extractCategories(categories, nested = false, parentContainer) {
 }
 
 //extract nested categories:
-function extractNestedCategories(_category, categoryContainer) {
-    _category.nestedCategories.forEach((category) => {
+function extractNestedCategories(nested, categoryContainer, categories) {
+    nested.forEach((category) => {
         const container = $('<div>', {
             class: 'categoryContainer',
             id: 'categoryContainer' + category._id
@@ -1137,7 +1132,18 @@ function extractNestedCategories(_category, categoryContainer) {
         const label = $('<span>').html(category.title + '<br>');
         container.append(label);
         categoryContainer.append(container);
-        if (category.nestedCategories.length > 0) {
+        //extract the nested categories:
+        console.log(category)
+        var nestedCats = categories.filter((c)=>{
+            return c.category.parentId == category._id
+        })
+        //get cats array:
+        var temp = new Array();
+        nestedCats.forEach((c)=>{
+            temp.push(c.category)
+        });
+        nestedCats = temp ; 
+        if (nestedCats.length > 0) {
             // edit label
             label.html(category.title);
             // create dropdown;
@@ -1153,7 +1159,7 @@ function extractNestedCategories(_category, categoryContainer) {
             dropDown.click(() => {
                 nestedCatContainer.toggle('fast');
             });
-            extractNestedCategories(category, nestedCatContainer);
+            extractNestedCategories(nestedCats, nestedCatContainer, categories);
         }
         //check if the category is saved in the post copy:
         var tempParent = categoryContainer.get(0);
