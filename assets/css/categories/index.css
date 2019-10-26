@@ -1,0 +1,12 @@
+* {
+    margin: 0px;
+}
+
+.pageWrapper {
+    min-height: 77vh;
+}
+
+.pageContainer {
+    width: 100%;
+    padding-top: 82px;
+}

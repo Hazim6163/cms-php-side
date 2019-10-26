@@ -1,5 +1,11 @@
 <?php
 
+//check logged in users:
+$loggedIn = false;
+session_start();
+if(isset($_SESSION['token'])){
+    $loggedIn = true;
+}
 
 ?>
 
@@ -11,6 +17,7 @@
                 <div id="navigateMenuLinkHome" class="nav-link">Home</div>
                 <div id="navigateMenuLinkCategories" class="nav-link">Categories</div>
             </div>
+            <?php if($loggedIn) {?>
             <div class="userMenu">
                 <div class="toggleNavigateMenu" id="toggleSideNavigateMenu">
                     <i class="fas fa-bars"></i>
@@ -33,9 +40,8 @@
                         </i>
                     </div>
                 </div>
-
-
             </div>
+            <?php } ?>
 
         </div>
     </div>
