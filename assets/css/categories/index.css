@@ -9,4 +9,60 @@
 .pageContainer {
     width: 100%;
     padding-top: 82px;
+    color: #2b2b2b;
+}
+
+/* all screens basic rules and screen > 800 || screen < 1200 rules */
+#rootCatContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.catContainer {
+    box-shadow: 0px 0px 5px gray;
+    border-radius: 15px;
+    width: 300px;
+    margin: 24px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.catImg {
+    border-radius: 15px 15px 0px 0px;
+}
+
+.catInfo {
+    padding: 16px;
+}
+
+.catTitle {
+    font-size: 1.3rem;
+    margin: 8px auto;
+}
+
+.catDes {
+    margin: 8px auto;
+    color: #484848;
+}
+
+.catPostsCount {
+    margin: 16px 0px 0px 0px;
+    font-size: .9rem;
+    color: #484848;
+}
+
+/* extra large screens */
+@media only screen and (min-width: 1250px) {
+
+}
+
+/* medium screens */
+@media only screen and (max-width: 800px) {
+
+}
+
+/* small screens */
+@media only screen and (max-width: 430px) {
+
 }
