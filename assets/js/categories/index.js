@@ -32,6 +32,9 @@ function inflatePage(data, userInfo) {
 function inflateRPage(data, userInfo) {
     const pageContainer = $('#pageContainer');
 
+    const bodyNav = htmlE({ type: 'div', class: 'bodyNav', container: pageContainer, id: 'bodyNav' });
+    getBodyNav(data);
+
     const wrapper = $('<div>', {
         class: 'rootCatWrapper',
         id: 'rootCatWrapper'
@@ -59,12 +62,12 @@ function appendRCatC(categories, container) {
     categories.forEach(category => {
         //create category container
         const catContainer = htmlE({
-            type: 'div', classes: 'catContainer', id: category._id, container: container, onClick: catClick, params: [category]
+            type: 'div', class: 'catContainer', id: category._id, container: container, onClick: catClick, params: [category]
         });
         //category img container
         if (category.imgUrl) {
             const CatImg = htmlE({
-                type: 'div', classes: 'catImgContainer', container: 'catContainer'
+                type: 'div', class: 'catImgContainer', container: 'catContainer'
             });
             catContainer.append(CatImg);
             //create category img:
@@ -72,7 +75,7 @@ function appendRCatC(categories, container) {
         }
         //category info container behind the img container
         const catInfo = htmlE({
-            type: 'div', classes: 'catInfo', container: catContainer
+            type: 'div', class: 'catInfo', container: catContainer
         });
         catContainer.append(catInfo);
         //create category title:
@@ -89,7 +92,7 @@ function appendRCatC(categories, container) {
 function createCatTitle(cat, container) {
     const data = {
         type: 'div',
-        classes: 'catTitle',
+        class: 'catTitle',
         container: container,
         html: cat.title
     };
@@ -102,7 +105,7 @@ function createCatTitle(cat, container) {
 function createCatImg(cat, container) {
     const data = {
         type: 'img',
-        classes: 'catImg',
+        class: 'catImg',
         container: container
     };
     const img = htmlE(data);
@@ -117,7 +120,7 @@ function createCatImg(cat, container) {
 function createCatDes(cat, container) {
     const data = {
         type: 'div',
-        classes: 'catDes',
+        class: 'catDes',
         container: container,
         html: cat.des
     };
@@ -130,7 +133,7 @@ function createCatDes(cat, container) {
 function createCatPostsCount(cat, container) {
     const data = {
         type: 'div',
-        classes: 'catPostsCount',
+        class: 'catPostsCount',
         container: container,
         html: 'Posts Count : ' + cat.postsCount
     };
@@ -142,8 +145,8 @@ function createCatPostsCount(cat, container) {
 function htmlE(data) {
     const e = $('<' + data.type + '>')
 
-    if (data.classes) {
-        e.addClass(data.classes);
+    if (data.class) {
+        e.addClass(data.class);
     }
 
     if (data.id) {
@@ -175,4 +178,38 @@ function htmlE(data) {
 function catClick(params) {
     const cat = params[0];
     console.log(cat._id)
+}
+
+//get body nav:
+function getBodyNav(data) {
+    if (!data.isSingleCat) {
+        createRCatsNav();
+    } else {
+        //createCatNav(data);
+    }
+}
+
+//create root categories nav:
+function createRCatsNav() {
+    const nav = $('#bodyNav');
+
+    //slash:
+    const slash = htmlE({ type: 'div', class: 'body-nav-slash', text: '/' });
+
+    //home nav:
+    const homeNav = htmlE({
+        type: 'div',
+        class: 'body-nav-link',
+        text: 'Home',
+        container: nav,
+        onClick: () => {
+            window.location.href = '../index.php';
+        }
+    });
+
+    //append slash:
+    nav.append(slash.clone(true));
+
+    //categories nav:
+    htmlE({ type: 'div', class: 'body-nav-link ', text: 'Categories', container: nav });
 }
