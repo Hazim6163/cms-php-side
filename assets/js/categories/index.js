@@ -177,7 +177,7 @@ function htmlE(data) {
 //on category click
 function catClick(params) {
     const cat = params[0];
-    console.log(cat._id)
+    window.location.href = 'http://localhost/html/CMS/categories/categories.php?id=' + cat._id;
 }
 
 //get body nav:
@@ -185,7 +185,7 @@ function getBodyNav(data) {
     if (!data.isSingleCat) {
         createRCatsNav();
     } else {
-        //createCatNav(data);
+        createCatNav(data);
     }
 }
 
@@ -212,4 +212,104 @@ function createRCatsNav() {
 
     //categories nav:
     htmlE({ type: 'div', class: 'body-nav-link ', text: 'Categories', container: nav });
+}
+
+//inflate category page:
+function inflateCPage(data, userInfo) {
+    document.title = data.cat.title;
+    const pageContainer = $('#pageContainer');
+
+    const bodyNav = htmlE({ type: 'div', class: 'bodyNav', container: pageContainer, id: 'bodyNav' });
+    getBodyNav(data);
+
+    const wrapper = $('<div>', {
+        class: 'nestedCatsWrapper',
+        id: 'nestedCatsWrapper'
+    }).appendTo(pageContainer);
+
+    //append nested categories to wrapper:
+    appendNCW(data).appendTo(wrapper);
+}
+
+//append nested cats to wrapper:
+function appendNCW(data) {
+    const container = $('<div>', {
+        class: 'nestedCContainer categoriesContainer',
+        id: 'nestedCContainer'
+    });
+
+    //append nested categories to nested categories container
+    appendRCatC(data.nested, container);
+
+    return container;
+}
+
+//category page nav:
+function createCatNav(data) {
+    //get parents array:
+    const parents = data.parents;
+    //get body nav:
+    const nav = $('#bodyNav');
+    //slash:
+    const slash = htmlE({ type: 'div', class: 'body-nav-slash', text: '/' });
+    //home nav:
+    const homeNav = htmlE({
+        type: 'div',
+        class: 'body-nav-link',
+        text: 'Home',
+        container: nav,
+        onClick: () => {
+            window.location.href = '../index.php';
+        }
+    });
+    //categories nav:
+    nav.append(slash.clone(true));
+    nav.append(htmlE({
+        type: 'div',
+        class: 'body-nav-link ',
+        text: 'Categories',
+        onClick: () => {
+            window.location.href = './categories.php'
+        }
+    }));
+    //check if the category has parents:
+    if (!parents) {
+        //category nav: 
+        nav.append(slash.clone(true));
+        nav.append(htmlE({
+            type: 'div',
+            class: 'body-nav-link ',
+            text: data.cat.title,
+            onClick: () => {
+                window.location.href = './categories.php?id=' + data.cat._id
+            }
+        }));
+        return;
+    }
+    //loop throw parents:
+    for (let i = parents.length - 1; i >= 0; i--) {
+        const parent = parents[i];
+        //append slash:
+        nav.append(slash.clone(true));
+        //append parent:
+        nav.append(htmlE({
+            type: 'div',
+            class: 'body-nav-link ',
+            text: parent.title,
+            onClick: () => {
+                window.location.href = './categories.php?id=' + parent._id
+            }
+        }))
+    }
+
+    //category nav: 
+    nav.append(slash.clone(true));
+    nav.append(htmlE({
+        type: 'div',
+        class: 'body-nav-link ',
+        text: data.cat.title,
+        onClick: () => {
+            window.location.href = './categories.php?id=' + data.cat._id
+        }
+    }));
 }

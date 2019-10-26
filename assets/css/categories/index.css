@@ -78,6 +78,22 @@
 
 /* end body nav */
 
+/* nested categories */
+.nestedCContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.non-select {
+    /* non select */
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
 /* extra large screens */
 @media only screen and (min-width: 1250px) {}
 

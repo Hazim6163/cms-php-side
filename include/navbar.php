@@ -14,7 +14,7 @@
             <a href="http://localhost/html/CMS/index.php">Home</a>
         </li>
         <li class="menuLink">
-            <a href="">Categories</a>
+            <a href="./categories/categories.php">Categories</a>
         </li>
         <?php if(isset($_SESSION['token'])){ ?>
         <li class="menuLink">

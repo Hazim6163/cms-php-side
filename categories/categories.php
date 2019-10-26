@@ -25,9 +25,14 @@ if(isset($_POST['getData'])){
         //data array
         $data = array(
             'isSingleCat' => $isSingleCat,
-            'cat' => $cat,
-            'catPosts' => $catPosts
+            'cat' => $cat->category,
         );
+        if(isset($cat->nestedCats)){
+            $data['nested'] = $cat->nestedCats;
+        }
+        if(isset($cat->parents)){
+            $data['parents'] = $cat->parents;
+        }
         $data = json_encode($data);
         echo($data);
         return;
