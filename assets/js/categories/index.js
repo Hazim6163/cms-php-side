@@ -15,24 +15,24 @@ getUserInfo((userInfo) => {
 
 //get data:
 function getData(catId, nextFun) {
-    $.post('./categories.php', { getData: true, id: catId}, (data) => {
+    $.post('./categories.php', { getData: true, id: catId }, (data) => {
         nextFun(data);
     }, 'json')
 }
 
 //function will call after the document is ready:
-function documentReadyAndThen(){}
+function documentReadyAndThen() { }
 
 //inflate page:
-function inflatePage(data, userInfo){
+function inflatePage(data, userInfo) {
     data.isSingleCat ? inflateCPage(data, userInfo) : inflateRPage(data, userInfo);
 }
 
 //inflate root categories page:
-function inflateRPage(data, userInfo){
+function inflateRPage(data, userInfo) {
     const pageContainer = $('#pageContainer');
 
-    const wrapper = $('<div>',{
+    const wrapper = $('<div>', {
         class: 'rootCatWrapper',
         id: 'rootCatWrapper'
     }).appendTo(pageContainer);
@@ -42,8 +42,8 @@ function inflateRPage(data, userInfo){
 }
 
 //append root categories to root categories wrapper:
-function appendRCatsW(data){
-    const container = $('<div>',{
+function appendRCatsW(data) {
+    const container = $('<div>', {
         class: 'rootCatContainer',
         id: 'rootCatContainer'
     });
@@ -55,14 +55,14 @@ function appendRCatsW(data){
 }
 
 //append root categories to root categories container.
-function appendRCatC(categories, container){
+function appendRCatC(categories, container) {
     categories.forEach(category => {
         //create category container
         const catContainer = htmlE({
             type: 'div', classes: 'catContainer', id: category._id, container: container, onClick: catClick, params: [category]
         });
         //category img container
-        if(category.imgUrl){
+        if (category.imgUrl) {
             const CatImg = htmlE({
                 type: 'div', classes: 'catImgContainer', container: 'catContainer'
             });
@@ -86,8 +86,8 @@ function appendRCatC(categories, container){
 
 //create category title:
 /// container : to append to
-function createCatTitle(cat, container){
-    const data ={
+function createCatTitle(cat, container) {
+    const data = {
         type: 'div',
         classes: 'catTitle',
         container: container,
@@ -99,8 +99,8 @@ function createCatTitle(cat, container){
 
 //create category img:
 /// container : to append to
-function createCatImg(cat, container){
-    const data ={
+function createCatImg(cat, container) {
+    const data = {
         type: 'img',
         classes: 'catImg',
         container: container
@@ -114,8 +114,8 @@ function createCatImg(cat, container){
 
 //create category des:
 /// container : to append to
-function createCatDes(cat, container){
-    const data ={
+function createCatDes(cat, container) {
+    const data = {
         type: 'div',
         classes: 'catDes',
         container: container,
@@ -127,8 +127,8 @@ function createCatDes(cat, container){
 
 //create category posts count:
 /// container : to append to
-function createCatPostsCount(cat, container){
-    const data ={
+function createCatPostsCount(cat, container) {
+    const data = {
         type: 'div',
         classes: 'catPostsCount',
         container: container,
@@ -139,31 +139,31 @@ function createCatPostsCount(cat, container){
 }
 
 //create html element:
-function htmlE(data){
-    const e = $('<'+ data.type +'>')
+function htmlE(data) {
+    const e = $('<' + data.type + '>')
 
-    if(data.classes){
+    if (data.classes) {
         e.addClass(data.classes);
     }
-    
-    if(data.id){
+
+    if (data.id) {
         e.attr('id', data.id);
     }
 
-    if(data.html){
+    if (data.html) {
         e.html(data.html);
     }
 
-    if(data.text){
+    if (data.text) {
         e.text(data.text);
     }
 
-    if(data.container){
+    if (data.container) {
         e.appendTo(data.container);
     }
 
-    if(data.onClick){
-        e.click(()=>{
+    if (data.onClick) {
+        e.click(() => {
             data.onClick(data.params)
         });
     }
@@ -172,7 +172,7 @@ function htmlE(data){
 }
 
 //on category click
-function catClick(params){
+function catClick(params) {
     const cat = params[0];
     console.log(cat._id)
 }

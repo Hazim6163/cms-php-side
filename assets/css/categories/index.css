@@ -53,16 +53,10 @@
 }
 
 /* extra large screens */
-@media only screen and (min-width: 1250px) {
-
-}
+@media only screen and (min-width: 1250px) {}
 
 /* medium screens */
-@media only screen and (max-width: 800px) {
-
-}
+@media only screen and (max-width: 800px) {}
 
 /* small screens */
-@media only screen and (max-width: 430px) {
-
-}
+@media only screen and (max-width: 430px) {}
