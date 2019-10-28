@@ -889,6 +889,6 @@
 /* small screens */
 @media only screen and (max-width: 430px) {
     #postsContainer {
-         margin: 0px;
+        margin: 0px;
     }
 }

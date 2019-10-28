@@ -12,9 +12,9 @@ var userLoggedIn = false;
 var userInfo;
 //get page data
 getUserInfo((_userInfo) => {
-    if(_userInfo.loggedIn == false){
-        
-    }else{
+    if (_userInfo.loggedIn == false) {
+
+    } else {
         userLoggedIn = true;
         userInfo = _userInfo;
         console.log(userInfo)
@@ -256,10 +256,10 @@ function inflateCPage(data, userInfo) {
     //append nested categories to wrapper:
     appendNCW(data).appendTo(wrapper);
 
-    htmlE({type: 'div', class: 'postsWrapper', id: 'postsWrapper'}).appendTo(pageContainer);
+    htmlE({ type: 'div', class: 'postsWrapper', id: 'postsWrapper' }).appendTo(pageContainer);
     //append posts to posts wrapper
     appendPToPWrapper(data)
-    
+
 }
 
 //append nested cats to wrapper:
@@ -346,9 +346,9 @@ function createCatNav(data) {
 }
 
 //append the posts to posts wrapper:
-function appendPToPWrapper(data){
+function appendPToPWrapper(data) {
     //return if not posts
-    if(!data.posts){
+    if (!data.posts) {
         return;
     }
     //posts array : 
@@ -356,9 +356,9 @@ function appendPToPWrapper(data){
     //posts wrapper: 
     const wrapper = $('#postsWrapper');
     //posts container : 
-    const postsContainer = htmlE({type: 'div', class: 'postsContainer', id: 'postsContainer'});
+    const postsContainer = htmlE({ type: 'div', class: 'postsContainer', id: 'postsContainer' });
     wrapper.append(postsContainer);
-    
+
     logObj('data', data);
     logObj('posts', posts);
     posts.forEach((post) => {
@@ -367,7 +367,7 @@ function appendPToPWrapper(data){
 }
 
 //log obj
-function logObj(msg, obj){
+function logObj(msg, obj) {
     console.log('*************************************')
     console.log(msg);
     console.log('++++++++++++++++++++++++++++++++')
@@ -714,7 +714,7 @@ function getCommentHeader(comment) {
     }
 
     //check if the current user is the comment author:
-    if(comment.authorInfo.id != userInfo.id && userInfo.admin != 1){
+    if (comment.authorInfo.id != userInfo.id && userInfo.admin != 1) {
         return commentHeader;
     }
     //create comment author edit icon:
