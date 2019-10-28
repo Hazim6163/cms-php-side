@@ -1818,7 +1818,7 @@ function extractNestedCategories(_category, categoryContainer) {
     });
 }
 
-//category modal content after categories:
+//category modal content after categories tree:
 function getCMCAfterCategories(){
     const wrapper = $('<div>',{
         class: 'inputSectionWrapper',

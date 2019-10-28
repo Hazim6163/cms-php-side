@@ -33,6 +33,9 @@ if(isset($_POST['getData'])){
         if(isset($cat->parents)){
             $data['parents'] = $cat->parents;
         }
+        if($catPosts){
+            $data['posts'] = $catPosts;
+        }
         $data = json_encode($data);
         echo($data);
         return;

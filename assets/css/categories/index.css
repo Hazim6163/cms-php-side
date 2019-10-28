@@ -79,7 +79,7 @@
 /* end body nav */
 
 /* nested categories */
-.nestedCContainer{
+.nestedCContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -94,6 +94,792 @@
     user-select: none;
 }
 
+/* post style */
+#postsWrapper {
+    padding: 48px 0px;
+}
+
+#postsContainer {
+    margin: 48px;
+}
+
+.post {
+    box-sizing: border-box;
+    padding: 16px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: #ececec78;
+    border-radius: 15px;
+    margin: 16px;
+    box-shadow: 0px 0px 2px gray;
+}
+
+.postHeader {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.authorImg {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.userIcon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.authorImgContainer {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: black;
+}
+
+.headerContent {
+    padding-left: 8px;
+}
+
+.authorName {
+    font-size: 17px;
+}
+
+.postDate,
+.commentDate,
+.replayDate {
+    font-size: .7rem;
+    margin-top: .5em;
+    margin-bottom: auto;
+    color: #646464;
+}
+
+/*remove the margin from  the post date*/
+.postDate {
+    margin-top: 0px;
+}
+
+.postBody {
+    margin-top: 8px;
+    display: flex;
+    margin-left: 60px;
+}
+
+.postImg {
+    width: 80px;
+    height: 80px;
+}
+
+.postContent {
+    padding-left: 8px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.postTitle {
+    font-size: 24px;
+    margin: 16px 0px;
+    font-weight: bold;
+    line-height: 1.6rem;
+}
+
+.postDes {
+    font-size: 16px;
+    color: #646464;
+    margin: 8px 0px;
+    font-style: italic;
+}
+
+.postFooter {
+    display: flex;
+    padding: 8px 60px;
+}
+
+.comments {
+    margin-left: 60px;
+    margin-right: 60px;
+    margin-top: 8px;
+    font-size: 18px;
+    color: #353535;
+}
+
+.commentHeader {
+    padding-top: 8px;
+    display: flex;
+}
+
+.imgCommenterPhoto {
+    width: 30px;
+    height: 30px;
+}
+
+.commenterName {
+    padding-left: 8px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 16px;
+}
+
+.commentBody {
+    padding-top: 2px;
+    margin-left: 40px;
+    font-size: 13px;
+}
+
+.commentFooter {
+    padding-top: 2px;
+    display: flex;
+    margin-left: 40px;
+}
+
+.likes,
+.postLikes,
+.commentLikes,
+.replayLikes {
+    display: flex;
+}
+
+.likeIcon,
+.postLikeIcon,
+.commentLikeIcon,
+.replayLikeIcon {
+    height: 15px;
+    width: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: .9rem;
+}
+
+.commentLikeIcon {
+    padding-left: 8px;
+}
+
+.likesCount,
+.postLikesCount,
+.commentLikesCount,
+.replayLikesCount {
+    margin-top: .5em;
+    padding-left: 8px;
+    margin-bottom: auto;
+    font-size: .7rem;
+}
+
+.replays {
+    display: flex;
+}
+
+.postReplayIcon,
+.commentReplayIcon {
+    height: 15px;
+    width: 15px;
+    padding-left: 16px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: .9rem;
+}
+
+.postCommentsCount,
+.commentReplaysCount {
+    font-size: 13px;
+    margin-top: .5em;
+    padding-left: 8px;
+    margin-bottom: auto;
+    font-size: .7rem;
+}
+
+.replaysContainer {
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 8px;
+    font-size: 18px;
+}
+
+.replayHeader {
+    padding-top: 8px;
+    display: flex;
+}
+
+.imgReplayerPhoto {
+    width: 30px;
+    height: 30px;
+}
+
+.replayerName {
+    padding-left: 8px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 16px;
+}
+
+.replayBody {
+    padding-left: 8px;
+    margin-left: 30px;
+    font-size: 13px;
+}
+
+.replayFooter {
+    padding-top: 4px;
+    padding-left: 8px;
+    margin-left: 30px;
+    font-size: 13px;
+    display: flex;
+}
+
+.replayLikes {
+    padding-left: 8px;
+    font-size: 13px;
+    display: flex;
+}
+
+.commentsToggle {
+    display: flex;
+}
+
+.rotate {
+    animation-name: rotate-animation;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes rotate-animation {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.alreadyLikedIcon {
+    height: 15px;
+    width: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: .9rem;
+    color: #a80000;
+}
+
+/** ------------ add comment ----------- */
+.commentAuthorTools {
+    padding: 0px 14px;
+    text-align: center;
+}
+
+.addPostCommentContainer {
+    display: flex;
+    margin: 0px 40px 8px 40px;
+    padding: 8px 0px;
+}
+
+.addPostCommentInput {
+    flex: 1;
+    font-size: .9rem;
+    overflow-y: hidden;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    resize: none;
+    border: 1px solid gray;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    padding: 4px;
+}
+
+.addPostCommentInputSubmit {
+    height: 31px;
+    text-align: center;
+    margin-top: auto;
+    background-color: black;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+.addPostCommentInputSubmit:hover {
+    background-color: black;
+    color: aqua;
+}
+
+.commentAuthorTools {
+    margin: auto;
+    cursor: pointer;
+    color: #525252;
+    font-size: 14px;
+}
+
+.editCommentModal {
+    z-index: 1;
+    background-color: rgba(243, 243, 243, 0.959);
+    position: absolute;
+    color: black;
+    padding: 8px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.editCommentModalLineBreak {
+    background-color: #444444;
+    margin: 2px;
+    height: 1px;
+    text-align: center;
+}
+
+.addCommentReplaySpinner {
+    text-align: center;
+    font-size: 18px;
+    margin: auto 0px auto 8px;
+}
+
+/******************** edit comment *******************/
+.editCommentContainer {
+    display: flex;
+    padding: 8px 0px;
+    margin: 8px 40px;
+}
+
+.editCommentInput {
+    flex: 1;
+    font-size: .9rem;
+    overflow-y: hidden;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    resize: none;
+    border: 1px solid gray;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    padding: 4px;
+}
+
+.updatePostCommentButton {
+    height: 31px;
+    text-align: center;
+    margin-top: auto;
+    background-color: black;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+.updatePostCommentButton:hover {
+    background-color: black;
+    color: aqua;
+}
+
+.cancelUpdatePostCommentButton {
+    height: 31px;
+    text-align: center;
+    margin-top: auto;
+    background-color: rgb(75, 0, 0);
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+.postNoComments {
+    font-size: 13px;
+    color: gray;
+}
+
+/** ------------ add replay ----------- */
+/* .commentAuthorTools{
+    padding: 0px 14px;
+    text-align: center;
+    } */
+
+.addCommentReplayContainer {
+    display: flex;
+    margin: 0px 0px 8px 40px;
+    padding: 8px 0px;
+}
+
+.addCommentReplayInput {
+    flex: 1;
+    font-size: .9rem;
+    overflow-y: hidden;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    resize: none;
+    border: 1px solid gray;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    padding: 4px;
+}
+
+.addCommentReplaySubmit {
+    height: 31px;
+    min-width: 108px;
+    text-align: center;
+    margin-top: auto;
+    background-color: black;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+.addCommentReplaySubmit:hover {
+    background-color: black;
+    color: aqua;
+}
+
+/************ replay author menu**********/
+.commentReplayMenuIcon {
+    margin: auto;
+    cursor: pointer;
+    color: #525252;
+    font-size: 14px;
+}
+
+.replayAuthorMenu {
+    z-index: 1;
+    background-color: rgba(243, 243, 243, 0.959);
+    position: absolute;
+    color: black;
+    padding: 8px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/*********************** edit replay *************************/
+.editReplayContainer {
+    display: flex;
+    padding: 8px 0px;
+    margin: 8px 40px;
+}
+
+.editReplayInput {
+    flex: 1;
+    font-size: .9rem;
+    overflow-y: hidden;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    resize: none;
+    border: 1px solid gray;
+    border-radius: 9px;
+    -moz-border-radius: 9px;
+    -webkit-border-radius: 9px;
+    padding: 4px;
+}
+
+.editReplaySubmitBtn {
+    height: 31px;
+    text-align: center;
+    margin-top: auto;
+    background-color: black;
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+.editReplaySubmitBtn:hover {
+    background-color: black;
+    color: aqua;
+}
+
+.cancelEditReplayBtn {
+    height: 31px;
+    text-align: center;
+    margin-top: auto;
+    background-color: rgb(75, 0, 0);
+    color: white;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    padding-top: 3px;
+    font-size: 18px;
+    border-radius: 9px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
+
+/**************login modal************/
+.loginModal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.loginModalContainer {
+    margin-left: -50%;
+    margin-top: -50%;
+    width: 500px;
+    background-color: #fafafa;
+    box-shadow: 0px 0px 15px #818181;
+    border-radius: 5px;
+    padding: 16px;
+    font-family: Roboto;
+}
+
+.closeLoginModalBtn {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #570303;
+    padding: 8px 24px;
+    color: white;
+    border-radius: 10px;
+    margin: 16px;
+}
+
+.loginModalTitle {
+    font-size: 44px;
+    padding: 36px;
+    text-align: center;
+    color: #512679;
+}
+
+.LoginModalForm {
+    margin-left: 36px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.LoginFormUsernameD {
+    margin: 4px;
+}
+
+.LoginFormUserNameI {
+    margin: 4px;
+    padding: 8px;
+    border: 1px solid #b3acac;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    width: 250px
+}
+
+.loginFormPasswordD {
+    margin: 4px;
+    margin-left: -155px;
+}
+
+.LoginFormPasswordI {
+    margin: 4px;
+    padding: 8px;
+    border: 1px solid #b3acac;
+    border-radius: 5px;
+    width: 250px
+}
+
+.LoginFormPasswordForget {
+    font-size: 0.9rem;
+    margin-left: 36px;
+    padding: 4px;
+}
+
+.LoginFormPasswordForget a {
+    color: #512679;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.LoginFormPasswordForget a:hover {
+    color: #4c93fd;
+}
+
+.LoginModalRegisterAccount {
+    font-size: 0.9rem;
+    margin-left: 36px;
+    padding: 4px;
+}
+
+.LoginModalRegisterAccount a {
+    color: #512679;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.LoginModalRegisterAccount a:hover {
+    color: #4c93fd;
+}
+
+.LoginModalLoginBtn {
+    display: inline-block;
+    padding: 8px 36px;
+    background-color: #512679;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 56px;
+    cursor: pointer;
+}
+
+.LoginModalFooter {
+    display: flex;
+    justify-content: end;
+}
+
+.loginModalSubmitContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.loginModalErrorMessage {
+    color: red;
+    margin-left: -94px;
+    padding-top: 16px;
+}
+
+/********************** alert modal**********************/
+.alertModal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.alertModalContainer {
+    margin-left: -50%;
+    margin-top: -50%;
+    width: 500px;
+    background-color: #fafafa;
+    box-shadow: 0px 0px 15px #818181;
+    border-radius: 5px;
+    padding: 16px;
+    font-family: Roboto;
+    display: inline-block;
+}
+
+.alertModalIcon {
+    font-size: 36px;
+    display: inline-block;
+    color: #570303;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+}
+
+.alertModalMessage {
+    padding: 16px;
+}
+
+.alertModalIconMsgWrapper {
+    display: flex;
+    padding: 16px;
+}
+
+.alertModalFooter {
+    display: flex;
+    justify-content: end;
+}
+
+.alertModalCloseBtn {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #570303;
+    padding: 8px 24px;
+    color: white;
+    border-radius: 10px;
+}
+
+/********************** likers modal**********************/
+.likersModal {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+
+.likersModalContainer {
+    margin-left: -50%;
+    margin-top: -50%;
+    width: 500px;
+    max-height: 500px;
+    background-color: #fafafa;
+    box-shadow: 0px 0px 15px #818181;
+    border-radius: 5px;
+    padding: 16px;
+    font-family: Roboto;
+    display: inline-block;
+    overflow-y: auto;
+}
+
+.likersModalCloseBtn {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #512679;
+    padding: 8px 24px;
+    color: white;
+    border-radius: 10px;
+}
+
+.likersModalLikerContainer {
+    display: flex;
+    padding: 16px;
+}
+
+.likersModalLikerImg {
+    width: 50px;
+    height: 50px;
+}
+
+.likersModalLikerImgContainer {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: black;
+}
+
+.likerModalUserIcon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #564cec;
+}
+
+.likersModalLikerName {
+    display: flex;
+    align-self: center;
+    padding-left: 16px;
+}
+
+.likersModalLikerName a {
+    text-decoration: none;
+    color: #512679;
+}
+
+.likersModalFooter {
+    display: flex;
+    justify-content: end;
+}
+
+/* end post style */
+
 /* extra large screens */
 @media only screen and (min-width: 1250px) {}
 
@@ -101,4 +887,8 @@
 @media only screen and (max-width: 800px) {}
 
 /* small screens */
-@media only screen and (max-width: 430px) {}
+@media only screen and (max-width: 430px) {
+    #postsContainer {
+         margin: 0px;
+    }
+}
