@@ -120,7 +120,7 @@ const createPage = (userInfo, categories, tags, postC) => {
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
     //check if there is tags history:
-    if(postC.tags || postC.tags != ''){
+    if (postC.tags || postC.tags != '') {
         const ts = JSON.parse(postC.tags);
         if (ts.length > 0) {
             ts.forEach((t) => {
@@ -1133,15 +1133,15 @@ function extractNestedCategories(nested, categoryContainer, categories) {
         container.append(label);
         categoryContainer.append(container);
         //extract the nested categories:
-        var nestedCats = categories.filter((c)=>{
+        var nestedCats = categories.filter((c) => {
             return c.category.parentId == category._id
         })
         //get cats array:
         var temp = new Array();
-        nestedCats.forEach((c)=>{
+        nestedCats.forEach((c) => {
             temp.push(c.category)
         });
-        nestedCats = temp ; 
+        nestedCats = temp;
         if (nestedCats.length > 0) {
             // edit label
             label.html(category.title);

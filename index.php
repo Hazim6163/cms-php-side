@@ -138,8 +138,10 @@ include('./include/navbar.php');
         <div class="addBtn" id="addBtn"><i class="fas fa-plus"></i></div>
     </div>
     <?php } ?>
-</div><!--container-->
-</div><!--page wrapper-->
+</div>
+<!--container-->
+</div>
+<!--page wrapper-->
 <script src="./assets/js/home.js"></script>
 <?php 
 include('./include/footer.php');

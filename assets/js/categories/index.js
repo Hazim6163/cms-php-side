@@ -247,13 +247,13 @@ function inflateCPage(data, userInfo) {
     getBodyNav(data);
 
     //category page info:
-    const catPInfo = htmlE({type: 'div', class: 'catPInfo', container: pageContainer});
+    const catPInfo = htmlE({ type: 'div', class: 'catPInfo', container: pageContainer });
     //cat info title:
-    const catPITitle = htmlE({type: 'div', class: 'catPITitle', text: data.cat.title, container: catPInfo});
+    const catPITitle = htmlE({ type: 'div', class: 'catPITitle', text: data.cat.title, container: catPInfo });
     //cat info des:
-    const catPIDescription = htmlE({type: 'div', class: 'catPIDescription', text: data.cat.des, container: catPInfo});
+    const catPIDescription = htmlE({ type: 'div', class: 'catPIDescription', text: data.cat.des, container: catPInfo });
     //cat info posts count: 
-    const catPIPostsCount = htmlE({type: 'div', class: 'catPIPostsCount', text: 'Posts Count : ' + data.cat.postsCount, container: catPInfo});
+    const catPIPostsCount = htmlE({ type: 'div', class: 'catPIPostsCount', text: 'Posts Count : ' + data.cat.postsCount, container: catPInfo });
 
     const wrapper = $('<div>', {
         class: 'nestedCatsWrapper',
@@ -270,8 +270,8 @@ function inflateCPage(data, userInfo) {
 }
 
 //nested categories get rand background-color:
-function getRandBKColor(){
-    const colors  = [
+function getRandBKColor() {
+    const colors = [
         '#8449',
         '#88714499',
         '#72884499',
@@ -1980,30 +1980,30 @@ function createLikersModal(likers) {
 const menu = $('#addMenu');
 var menuOpened = false;
 //on add btn click
-$('#addBtn').click(()=>{
+$('#addBtn').click(() => {
     menuOpened = !menuOpened;
     menuOpened ? menu.css('visibility', 'visible') : menu.css('visibility', 'hidden');
 })
 const addPost = $('#addPost');
 const addCat = $('#addCat');
 
-addPost.click(()=>{
+addPost.click(() => {
     window.location.href = './../posts/add.php';
 });
 
 var addCMOpened = false;
-addCat.click(()=>{
+addCat.click(() => {
     toggleCatModal();
 });
 
 //toggle CatModal : 
-function toggleCatModal(){
+function toggleCatModal() {
     //check if the modal already opened:
-    if(addCMOpened){
+    if (addCMOpened) {
         $('#addCModal').remove();
     }
     //create modal:
-    const modal = $('<div>',{
+    const modal = $('<div>', {
         class: 'addCModal',
         id: 'addCModal'
     }).appendTo($('body'));
@@ -2029,13 +2029,13 @@ function toggleCatModal(){
 }
 
 //get category modal content:
-function getCMContent(){
+function getCMContent() {
     const chooseCategoryContainer = $('<div>', {
         class: 'chooseCategoryContainer',
         id: 'chooseCategoryContainer'
     }).html('Parent Category: ')
     //get categories: 
-    $.post('./../index.php', {getCategories: true}, (res)=>{
+    $.post('./../index.php', { getCategories: true }, (res) => {
         const categories = res.request;
         extractCategories(categories).appendTo(chooseCategoryContainer);
         chooseCategoryContainer.append(getNextBtn(1));
@@ -2045,16 +2045,16 @@ function getCMContent(){
 }
 
 //modal next btn:
-function getNextBtn(step){
+function getNextBtn(step) {
     const nextContainer = $('<div>', {
         class: 'modalNextBtnContainer',
-        id: 'modalNextBtnContainer'+step
+        id: 'modalNextBtnContainer' + step
     });
 
     const next = $('<div>', {
         class: 'modalNextBtn',
-        id: 'modalNextStep'+step
-    }).html('Next').appendTo(nextContainer).click(()=>{
+        id: 'modalNextStep' + step
+    }).html('Next').appendTo(nextContainer).click(() => {
         $('#chooseCategoryContainer').toggle('fast');
         $('#cMInputSection').toggle('fast');
         $('#cMStep1').toggleClass('activeStep');
@@ -2065,8 +2065,8 @@ function getNextBtn(step){
 }
 
 //category modal header:
-function getCMHeaderContent(){
-    const container  = $('<div>', {
+function getCMHeaderContent() {
+    const container = $('<div>', {
         class: 'cMHeaderContent'
     });
 
@@ -2090,7 +2090,7 @@ function extractCategories(data) {
         class: 'categoriesGroupContainer'
     });
     data.forEach((obj) => {
-        const category  = obj.category;
+        const category = obj.category;
         const nested = obj.nestedCats;
         //filter root categories
         if (!category.parentId) {
@@ -2150,11 +2150,11 @@ function extractNestedCategories(nested, categoryContainer, data) {
         categoryContainer.append(container);
         //get categories array:
         const cats = new Array();
-        data.forEach((obj)=>{
+        data.forEach((obj) => {
             cats.push(obj.category);
         })
         //filter children
-        const children = cats.filter((c) =>{
+        const children = cats.filter((c) => {
             return c.parentId == category._id
         })
         if (children.length > 0) {
@@ -2179,13 +2179,13 @@ function extractNestedCategories(nested, categoryContainer, data) {
 }
 
 //category modal content after categories tree:
-function getCMCAfterCategories(){
-    const wrapper = $('<div>',{
+function getCMCAfterCategories() {
+    const wrapper = $('<div>', {
         class: 'inputSectionWrapper',
         id: 'cMInputSection'
     }).hide().html('New Category :');
 
-    const container = $('<div>',{
+    const container = $('<div>', {
         class: 'inputSection'
     }).appendTo(wrapper);
 
@@ -2211,24 +2211,24 @@ function getCMCAfterCategories(){
         class: 'catDesLabel'
     }).text('Category Description:')
 
-    const des = $('<textarea>',{
+    const des = $('<textarea>', {
         class: 'catDesI',
         id: 'catDesI'
     })
 
-    const footer = $('<div>',{
+    const footer = $('<div>', {
         class: 'cMFooter'
     });
 
-    const err = $('<div>',{
+    const err = $('<div>', {
         class: 'cMIErr',
         id: 'cMIErr'
     })
 
     const back = $('<div>', {
-        class:'cMBack',
+        class: 'cMBack',
         id: 'cMBack'
-    }).html('Back').click(()=>{
+    }).html('Back').click(() => {
         $('#chooseCategoryContainer').toggle('fast');
         $('#cMInputSection').toggle('fast');
         $('#cMStep1').toggleClass('activeStep');
@@ -2238,14 +2238,14 @@ function getCMCAfterCategories(){
     const submit = $('<div>', {
         class: 'catISubmit',
         id: 'catISubmit'
-    }).html('Save').click(()=>{
+    }).html('Save').click(() => {
         saveNewCat();
     })
 
     const cancel = $('<div>', {
         class: 'catMCancel',
         id: 'catMCancel'
-    }).html('Cancel').click(()=>{
+    }).html('Cancel').click(() => {
         $('#addCModal').remove();
     })
 
@@ -2265,7 +2265,7 @@ function getCMCAfterCategories(){
 }
 
 //save category :
-function saveNewCat(){
+function saveNewCat() {
     //form: 
     const form = new FormData();
     form.append('saveCat', true);
@@ -2279,35 +2279,35 @@ function saveNewCat(){
     //img
     const img = $('#catImgI');
     //check if there is an img:
-    if(img.val().length != 0){
+    if (img.val().length != 0) {
         form.append('img', img.get(0).files[0]);
     }
     //error:
     const e = $('#cMIErr');
     //parent category:
-    const pCat =  $("input[name='category']:checked").val();
+    const pCat = $("input[name='category']:checked").val();
     //check if there is parent category:
-    if(pCat != undefined){
+    if (pCat != undefined) {
         form.append('pCat', pCat);
     }
 
     //validate name
-    if(i.val().replace(' ', '').length <= 0){
+    if (i.val().replace(' ', '').length <= 0) {
         e.text('Category Name cant be Empty .');
-        setTimeout(()=>{
+        setTimeout(() => {
             e.text('');
         }, 2000)
         return;
     }
     //validate description
-    if(des.val().replace(' ', '').replace('\n', '').length <= 0){
+    if (des.val().replace(' ', '').replace('\n', '').length <= 0) {
         e.text('Category Description cant be Empty .');
-        setTimeout(()=>{
+        setTimeout(() => {
             e.text('');
         }, 2000)
         return;
     }
-    
+
     //send post request:
     $.ajax({
         url: './../index.php',
@@ -2315,10 +2315,10 @@ function saveNewCat(){
         processData: false, // important
         contentType: false, // important
         data: form,
-        success: (res)=>{
+        success: (res) => {
             $('#addCModal').remove();
-            window.location.href = window.location.href ;
+            window.location.href = window.location.href;
         }
-      });
+    });
 
 }
