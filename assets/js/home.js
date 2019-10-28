@@ -1628,7 +1628,7 @@ function createLikersModal(likers) {
     });
 }
 
-// add section:
+/******************************** add section  **************/
 const menu = $('#addMenu');
 var menuOpened = false;
 //on add btn click
@@ -1687,8 +1687,9 @@ function getCMContent(){
         id: 'chooseCategoryContainer'
     }).html('Parent Category: ')
     //get categories: 
-    $.post('./index.php', {getCategories: true}, (categories)=>{
-        extractCategories(categories).appendTo(chooseCategoryContainer);
+    $.post('./index.php', {getCategories: true}, (res)=>{
+        const data = res.request;
+        extractCategories(data).appendTo(chooseCategoryContainer);
         chooseCategoryContainer.append(getNextBtn(1));
     }, 'json')
 
@@ -1736,11 +1737,13 @@ function getCMHeaderContent(){
 
 
 //extract categories and nested categories:
-function extractCategories(categories) {
+function extractCategories(data) {
     const categoriesGroupContainer = $('<div>', {
         class: 'categoriesGroupContainer'
     });
-    categories.forEach((category) => {
+    data.forEach((obj) => {
+        const category = obj.category;
+        const nested = obj.nestedCats;
         //filter root categories
         if (!category.parentId) {
             //create category container
@@ -1757,7 +1760,7 @@ function extractCategories(categories) {
             const label = $('<span>').html(category.title + '<br>');
             categoryContainer.append(label);
             //check if the category has nested categories:
-            if (category.nestedCategories.length > 0) {
+            if (nested.length > 0) {
                 // edit label
                 label.html(category.title);
                 // create dropdown;
@@ -1774,7 +1777,7 @@ function extractCategories(categories) {
                     nestedCatContainer.toggle('fast');
                 });
                 //extract nested categories:
-                extractNestedCategories(category, nestedCatContainer);
+                extractNestedCategories(nested, nestedCatContainer, data);
             }
         }
 
@@ -1784,8 +1787,8 @@ function extractCategories(categories) {
 }
 
 //extract nested categories:
-function extractNestedCategories(_category, categoryContainer) {
-    _category.nestedCategories.forEach((category) => {
+function extractNestedCategories(nested, categoryContainer, data) {
+    nested.forEach((category) => {
         const container = $('<div>', {
             class: 'categoryContainer',
             id: 'categoryContainer' + category._id
@@ -1797,7 +1800,16 @@ function extractNestedCategories(_category, categoryContainer) {
         const label = $('<span>').html(category.title + '<br>');
         container.append(label);
         categoryContainer.append(container);
-        if (category.nestedCategories.length > 0) {
+        //get categories array:
+        const cats = new Array();
+        data.forEach((obj)=>{
+            cats.push(obj.category);
+        })
+        //filter children
+        const children = cats.filter((c) =>{
+            return c.parentId == category._id
+        })
+        if (children.length > 0) {
             // edit label
             label.html(category.title);
             // create dropdown;
@@ -1813,7 +1825,7 @@ function extractNestedCategories(_category, categoryContainer) {
             dropDown.click(() => {
                 nestedCatContainer.toggle('fast');
             });
-            extractNestedCategories(category, nestedCatContainer);
+            extractNestedCategories(children, nestedCatContainer, data);
         }
     });
 }
@@ -1957,6 +1969,7 @@ function saveNewCat(){
         data: form,
         success: (res)=>{
             $('#addCModal').remove();
+            window.location.href = window.location.href;
         }
       });
 
