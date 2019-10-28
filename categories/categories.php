@@ -73,6 +73,13 @@ function getCatPosts(){
     return $res;
 }
 
+//logged in status:
+$loggedIn = false;
+session_start();
+if(isset($_SESSION['token'])){
+    $loggedIn = true;
+}
+
 
 $title = 'Categories';
 $custom_headers = '
@@ -87,6 +94,16 @@ include('../include/v2/nav.php');
 <div class="pageWrapper" id="pageWrapper">
     <div class="sideNavigate" id="sideNavigate"></div>
     <div class="pageContainer" id="pageContainer"></div>
+    <!-- add float btn -->
+    <?php if($loggedIn){?>
+    <div class="addSection">
+        <div class="addMenu" id="addMenu">
+            <div class="addPost" id="addPost">add post</div>
+            <div class="addCategory" id="addCat">add category</div>
+        </div>
+        <div class="addBtn" id="addBtn"><i class="fas fa-plus"></i></div>
+    </div>
+    <?php } ?>
 </div>
 
 <script src="../assets/js/categories/index.js"></script>

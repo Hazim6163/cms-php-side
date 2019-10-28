@@ -1133,7 +1133,6 @@ function extractNestedCategories(nested, categoryContainer, categories) {
         container.append(label);
         categoryContainer.append(container);
         //extract the nested categories:
-        console.log(category)
         var nestedCats = categories.filter((c)=>{
             return c.category.parentId == category._id
         })

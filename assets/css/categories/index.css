@@ -922,6 +922,260 @@
 
 /* end post style */
 
+/* add section */
+/*          add section          */
+.addSection {
+    position: fixed;
+    bottom: 4em;
+    right: 0;
+    text-align: center;
+}
+
+.addBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #171717;
+    color: whitesmoke;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.addMenu {
+    padding: 18px;
+    transition: display 1s;
+    visibility: hidden;
+}
+
+.addPost {
+    padding: 8px;
+    background-color: #171717;
+    border-radius: 15px;
+    color: white;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.addCategory {
+    padding: 8px;
+    background-color: #171717;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+/* add category modal: */
+#addCModal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#addCMContent {
+    background-color: white;
+    padding: 16px;
+    border-radius: 15px;
+    width: 450px;
+}
+
+.inputSection {
+    margin-top: 24px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 400px;
+    font-size: 1rem;
+}
+
+#catISubmit {
+    background-color: darkblue;
+    margin: 8px;
+    padding: 8px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    min-width: 50px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.catILabel {
+    width: 100%;
+    font-size: 1.3rem;
+}
+
+#catISubmit {
+    background-color: #512679;
+    margin: 32px 8px 8px 24px;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    min-width: 50px;
+    text-align: center;
+    transition: 1s;
+    color: white;
+}
+
+.catNameI {
+    border: 0px;
+    color: #171717;
+    padding: 8px;
+    box-shadow: 0px 0px 2px gray;
+    border-radius: 10px;
+    margin: 16px 0px;
+    width: 350px;
+    font-family: roboto;
+}
+
+#chooseCategoryContainer {
+    padding: 16px 16px 0px 16px;
+    width: 400px;
+    font-size: 1.3rem;
+
+}
+
+.categoriesGroupContainer {
+    max-height: 300px;
+    overflow: auto;
+    margin: 16px 0px;
+    font-size: 1rem;
+    box-shadow: 0px 0px 2px gray;
+    border-radius: 15px;
+}
+
+.categoriesGroupContainer span {
+    margin-left: 8px;
+}
+
+.rootCategoryContainer {
+    padding: 4px;
+}
+
+.nestedCatContainer {
+    padding: 4px;
+}
+
+.dropDownIcon {
+    font-size: .7rem;
+    color: gray;
+    cursor: pointer;
+}
+
+#catMCancel {
+    margin: 32px 8px 8px auto;
+    padding: 8px;
+    border-radius: 10px;
+    color: darkred;
+    cursor: pointer;
+    min-width: 50px;
+    text-align: center;
+    transition: .5s;
+}
+
+#cMIErr {
+    color: red;
+    width: 100%;
+    margin-top: 16px;
+    font-size: .9rem;
+    margin-left: 16px;
+}
+
+.catDesI {
+    width: 350px;
+    border: 0px;
+    margin-top: 16px;
+    box-shadow: 0px 0px 2px gray;
+    padding: 8px;
+    border-radius: 10px;
+    height: 100px;
+    resize: none;
+    font-size: .8rem;
+    font-family: roboto;
+    color: #626262;
+    line-height: 1.2em;
+}
+
+.cMHeaderContent {
+    display: flex;
+    justify-content: center;
+}
+
+.headerStep {
+    background-color: gray;
+    color: white;
+    width: 25px;
+    border-radius: 50px;
+    text-align: center;
+    margin: 0px 8px;
+    font-size: .7rem;
+    padding: 4px 0px;
+}
+
+.activeStep {
+    background-color: #512679;
+}
+
+.modalNextBtnContainer {
+    display: flex;
+    justify-content: end;
+    font-size: 1rem;
+}
+
+.modalNextBtn {
+    padding: 4px 8px;
+    background-color: #512679;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.catImgLabel {
+    margin-top: 16px;
+}
+
+.catNameLabel {
+    margin-top: 16px;
+}
+
+.catDesLabel {
+    margin-top: 16px;
+}
+
+#catImgI {
+    margin: 16px 0px;
+}
+
+.inputSectionWrapper {
+    margin-left: 48px;
+    margin-top: 24px;
+    font-size: 1.3rem;
+}
+
+#cMBack {
+    margin-top: 24px;
+    cursor: pointer;
+}
+
+.cMFooter {
+    font-size: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* end add section */
+
 /* extra large screens */
 @media only screen and (min-width: 1250px) {}
 
