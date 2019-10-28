@@ -1964,7 +1964,7 @@ function createLikersModal(likers) {
         }).appendTo(
             likerContainer
         ).html(
-            '<a href="#' + liker.id + '">' + liker.fname + ' ' + liker.lname + '</a>'//TODO CREATE USER PAGE
+            '<a href="./../user/index.php?id=' + liker.id + '">' + liker.fname + ' ' + liker.lname + '</a>'
         );
     });
     //footer 

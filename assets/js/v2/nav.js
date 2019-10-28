@@ -67,7 +67,7 @@ const createNavBar = (userInfo) => {
 
         //on Profile click:
         $profile.click(() => {
-            window.location.href = "../error.php?id=" + userId; //TODO create user page
+            window.location.href = "../user/index.php?id=" + userId;
         });
     });
 
