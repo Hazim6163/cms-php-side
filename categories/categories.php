@@ -74,11 +74,7 @@ function getCatPosts(){
 }
 
 //logged in status:
-$loggedIn = false;
-session_start();
-if(isset($_SESSION['token'])){
-    $loggedIn = true;
-}
+global $loggedIn;
 
 
 $title = 'Categories';

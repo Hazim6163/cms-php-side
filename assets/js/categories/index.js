@@ -248,6 +248,12 @@ function inflateCPage(data, userInfo) {
 
     //category page info:
     const catPInfo = htmlE({ type: 'div', class: 'catPInfo', container: pageContainer });
+    //check if the category has img:
+    if (data.cat.imgUrl) {
+        //cat info Img: 
+        const catPIImg = htmlE({ type: 'img', class: 'catPIImg', container: catPInfo });
+        catPIImg.attr('src', postImgBase + data.cat.imgUrl)
+    }
     //cat info title:
     const catPITitle = htmlE({ type: 'div', class: 'catPITitle', text: data.cat.title, container: catPInfo });
     //cat info des:
@@ -482,7 +488,7 @@ function getPostBody(post) {
     const postBody = $('<div>', {
         id: 'postBody' + post._id,
         class: 'postBody'
-    }).css('cursor', 'pointer').click(()=>{
+    }).css('cursor', 'pointer').click(() => {
         window.location.href = './../posts/post.php?id=' + post._id
     });
 

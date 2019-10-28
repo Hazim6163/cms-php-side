@@ -7,8 +7,9 @@
 }
 
 .pageContainer {
-    width: 100%;
+    width: 800px;
     color: #2b2b2b;
+    margin: auto;
 }
 
 /* all screens basic rules and screen > 800 || screen < 1200 rules */
@@ -59,6 +60,7 @@
     margin: 48px;
     border-radius: 15px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .body-nav-link {
@@ -81,6 +83,12 @@
 /* category page category info */
 .catPInfo {
     margin: 16px 48px 48px 48px;
+    text-align: center;
+}
+
+.catPIImg {
+    width: 600px;
+    border-radius: 15px;
 }
 
 .catPITitle {
@@ -131,7 +139,7 @@
 }
 
 /* post style */
-#postsWrapper {
+.postsWrapper {
     padding: 48px 0px;
     margin: 48px;
     font-size: 1.3rem;
@@ -147,17 +155,18 @@
 
 .post {
     box-sizing: border-box;
-    padding: 16px;
     font-family: Georgia, 'Times New Roman', Times, serif;
     background-color: #ececec78;
     border-radius: 15px;
     margin: 16px;
+    line-height: 1.1rem;
     box-shadow: 0px 0px 2px gray;
 }
 
 .postHeader {
     display: flex;
     flex-wrap: wrap;
+    padding: 16px 16px 0px 16px;
 }
 
 .authorImg {
@@ -219,7 +228,7 @@
 }
 
 .postContent {
-    padding-left: 8px;
+    padding: 0px 16px;
     margin-top: auto;
     margin-bottom: auto;
 }
@@ -244,11 +253,13 @@
 }
 
 .comments {
-    margin-left: 60px;
-    margin-right: 60px;
+    padding: 16px 60px 16px 60px;
+    padding-right: 60px;
     margin-top: 8px;
     font-size: 18px;
     color: #353535;
+    background-color: #dddddd78;
+    border-radius: 0px 0px 15px 15px;
 }
 
 .commentHeader {
@@ -278,6 +289,7 @@
     padding-top: 2px;
     display: flex;
     margin-left: 40px;
+    flex-wrap: wrap;
 }
 
 .likes,
@@ -336,10 +348,13 @@
 }
 
 .replaysContainer {
-    margin-left: 40px;
-    margin-right: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
     margin-top: 8px;
     font-size: 18px;
+    background-color: #ffffff78;
+    border-radius: 15px;
+    padding-top: 8px;
 }
 
 .replayHeader {
@@ -371,6 +386,7 @@
     margin-left: 30px;
     font-size: 13px;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .replayLikes {
@@ -437,13 +453,13 @@
     height: 31px;
     text-align: center;
     margin-top: auto;
-    background-color: black;
+    background-color: gray;
     color: white;
     padding-left: 16px;
     padding-right: 16px;
     box-sizing: border-box;
     padding-top: 3px;
-    font-size: 18px;
+    font-size: 14px;
     border-radius: 9px;
     margin-left: 8px;
     margin-bottom: 2px;
@@ -455,7 +471,7 @@
 }
 
 .commentAuthorTools {
-    margin: auto;
+    margin-left: auto;
     cursor: pointer;
     color: #525252;
     font-size: 14px;
@@ -573,16 +589,15 @@
 
 .addCommentReplaySubmit {
     height: 31px;
-    min-width: 108px;
     text-align: center;
     margin-top: auto;
-    background-color: black;
+    background-color: gray;
     color: white;
     padding-left: 16px;
     padding-right: 16px;
     box-sizing: border-box;
     padding-top: 3px;
-    font-size: 18px;
+    font-size: 14px;
     border-radius: 9px;
     margin-left: 8px;
     margin-bottom: 2px;
@@ -595,7 +610,7 @@
 
 /************ replay author menu**********/
 .commentReplayMenuIcon {
-    margin: auto;
+    margin-left: auto;
     cursor: pointer;
     color: #525252;
     font-size: 14px;
@@ -1177,14 +1192,126 @@
 /* end add section */
 
 /* extra large screens */
-@media only screen and (min-width: 1250px) {}
+@media only screen and (min-width: 1250px) {
+    .pageContainer {
+        width: 1000px;
+        color: #2b2b2b;
+        margin: auto;
+    }
+}
 
 /* medium screens */
-@media only screen and (max-width: 800px) {}
+@media only screen and (max-width: 800px) {
+    .pageContainer {
+        width: 700px;
+        color: #2b2b2b;
+        margin: auto;
+    }
+}
 
 /* small screens */
 @media only screen and (max-width: 430px) {
+    .pageContainer {
+        width: 100%;
+        color: #2b2b2b;
+    }
+
+    #nestedCatsWrapper {
+        margin: 48px 8px;
+    }
+
+    #bodyNav {
+        margin: 48px 8px;
+    }
+
+    .postsWrapper {
+        margin: 48px 8px !important;
+    }
+
+    .nestedCatsWrapper {
+        margin: 16px;
+    }
+
+    .postContent {
+        padding: 0px 8px;
+    }
+
+    .postBody {
+        margin-left: 8px;
+    }
+
+    .post {
+        padding: 0px;
+        margin: 16px 0px;
+    }
+
+    .postFooter {
+        display: flex;
+        padding: 8px 30px;
+    }
+
+    .replayFooter {
+        margin-left: 8px;
+    }
+
+    .replaysContainer {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .addCommentReplaySubmit {
+        padding: 2px 8px;
+    }
+
+    .addPostCommentInputSubmit {
+        padding: 2px 8px;
+    }
+
+    .addPostCommentContainer {
+        margin: 0px;
+    }
+
     #postsContainer {
         margin: 0px;
+    }
+
+    .comments {
+        padding: 16px;
+    }
+
+    .addCommentReplayContainer {
+        margin: 0px 0px 8px 0px;
+    }
+
+    .catPIImg {
+        width: 300px;
+        border-radius: 15px;
+    }
+
+    .catPInfo {
+        margin: 0px;
+    }
+
+    .catPITitle {
+        font-size: 2rem;
+        margin: 0px;
+        padding: 16px 8px;
+    }
+
+    .catPIDescription {
+        padding: 0px 8px;
+    }
+
+    /* add section */
+    .addSection {
+        bottom: 2em;
+        right: 0;
+        font-size: .7rem;
+    }
+
+    .addBtn {
+        width: 36px;
+        height: 36px;
+        margin-right: 16px;
     }
 }
