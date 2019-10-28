@@ -78,11 +78,47 @@
 
 /* end body nav */
 
+/* category page category info */
+.catPInfo {
+    margin: 16px 48px 48px 48px;
+}
+
+.catPITitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: 3rem;
+    margin: 16px;
+    text-transform: uppercase;
+}
+
+.catPIDescription {
+    text-align: center;
+    color: #4f4f4f;
+    font-style: italic;
+}
+
+.catPIPostsCount {
+    text-align: center;
+    margin-top: 36px;
+    color: #4f4f4f;
+}
+
 /* nested categories */
+#nestedCatsWrapper {
+    margin: 48px;
+    padding-top: 48px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 .nestedCContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: start;
+    font-size: 1rem;
+    font-weight: normal;
+    text-transform: none;
 }
 
 .non-select {
@@ -97,10 +133,16 @@
 /* post style */
 #postsWrapper {
     padding: 48px 0px;
+    margin: 48px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 #postsContainer {
-    margin: 48px;
+    font-size: 1rem;
+    font-weight: normal;
+    text-transform: none;
 }
 
 .post {

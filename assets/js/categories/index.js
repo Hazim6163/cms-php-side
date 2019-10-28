@@ -89,7 +89,7 @@ function appendRCatC(categories, container) {
         //create category container
         const catContainer = htmlE({
             type: 'div', class: 'catContainer', id: category._id, container: container, onClick: catClick, params: [category]
-        });
+        }).css('background-color', getRandBKColor());
         //category img container
         if (category.imgUrl) {
             const CatImg = htmlE({
@@ -248,18 +248,45 @@ function inflateCPage(data, userInfo) {
     const bodyNav = htmlE({ type: 'div', class: 'bodyNav', container: pageContainer, id: 'bodyNav' });
     getBodyNav(data);
 
+    //category page info:
+    const catPInfo = htmlE({type: 'div', class: 'catPInfo', container: pageContainer});
+    //cat info title:
+    const catPITitle = htmlE({type: 'div', class: 'catPITitle', text: data.cat.title, container: catPInfo});
+    //cat info des:
+    const catPIDescription = htmlE({type: 'div', class: 'catPIDescription', text: data.cat.des, container: catPInfo});
+    //cat info posts count: 
+    const catPIPostsCount = htmlE({type: 'div', class: 'catPIPostsCount', text: 'Posts Count : ' + data.cat.postsCount, container: catPInfo});
+
     const wrapper = $('<div>', {
         class: 'nestedCatsWrapper',
         id: 'nestedCatsWrapper'
-    }).appendTo(pageContainer);
+    }).appendTo(pageContainer).html('Nested Categories : ');
 
     //append nested categories to wrapper:
     appendNCW(data).appendTo(wrapper);
 
-    htmlE({ type: 'div', class: 'postsWrapper', id: 'postsWrapper' }).appendTo(pageContainer);
+    htmlE({ type: 'div', class: 'postsWrapper', id: 'postsWrapper', text: 'Posts : ' }).appendTo(pageContainer);
     //append posts to posts wrapper
     appendPToPWrapper(data)
 
+}
+
+//nested categories get rand background-color:
+function getRandBKColor(){
+    const colors  = [
+        '#8449',
+        '#88714499',
+        '#72884499',
+        '#44886799',
+        '#44738899',
+        '#5f448899',
+        '#88448799'
+    ]
+
+    //get rand color:
+    var rand = colors[Math.floor(Math.random() * colors.length)];
+
+    return rand;
 }
 
 //append nested cats to wrapper:
