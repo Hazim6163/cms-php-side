@@ -17,6 +17,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    margin: 0px 0px 60px 0px;
 }
 
 .catContainer {
@@ -25,7 +26,9 @@
     width: 300px;
     margin: 24px;
     cursor: pointer;
-    align-self: flex-start;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
 }
 
 .catImg {
@@ -34,6 +37,10 @@
 
 .catInfo {
     padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .catTitle {
@@ -42,14 +49,16 @@
 }
 
 .catDes {
-    margin: 8px auto;
+    margin: 8px;
     color: #484848;
+    text-align: left;
 }
 
 .catPostsCount {
     margin: 16px 0px 0px 0px;
     font-size: .9rem;
     color: #484848;
+    text-align: right;
 }
 
 /* body nav */
