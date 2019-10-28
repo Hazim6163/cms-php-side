@@ -482,6 +482,8 @@ function getPostBody(post) {
     const postBody = $('<div>', {
         id: 'postBody' + post._id,
         class: 'postBody'
+    }).css('cursor', 'pointer').click(()=>{
+        window.location.href = './../posts/post.php?id=' + post._id
     });
 
     //check if the post has an img: 

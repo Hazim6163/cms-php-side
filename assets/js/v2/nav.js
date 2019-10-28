@@ -93,7 +93,7 @@ const createNavBar = (userInfo) => {
     //categories click:
     const CategoriesBtn = $('#navigateMenuLinkCategories');
     CategoriesBtn.click(() => {
-        window.location.href = '../index.php';//TODO CREATE CATEGORIES PAGE 
+        window.location.href = '../categories/categories.php';
     });
 
     //toggle side bar
