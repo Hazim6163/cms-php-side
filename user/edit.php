@@ -97,7 +97,7 @@ global $loggedIn;
 
 $custom_headers = '
 <link rel="stylesheet" href="../assets/css/croppie.css" type="text/css">
-<link rel="stylesheet" href="../assets/css/user/index.css">
+<link rel="stylesheet" href="../assets/css/user/edit.css">
 ';
 
 
@@ -129,5 +129,5 @@ if(!$loggedIn){
 </div><!-- crop img dialog -->
 
 <script type="text/javascript" src="../assets/js/croppie.js"></script>
-<script src="../assets/js/user/index.js"></script>
+<script src="../assets/js/user/edit.js"></script>
 <?php include('../include/v2/footer.php'); ?>

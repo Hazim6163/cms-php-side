@@ -99,13 +99,13 @@ function inflateUserForm(pContainer, userInfo) {
             formData = { edit, fname, lname, username, email, oldPass, password, imgChanged, };
         }
 
-        $.post('./index.php', formData, (res) => {
+        $.post('./edit.php', formData, (res) => {
             $('#errMsg').hide()
             if (res.error) {
                 $('#errMsg').show()
                 $('#errMsg').text(res.error);
             } else {
-                $.post('./index.php', { updateUser: true }, (res2) => {
+                $.post('./edit.php', { updateUser: true }, (res2) => {
                     window.location.href = window.location.href
                 });
             }
@@ -199,7 +199,7 @@ function createUserImg(url) {
             size: 'viewport'
         }).then(function (response) {
             $.ajax({
-                url: "./index.php",
+                url: "./edit.php",
                 type: "POST",
                 data: {
                     "saveImg": true,
