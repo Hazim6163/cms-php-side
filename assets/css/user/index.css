@@ -1,3 +1,198 @@
-*{
+* {
     margin: 0px;
+}
+
+.pageWrapper {
+    margin-top: 90px;
+    padding-top: 40px;
+    transition: .2s;
+    min-height: 77vh;
+}
+
+#pageContainer {
+    width: 800px;
+    margin: auto;
+}
+
+#userForm {
+    padding: 36px;
+    background: #f2f2f2;
+    border-radius: 15px;
+    font-family: roboto;
+    margin: 48px;
+}
+
+.inputGroup {
+    margin: 8px 0px;
+    padding: 8px;
+    width: 430px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+.inputDes {
+    margin: 8px 24px;
+    width: 170px;
+}
+
+.input {
+    border: 0px;
+    box-shadow: 0px 0px 2px gray;
+    padding: 8px;
+    border-radius: 10px;
+    min-width: 200px;
+}
+
+#submitF {
+    margin: auto;
+    display: block;
+    margin-top: 60px;
+    border: 0px;
+    box-shadow: 0px 0px 2px black;
+    background-color: #115c77;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+#iconContainer {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #117737;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 24px auto;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+#userImg {
+    cursor: pointer;
+}
+
+#uIContainer {
+    text-align: center;
+}
+
+/* crop modal */
+
+#userImgIconContainer {
+    font-size: 3rem;
+    background-color: #3360b394;
+    width: 170px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: whitesmoke;
+    height: 170px;
+    margin: 16px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.removeImgIconContainer {
+    text-align: right;
+    color: red;
+}
+
+.removeImgIcon {
+    cursor: pointer;
+}
+
+#userImgContainer {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+#userImg {
+    width: 170px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px gray;
+    cursor: pointer;
+}
+
+/* crop img modal */
+.modalDialogCrop {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    top: 0px;
+    margin-top: 64px;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+
+/* Modal Content */
+.modal-content {
+    display: inline-block;
+    background-color: #fefefe;
+    padding: 20px;
+    margin: 64px;
+    text-align: center;
+    width: 500px;
+    border-radius: 15px;
+}
+
+/* save btn */
+#crop_image {
+    background-color: #171717;
+    font-size: 18px;
+    border-radius: 5px;
+    color: whitesmoke;
+    padding: 8px;
+    min-width: 78px;
+    border: 0px;
+    cursor: pointer;
+}
+
+/* The Close Button */
+.close {
+    color: darkred;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.closeModalContainer {
+    display: flex;
+    justify-content: end;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#image_demo {
+    width: auto !important;
+    margin-top: 30px;
+}
+
+.croppie-container .cr-slider-wrap {
+    width: 50% !important;
+    margin: 15px !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* end crop modal */
+
+#errMsg {
+    margin: 24px auto 0px auto;
+    width: 200px;
+    color: red;
 }

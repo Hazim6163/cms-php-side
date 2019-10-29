@@ -120,7 +120,7 @@ const createPage = (userInfo, categories, tags, postC) => {
     //editor footer:
     createEditorFooter(categories, tags, userInfo).appendTo(page);
     //check if there is tags history:
-    if (postC.tags || postC.tags != '') {
+    if (postC.tags && postC.tags != '') {
         const ts = JSON.parse(postC.tags);
         if (ts.length > 0) {
             ts.forEach((t) => {
