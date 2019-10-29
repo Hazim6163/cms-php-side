@@ -9,11 +9,32 @@ if(isset($_GET['id'])){
 
 //js requests:
 if(isset($_POST['getData'])){
-    
+    $data = false;
+    if($reqUserId){
+        $data = getSpUser($reqUserId);
+    }else{
+        $data = getAcUser();
+    }
+    echo $data;
     return;
 }
 
 //functions:
+
+//get posts other user
+function getSpUser($id){
+    $res = Utils::getPostsByUserId($id);
+    return $res;
+}
+
+//get actual user posts 
+function getAcUser(){
+    session_start();
+    $id = $_SESSION['userInfo']->id;
+    $res = Utils::getPostsByUserId($id);
+    return $res;
+}
+
 
 
 $custom_headers = '

@@ -150,6 +150,13 @@ class Utils{
         $res = Utils::getRequest($url);
         return $res;
     }
+
+    //get posts by user id:
+    public static function getPostsByUserId($id){
+        $url = 'http://localhost:3000/posts/user?id=' . $id . '&catTree=true';
+        $res = Utils::getRequest($url);
+        return $res;
+    }
 }
 
 ?>

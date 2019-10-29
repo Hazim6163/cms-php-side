@@ -11,3 +11,16 @@
  * create the custom post card put it inside user posts date range
  * 
  * */
+
+ //get data: 
+ const getData = (nextFun) =>{
+   $.post('./profile.php', {getData: true}, (data) => {
+        nextFun(data);
+   }, 'json')
+}
+
+getData(createPage);
+
+function createPage(data){
+    console.log(data);
+}
