@@ -1,3 +1,5 @@
+//loading : 
+startLoading();
 
 //vars: 
 //url params : 
@@ -35,12 +37,18 @@ function inflatePage(data, userInfo) {
         authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
         phpUtils: './profile.php'
     }
-
     //get page container: 
     const pageContainer = $('#pageContainer');
-    const post = new Post(data[0], links, userInfo);
-    post.createTags();
-    pageContainer.append(post.createCatTree());
+    // clean up loading stuff
+    pageContainer.empty();
+    //create post container: 
+    const postsContainer = eHtml({class: 'postsContainer', container: pageContainer});
+    //append posts to posts container
+    data.forEach((postD) =>{
+        const post = new Post(postD, links, userInfo);
+        const postContainer = eHtml({class: 'postContainer', container: postsContainer});
+        postContainer.append(post.eTitle);
+    })
 
 }
 
@@ -405,4 +413,10 @@ function eHtml(data) {
     }
 
     return e;
+}
+
+//loading page:
+function startLoading() {
+    const pageContainer = $('#pageContainer');
+    const loadingContainer = eHtml({ class: 'loadingContainer', id: 'loadingContainer', html: '<i class="fas fa-spinner loading-icon rotate"></i>', container: pageContainer });
 }

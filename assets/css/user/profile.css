@@ -1,7 +1,36 @@
-*{
+* {
     margin: 0px;
 }
 
-.pageWrapper{
+.pageWrapper {
     min-height: 63vh;
+}
+
+#loadingContainer {
+    min-height: 63vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    color: #b7b7b7;
+}
+
+.loading-icon {
+    margin-top: -5rem;
+}
+
+.rotate {
+    animation-name: rotate-animation;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes rotate-animation {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
