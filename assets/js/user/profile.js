@@ -14,7 +14,8 @@ const links = {
     profileLink: './profile.php?id=',
     tagLink: '', //todo create tag link
     authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
-    phpUtils: './profile.php'
+    phpUtils: './profile.php',
+    postImgLink: 'http://localhost:3000/file/uri?uri='
 }
 //user data: 
 let userData;
@@ -62,7 +63,6 @@ function timeLine(data) {
     const postsContainer = $('#postsContainer');
     const date = new Date(data.updatedAt);
     postDate = { year: date.getFullYear(), month: convertToMonth(date.getMonth() + 1) };
-    console.log(postDate.month);
     //create time line for the first post 
     if (!lastPostDate) {
         lastPostDate = postDate;
@@ -129,8 +129,7 @@ function convertToMonth(number) {
 function createPost(data) {
     const postsContainer = $('#postsContainer');
     const post = new Post(data, links, userData);
-    const postContainer = eHtml({ class: 'postContainer', container: postsContainer });
-    post.eTitle.appendTo(postContainer);
+    post.postV1.appendTo(postsContainer);
 }
 
 
@@ -140,20 +139,28 @@ class Post {
         //operation vars: 
         this.authorMenuInProgress = false;
         //links:
+        this.links = links;
         this.catLink = links.catLink;
         this.tagLink = links.tagLink;
         this.profileLink = links.profileLink;
         this.phpUtils = links.phpUtils;
+        this.postImgLink = links.postImgLink
         //post vars:
         this.parentId = post.parentId;
+        //post author vars:
         this.authorId = post.authorId;
         this.authorInfo = post.authorInfo;
+        this.authorImgLink = this.links.authorImgLink + this.authorInfo.photoUrl;
+        if (post.authorInfo.photoUrl != '' && post.authorInfo.photoUrl) {
+            this.authorImgUrl = post.authorInfo.photoUrl;
+        }
+        //cat tree
         this.catTree = post.catTree;
         this.id = post._id;
         this.title = post.title;
         this.des = post.des;
         this.body = post.body;
-        post.img ? this.img = post.img : this.img = undefined;
+        post.imgUrl ? this.img = post.imgUrl : this.img = undefined;
         this.tags = post.tags;
         this.likesCount = post.likesCount;
         this.likers = post.likers;
@@ -187,19 +194,22 @@ class Post {
         //create post author username element: 
         this.eAuthorUsername = eHtml({ class: 'postAuthorUsername', html: this.authorInfo.username });
 
+        //create post : 
+        this.postV1 = this.postV1();
 
     }
 
     //post img:
     postImg() {
         const wrapper = eHtml({ class: 'pImgWrapper' });
-        const container = eHtml({ class: 'pImgContainer' });
+        const container = eHtml({ class: 'pImgContainer', container: wrapper });
         //check if the post has img:
         const url = this.img;
+        console.log(this.img)
         if (url && url != '' && url != null) {
             //create post img
             const img = eHtml({ type: 'img', class: 'postImg', container: container });
-            img.attr('src', this.links.postImg + url);
+            img.attr('src', this.postImgLink + url);
         } else {
             //create post icon: 
             container.html('<i class="fas fa-image postIcon"></i>')
@@ -429,6 +439,78 @@ class Post {
 
         $('body').append(wrapper);
     }
+
+
+    //  post v1
+    postV1() {
+        //post container:
+        const container = eHtml({ class: 'postContainer' });
+        //post header: 
+        this.postHeaderV1(container);
+        //post body: 
+        // this.postBodyV1(container);
+        // //post footer: 
+        // this.postFooterV1(container);
+        //todo post comments:
+        return container;
+    }
+
+    //create post header:
+    postHeaderV1(container) {
+        const header = eHtml({ class: 'postHeader', container: container });
+        this.eAuthorAsHeader().appendTo(header);
+    }
+
+    /**
+    * author as header element
+    * content 2 col 
+    *      1. author img, icon
+    *      2. -> 2 row
+    *          1. author first last name
+    *          2. author username
+    */
+    eAuthorAsHeader() {
+        const wrapper = eHtml({ class: 'postHeaderWrapper' });
+        const container = eHtml({ class: 'postHeaderContainer', container: wrapper });
+        //set on section click listener:
+        container.click(() => {
+            window.location.href = this.links.profileLink + this.authorId
+        })
+
+        //col 1 img container: 
+        const imgContainer = eHtml({ class: 'authorImgContainer', container: container });
+        //check if the user has img: 
+        if (this.authorImgUrl) {
+            const img = eHtml({ type: 'img', class: 'authorImg', container: imgContainer });
+            img.attr('src', this.authorImgLink);
+        } else {
+            const icon = eHtml({ class: 'authorIconContainer', container: imgContainer, html: '<i class="fas fa-user authorIcon "></i>' });
+        }
+        //col 2 - names container: 
+        const nameContainer = eHtml({ class: 'headerNameContainer', container: container });
+        nameContainer.append(this.eAuthorName);
+        nameContainer.append(this.eAuthorUsername);
+        return wrapper;
+    }
+
+    //create post Body 
+    postBodyV1(container) {
+        const body = eHtml({ class: 'postBody', container: container });
+        //this.postImg().appendTo(body);
+        //this.eTitleTagsDes().appendTo(body);
+    }
+
+
+    //post footer: 
+    postFooterV1(container) {
+        const footer = eHtml({ class: 'postFooter', container: container });
+
+        // this.eLikes().appendTo(footer);
+        // this.eComments().appendTo(footer);
+        // this.eLasUpdate.appendTo(footer);
+        // this.path.appendTo(footer);
+    }
+
 
 }
 
