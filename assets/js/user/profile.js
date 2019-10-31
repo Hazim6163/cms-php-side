@@ -8,10 +8,23 @@ const params = new URLSearchParams(window.location.search);
 const rId = params.get('id');
 //user login status boolean
 let userLoggedIn = false;
+//post class links object:
+const links = {
+    catLink: '../categories.php?id=',
+    profileLink: './profile.php?id=',
+    tagLink: '', //todo create tag link
+    authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
+    phpUtils: './profile.php'
+}
+//user data: 
+let userData;
+//time line vars: 
+let lastPostDate;
 
 //get user data: 
 getUserInfo((userInfo) => {
     (userInfo.loggedIn == false) ? userLoggedIn = false : userLoggedIn = true;
+    userData = userInfo;
     //get data:
     getData((data) => {
         //inflate page:
@@ -30,30 +43,98 @@ const getData = (nextFun) => {
 }
 
 function inflatePage(data, userInfo) {
-    const links = {
-        catLink: '../categories.php?id=',
-        profileLink: './profile.php?id=',
-        tagLink: '', //todo create tag link
-        authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
-        phpUtils: './profile.php'
-    }
     //get page container: 
     const pageContainer = $('#pageContainer');
     // clean up loading stuff
     pageContainer.empty();
     //create post container: 
-    const postsContainer = eHtml({ class: 'postsContainer', container: pageContainer });
+    eHtml({ class: 'postsContainer', id: 'postsContainer', container: pageContainer });
     //append posts to posts container
     data.forEach((postD) => {
-        const post = new Post(postD, links, userInfo);
-        const postContainer = eHtml({ class: 'postContainer', container: postsContainer });
-        postContainer.append(post.eTitle);
+        timeLine(postD);
+        createPost(postD);
     })
 
 }
 
+//profile time line creator:
+function timeLine(data) {
+    const postsContainer = $('#postsContainer');
+    const date = new Date(data.updatedAt);
+    postDate = { year: date.getFullYear(), month: convertToMonth(date.getMonth() + 1) };
+    console.log(postDate.month);
+    //create time line for the first post 
+    if (!lastPostDate) {
+        lastPostDate = postDate;
+        const eTimeLine = eHtml({ class: 'eTimeLine non-select', container: postsContainer });
+        eHtml({ class: 'timeLineYear', container: eTimeLine, text: lastPostDate.year });
+        eHtml({ class: 'timeLineMonth', container: eTimeLine, text: ' - ' + lastPostDate.month });
+    }
+    //validate date last post and actual
+    if (postDate.month != lastPostDate.month || postDate.year != lastPostDate.year) {
+        lastPostDate = postDate;
+        const eTimeLine = eHtml({ class: 'eTimeLine non-select', container: postsContainer });
+        eHtml({ class: 'timeLineYear', container: eTimeLine, text: lastPostDate.year });
+        eHtml({ class: 'timeLineMonth', container: eTimeLine, text: ' - ' + lastPostDate.month });
+    }
+}
 
-//function to create post component
+//convert month from number to typed month: 
+function convertToMonth(number) {
+    let month = '';
+    switch (number) {
+        case 1:
+            month = 'Jan'
+            break;
+        case 2:
+            month = 'Feb'
+            break;
+        case 3:
+            month = 'Mar'
+            break;
+        case 4:
+            month = 'Apr'
+            break;
+        case 5:
+            month = 'May'
+            break;
+        case 6:
+            month = 'Jun'
+            break;
+        case 7:
+            month = 'Jul'
+            break;
+        case 8:
+            month = 'Aug'
+            break;
+        case 9:
+            month = 'Sep'
+            break;
+        case 10:
+            month = 'Oct'
+            break;
+        case 11:
+            month = 'Nov'
+            break;
+        case 12:
+            month = 'Dec'
+            break;
+        default:
+            break;
+    }
+    return month;
+}
+
+//create post function: 
+function createPost(data) {
+    const postsContainer = $('#postsContainer');
+    const post = new Post(data, links, userData);
+    const postContainer = eHtml({ class: 'postContainer', container: postsContainer });
+    post.eTitle.appendTo(postContainer);
+}
+
+
+//Post Class
 class Post {
     constructor(post, links, userInfo) {
         //operation vars: 

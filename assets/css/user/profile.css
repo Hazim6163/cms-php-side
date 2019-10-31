@@ -34,3 +34,39 @@
         transform: rotate(360deg);
     }
 }
+
+/* posts */
+#postsContainer {
+    width: 800px;
+    margin: 60px auto;
+}
+
+/* posts time line  */
+.eTimeLine {
+    padding: 8px;
+    background-color: #f9f9f9;
+    margin: 8px;
+    border-radius: 15px;
+    display: flex;
+    color: #999999;
+    font-size: 1.3rem;
+    align-items: center;
+}
+}
+
+.timeLineYear {
+    padding: 4px 8px;
+}
+
+.timeLineMonth {
+    padding: 4px 8px;
+}
+
+/* non select */
+.non-select {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
