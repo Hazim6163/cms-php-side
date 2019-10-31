@@ -15,7 +15,8 @@ const links = {
     tagLink: '', //todo create tag link
     authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
     phpUtils: './profile.php',
-    postImgLink: 'http://localhost:3000/file/uri?uri='
+    postImgLink: 'http://localhost:3000/file/uri?uri=',
+    postLink: 'http://localhost/html/CMS/posts/post.php?id='
 }
 //user data: 
 let userData;
@@ -136,6 +137,7 @@ function createPost(data) {
 //Post Class
 class Post {
     constructor(post, links, userInfo) {
+        this.id = post._id;
         //operation vars: 
         this.authorMenuInProgress = false;
         //links:
@@ -145,6 +147,7 @@ class Post {
         this.profileLink = links.profileLink;
         this.phpUtils = links.phpUtils;
         this.postImgLink = links.postImgLink
+        this.postLink = links.postLink + this.id
         //post vars:
         this.parentId = post.parentId;
         //post author vars:
@@ -156,7 +159,6 @@ class Post {
         }
         //cat tree
         this.catTree = post.catTree;
-        this.id = post._id;
         this.title = post.title;
         this.des = post.des;
         this.body = post.body;
@@ -200,19 +202,15 @@ class Post {
     }
 
     //post img:
-    postImg() {
+    postImgV1() {
         const wrapper = eHtml({ class: 'pImgWrapper' });
         const container = eHtml({ class: 'pImgContainer', container: wrapper });
         //check if the post has img:
         const url = this.img;
-        console.log(this.img)
         if (url && url != '' && url != null) {
             //create post img
             const img = eHtml({ type: 'img', class: 'postImg', container: container });
             img.attr('src', this.postImgLink + url);
-        } else {
-            //create post icon: 
-            container.html('<i class="fas fa-image postIcon"></i>')
         }
         return wrapper;
     }
@@ -448,7 +446,7 @@ class Post {
         //post header: 
         this.postHeaderV1(container);
         //post body: 
-        // this.postBodyV1(container);
+        this.postBodyV1(container);
         // //post footer: 
         // this.postFooterV1(container);
         //todo post comments:
@@ -496,8 +494,29 @@ class Post {
     //create post Body 
     postBodyV1(container) {
         const body = eHtml({ class: 'postBody', container: container });
-        //this.postImg().appendTo(body);
-        //this.eTitleTagsDes().appendTo(body);
+        this.postImgV1().appendTo(body);
+        this.eTitleTagsDes().appendTo(body);
+    }
+
+    //post title tags des element 
+    eTitleTagsDes() {
+        const container = eHtml({});
+        //title
+        this.eTitle.appendTo(container);
+        //tags
+        this.createTags().appendTo(container);
+        //description
+        this.eDes.appendTo(container);
+        //read more
+        const readMore = eHtml({ html: '<a href="' + this.postLink + '">Read more ...</a>' });
+        readMore.attr('href');
+        readMore.appendTo(container);
+        //click listener:
+        container.click(() => {
+            window.location.href = this.postLink;
+        })
+
+        return container;
     }
 
 
