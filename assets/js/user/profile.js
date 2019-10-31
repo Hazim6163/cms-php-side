@@ -42,11 +42,11 @@ function inflatePage(data, userInfo) {
     // clean up loading stuff
     pageContainer.empty();
     //create post container: 
-    const postsContainer = eHtml({class: 'postsContainer', container: pageContainer});
+    const postsContainer = eHtml({ class: 'postsContainer', container: pageContainer });
     //append posts to posts container
-    data.forEach((postD) =>{
+    data.forEach((postD) => {
         const post = new Post(postD, links, userInfo);
-        const postContainer = eHtml({class: 'postContainer', container: postsContainer});
+        const postContainer = eHtml({ class: 'postContainer', container: postsContainer });
         postContainer.append(post.eTitle);
     })
 
