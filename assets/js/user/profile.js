@@ -137,6 +137,8 @@ function createPost(data) {
 //Post Class
 class Post {
     constructor(post, links, userInfo) {
+        //user : 
+        this.userInfo = userInfo;
         this.id = post._id;
         //operation vars: 
         this.authorMenuInProgress = false;
@@ -168,8 +170,17 @@ class Post {
         this.likers = post.likers;
         this.commentsCount = post.commentsCount;
         this.comments = post.comments;
+        //post date
+        let date;
+        //created date:
         this.createdAt = post.createdAt;
+        date = new Date(this.createdAt);
+        this.createdDate = { year: date.getFullYear(), month: convertToMonth(date.getMonth() + 1), day: date.getDate() };
         this.updatedAt = post.updatedAt;
+        //updated date:
+        date = new Date(this.updatedAt);
+        this.updatedDate = { year: date.getFullYear(), month: convertToMonth(date.getMonth() + 1), day: date.getDate() };
+        //post html elements:
         //create post title element: 
         this.eTitle = eHtml({ class: 'postTitle', html: this.title });
         //create post des element: 
@@ -180,10 +191,12 @@ class Post {
         this.eCreated = eHtml({ class: 'postCreated', html: this.createdAt });
         //create post updated element: 
         this.eUpdated = eHtml({ class: 'postUpdated', html: this.updatedAt });
-        //create post likes count element: 
+        //create post likes element: 
         this.eLikesCount = eHtml({ class: 'postLikesCount', html: this.likesCount });
-        //create post comments count element: 
+        this.eLikes = this.createPostLikes();
+        //create post comments element: 
         this.eCommentsCount = eHtml({ class: 'postCommentsCount', html: this.commentsCount });
+        this.eComments = this.createPostComments();
         //create post author fname element: 
         this.eAuthorFname = eHtml({ class: 'postAuthorFname', html: this.authorInfo.fname });
         //create post author lname element: 
@@ -448,7 +461,7 @@ class Post {
         //post body: 
         this.postBodyV1(container);
         // //post footer: 
-        // this.postFooterV1(container);
+        this.postFooterV1(container);
         //todo post comments:
         return container;
     }
@@ -523,14 +536,92 @@ class Post {
     //post footer: 
     postFooterV1(container) {
         const footer = eHtml({ class: 'postFooter', container: container });
-
-        // this.eLikes().appendTo(footer);
-        // this.eComments().appendTo(footer);
-        // this.eLasUpdate.appendTo(footer);
-        // this.path.appendTo(footer);
+        //post likes
+        this.eLikes.appendTo(footer);
+        //post comments
+        this.eComments.appendTo(footer);
+        //last update:
+        let lastUpdateText;
+        switch (this.updatedDate.day) {
+            case 1:
+                lastUpdateText = 'Last Update : ' + this.updatedDate.day + 'st ' + this.updatedDate.month
+                break;
+            case 2:
+                lastUpdateText = 'Last Update : ' + this.updatedDate.day + 'nd ' + this.updatedDate.month
+                break;
+            default:
+                lastUpdateText = 'Last Update : ' + this.updatedDate.day + 'th ' + this.updatedDate.month
+                break;
+        }
+        const lastUpdate = eHtml({ class: 'postLastUpdate', text: lastUpdateText, container: footer });
+        //post categories tree
+        this.createCatTree().appendTo(footer);
     }
 
+    //create post likes:
+    createPostLikes() {
+        //check if the user already liked the post : 
+        const alreadyLiked = this.likers.filter((l) => {
+            return l.id == this.userInfo.id
+        }).length > 0;
+        //likes container: 
+        const container = eHtml({ class: 'likesContainer' });
+        const likeIconC = eHtml({ class: 'likeIconContainer', container: container })
+        //like icon: 
+        alreadyLiked ?
+            likeIconC.html('<i class="fas fa-heart"></i>') :
+            likeIconC.html('<i class="far fa-heart"></i>');
+        //likes count:
+        eHtml({ class: 'pLikesCount', text: this.likesCount, container: container, onClick: this.showLikers });
+        //like label:
+        let likeLabel;
+        this.likesCount > 1 ?
+            likeLabel = 'Likes' :
+            likeLabel = 'Like';
+        eHtml({ class: 'pLikesLabel', text: likeLabel, container: container, onClick: this.showLikers });
 
+        //on icon container click: 
+        likeIconC.click(() => {
+            //apply classes and animate:
+
+            //send like request:
+            $.post(this.phpUtils, { postLike: true, id: this.id }, (res) => {
+                //update likes count likers:
+
+                //stop animate:
+            }, 'json')
+        });
+
+        return container;
+    }
+
+    //create post comments:
+    createPostComments() {
+        const container = eHtml({ class: 'pCommentsContainer' });
+        //icon
+        eHtml({ class: 'pCommentIconContainer', container: container, html: '<i class="fas fa-comment-alt"></i>', onClick: this.showComments });
+        //count
+        eHtml({ class: 'pCommentsCount', text: this.commentsCount, container: container, onClick: this.showComments })
+        //label
+        let label;
+        this.commentsCount > 1 ?
+            label = 'comments' :
+            label = 'comment';
+        eHtml({ class: 'pCommentLabel', container: container, text: label, onClick: this.showComments })
+        return container;
+    }
+
+    //show likers: 
+    showLikers() {
+        //todo
+        console.log('likes')
+    }
+
+    //show comments: 
+    showComments() {
+        //todo
+        console.log('comments');
+    }
 }
 
 class Comment {
