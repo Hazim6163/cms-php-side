@@ -46,11 +46,15 @@ const getData = (nextFun) => {
     }, 'json')
 }
 
-function inflatePage(data, userInfo) {
+function inflatePage(data) {
+    //get profile data: 
+    const profileData = data[0].authorInfo;
     //get page container: 
     const pageContainer = $('#pageContainer');
     // clean up loading stuff
     pageContainer.empty();
+    //append profile info to the page container: 
+    pageContainer.append(createProfileInfo(profileData, data.length));
     //create post container: 
     eHtml({ class: 'postsContainer', id: 'postsContainer', container: pageContainer });
     //append posts to posts container
@@ -59,6 +63,23 @@ function inflatePage(data, userInfo) {
         createPost(postD);
     })
 
+}
+
+//profile info  
+function createProfileInfo(data, postsCount) {
+    const container = eHtml({ class: 'profileInfoContainer' });
+    eHtml({ class: 'userImg', container: container });
+    eHtml({ class: 'userName', text: data.fname + ' ' + data.lname, container: container });
+    const profileData = eHtml({ class: 'profileData', container: container });
+    eHtml({ class: 'username', text: '@' + data.username, container: profileData });
+    eHtml({ class: 'email', text: 'E-Mail : ' + data.email, container: profileData });
+    //join date.
+    const date = new Date(data.createdAt);
+    let joinDate = ' ' + (date.getDate()) + ' - ' + convertToMonth(date.getMonth() + 1) + ' ' + date.getFullYear();
+    eHtml({ class: 'joinData', text: 'Join :' + joinDate, container: profileData });
+    eHtml({ class: 'userPostsCount', text: 'Posts : ' + postsCount, container: profileData });
+
+    return container;
 }
 
 //profile time line creator:
