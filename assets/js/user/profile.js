@@ -47,18 +47,20 @@ const getData = (nextFun) => {
 }
 
 function inflatePage(data) {
+    //set page title: 
+    document.title = data.info.fname + ' ' + data.info.lname;
     //get profile data: 
-    const profileData = data[0].authorInfo;
+    const profileData = data.info;
     //get page container: 
     const pageContainer = $('#pageContainer');
     // clean up loading stuff
     pageContainer.empty();
     //append profile info to the page container: 
-    pageContainer.append(createProfileInfo(profileData, data.length));
+    pageContainer.append(createProfileInfo(profileData, data.posts.length));
     //create post container: 
     eHtml({ class: 'postsContainer', id: 'postsContainer', container: pageContainer });
     //append posts to posts container
-    data.forEach((postD) => {
+    data.posts.forEach((postD) => {
         timeLine(postD);
         createPost(postD);
     })
