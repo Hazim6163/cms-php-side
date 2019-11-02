@@ -10,9 +10,11 @@ const rId = params.get('id');
 let userLoggedIn = false;
 //post class links object:
 const links = {
-    catLink: '../categories.php?id=',
+    catLink: '../categories/categories.php?id=',
+    categoriesLink: '../categories/categories.php',
+    home: '../index.php',
     profileLink: './profile.php?id=',
-    tagLink: '', //todo create tag link
+    tagLink: '../error.php', //todo create tag link
     authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
     phpUtils: './profile.php',
     postImgLink: 'http://localhost:3000/file/uri?uri=',
@@ -246,7 +248,10 @@ class Post {
             const icon = eHtml({ class: 'tagIconContainer', html: '<i class="fas fa-tag tagIcon"></i>', container: tContainer });
             const name = eHtml({ class: 'tagName', html: tag.name, container: tContainer });
         });
-        //todo test tags
+        //if not tags return empty
+        if (this.tags.length <= 0) {
+            wrapper.empty();
+        }
         return wrapper;
     }
 
@@ -257,11 +262,11 @@ class Post {
         //tree links container
         const container = eHtml({ class: 'catTreeContainer', container: wrapper });
         //home link
-        const home = eHtml({ class: 'body-nav', text: 'Home', container: container });
+        const home = eHtml({ class: 'body-nav', html: '<a href=' + this.links.home + '>Home</a>', container: container });
         //slash
         const slash = eHtml({ class: 'body-nav body-nav-slash', text: '/', container: container });
         //categories link
-        const categories = eHtml({ class: 'body-nav', text: 'Categories', container: container });
+        const categories = eHtml({ class: 'body-nav', html: '<a href=' + this.links.categoriesLink + '>Categories</a>', container: container });
         //loop throw each parent: 
         this.catTree.reverse().forEach((cat) => {
             //append slash
@@ -269,11 +274,8 @@ class Post {
             //create cat container: 
             const cContainer = eHtml({
                 class: 'body-nav-cat body-nav',
-                text: cat.title,
-                container: container,
-                onClick: () => {
-                    window.location.href = this.catLink + cat._id
-                }
+                html: '<a href=' + this.catLink + cat._id + '>' + cat.title + '</a>',
+                container: container
             });
         })
         //todo test categories
@@ -520,10 +522,6 @@ class Post {
         this.createTags().appendTo(container);
         //description
         this.eDes.appendTo(container);
-        //read more
-        const readMore = eHtml({ html: '<a href="' + this.postLink + '">Read more ...</a>' });
-        readMore.attr('href');
-        readMore.appendTo(container);
         //click listener:
         container.click(() => {
             window.location.href = this.postLink;
@@ -536,6 +534,9 @@ class Post {
     //post footer: 
     postFooterV1(container) {
         const footer = eHtml({ class: 'postFooter', container: container });
+        const footerTree = eHtml({ class: 'footerPTree', container: footer });
+        //post categories tree
+        this.createCatTree().appendTo(footerTree);
         //post likes
         this.eLikes.appendTo(footer);
         //post comments
@@ -554,8 +555,6 @@ class Post {
                 break;
         }
         const lastUpdate = eHtml({ class: 'postLastUpdate', text: lastUpdateText, container: footer });
-        //post categories tree
-        this.createCatTree().appendTo(footer);
     }
 
     //create post likes:

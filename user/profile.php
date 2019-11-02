@@ -38,6 +38,7 @@ function getAcUser(){
 
 
 $custom_headers = '
+<link href="https://fonts.googleapis.com/css?family=Rosarivo&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/croppie.css" type="text/css">
 <link rel="stylesheet" href="../assets/css/user/profile.css">
 ';
