@@ -332,8 +332,13 @@ class Post {
         const wrapper = eHtml({ class: 'authorMenuWrapper' });
         const container = eHtml({ class: 'authorMenuContainer', container: wrapper });
         const icon = eHtml({ class: 'authorMenuIconContainer menuCollapsed', id: 'authorMenuIconContainer', container: container, html: '<i class="fas fa-ellipsis-v menuIcon"></i>' });
-        const menu = eHtml({ class: 'authorMenu', id: 'authorMenu', container: container }).hide();
-        icon.click(() => {
+        const menu = eHtml({ class: 'authorMenu', id: 'authorMenu', container: $('body') }).hide();
+        icon.click((e) => {
+            //set menu position: 
+            const x = e.originalEvent.layerX;
+            const y = e.originalEvent.layerY;
+            menu.css('top', y + 'px');
+            menu.css('left', x + 'px');
             menu.toggle('fast', () => {
                 //check menu status:
                 let displayed;
@@ -341,18 +346,18 @@ class Post {
                 displayed ? icon.html('<i class="fas fa-times menuIcon"></i>') : icon.html('<i class="fas fa-ellipsis-v menuIcon"></i>')
             });
         })
-        const privacy = eHtml({ class: 'mPrivacy', id: 'mPrivacy', text: 'Privacy', container: menu });
+        const privacy = eHtml({ class: 'mPrivacy', text: 'Privacy', container: menu });
         privacy.click(() => {
             if (this.authorMenuInProgress) return;
             this.authorMenuInProgress = true;
             this.createPrivacyModal();
         })
-        const edit = eHtml({ class: 'mEditPost', id: 'mEditPost', text: 'Edit', container: menu });
+        const edit = eHtml({ class: 'mEditPost', text: 'Edit', container: menu });
         edit.click(() => {
             if (this.authorMenuInProgress) return;
             window.location.href = window.location.href //todo create edit post page
         })
-        const mDelete = eHtml({ class: 'mDelete', id: 'mDelete', text: 'Delete', container: menu });
+        const mDelete = eHtml({ class: 'mDelete', text: 'Delete', container: menu });
         mDelete.click(() => {
             if (this.authorMenuInProgress) return;
             this.authorMenuInProgress = true;
@@ -497,7 +502,23 @@ class Post {
     //create post header:
     postHeaderV1(container) {
         const header = eHtml({ class: 'postHeader', container: container });
-        this.eAuthorAsHeader().appendTo(header);
+        //author menu: 
+        //check if the current user is the author:
+        if (this.userInfo.loggedIn == false) {
+            //user need to login
+            this.eAuthorAsHeader().appendTo(header);
+            return;
+        } else if (this.userInfo.id != this.authorId) {
+            //user not the author
+            this.eAuthorAsHeader().appendTo(header);
+            return;
+        } else if (this.userInfo.id == this.authorId) {
+            //user is the post author:
+            //append author menu:
+            this.eAuthorAsHeader().append(this.createAuthorMenu()).appendTo(header);
+        } else {
+            this.eAuthorAsHeader().appendTo(header);
+        }
     }
 
     /**
@@ -509,15 +530,13 @@ class Post {
     *          2. author username
     */
     eAuthorAsHeader() {
-        const wrapper = eHtml({ class: 'postHeaderWrapper' });
-        const container = eHtml({ class: 'postHeaderContainer', container: wrapper });
-        //set on section click listener:
-        container.click(() => {
-            window.location.href = this.links.profileLink + this.authorId
-        })
-
+        const container = eHtml({ class: 'postHeaderContainer' });
         //col 1 img container: 
-        const imgContainer = eHtml({ class: 'authorImgContainer', container: container });
+        const imgContainer = eHtml({
+            class: 'authorImgContainer', container: container, onClick: () => {
+                window.location.href = this.links.profileLink + this.authorId
+            }
+        });
         //check if the user has img: 
         if (this.authorImgUrl) {
             const img = eHtml({ type: 'img', class: 'authorImg', container: imgContainer });
@@ -526,10 +545,14 @@ class Post {
             const icon = eHtml({ class: 'authorIconContainer', container: imgContainer, html: '<i class="fas fa-user authorIcon "></i>' });
         }
         //col 2 - names container: 
-        const nameContainer = eHtml({ class: 'headerNameContainer', container: container });
+        const nameContainer = eHtml({
+            class: 'headerNameContainer', container: container, onClick: () => {
+                window.location.href = this.links.profileLink + this.authorId
+            }
+        });
         nameContainer.append(this.eAuthorName);
         nameContainer.append(this.eAuthorUsername);
-        return wrapper;
+        return container;
     }
 
     //create post Body 

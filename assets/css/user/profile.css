@@ -211,6 +211,41 @@
     font-size: .75rem;
 }
 
+.authorMenuWrapper {
+    margin-left: auto;
+    min-width: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* author menu */
+.authorMenu {
+    position: absolute;
+    margin: 8px;
+    background-color: #202020;
+    padding: 8px;
+    border-radius: 10px;
+    color: whitesmoke;
+    font-size: .7rem;
+}
+
+.mPrivacy {
+    margin: 8px;
+    cursor: pointer;
+}
+
+.mEditPost {
+    margin: 8px;
+    cursor: pointer;
+}
+
+.mDelete {
+    margin: 8px;
+    cursor: pointer;
+}
+
+/* end author menu */
+
 /* end header */
 
 /* post body  */
