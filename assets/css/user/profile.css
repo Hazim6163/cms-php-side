@@ -444,4 +444,35 @@
 
 /* end post footer */
 
+/* alert modal */
+#alertModal {
+    min-width: 250px;
+    background-color: whitesmoke;
+    padding: 16px;
+}
+
+#closeAlertM {
+    text-align: right;
+    color: red;
+}
+
+.alertMCloseIcon {
+    cursor: pointer;
+}
+
+.alertMFooter {
+    margin-top: 16px;
+    text-align: right;
+}
+
+.alertMDone {
+    display: inline;
+    background-color: green;
+    padding: 4px 8px;
+    color: whitesmoke;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* end alert modal */
 /* end post styling */
