@@ -68,7 +68,12 @@ function inflatePage(data) {
 //profile info  
 function createProfileInfo(data, postsCount) {
     const container = eHtml({ class: 'profileInfoContainer' });
-    eHtml({ class: 'userImg', container: container });
+    //check if the user has img: 
+    if (data.photoUrl && data.photoUrl != '') {
+        const imgContainer = eHtml({ class: 'userImgContainer', container: container });
+        const img = eHtml({ type: 'img', class: 'userImg', container: imgContainer });
+        img.attr('src', links.authorImgLink + data.photoUrl);
+    }
     eHtml({ class: 'userName', text: data.fname + ' ' + data.lname, container: container });
     const profileData = eHtml({ class: 'profileData', container: container });
     eHtml({ class: 'username', text: '@' + data.username, container: profileData });
