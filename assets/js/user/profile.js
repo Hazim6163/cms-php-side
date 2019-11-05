@@ -630,16 +630,20 @@ class Post {
             likeIconC.html('<i class="fas fa-heart"></i>') :
             likeIconC.html('<i class="far fa-heart"></i>');
         //likes count:
-        const eLikesCount = eHtml({ class: 'pLikesCount', text: this.likesCount, container: container, onClick: this.showLikers });
+        const eLikesCount = eHtml({ class: 'pLikesCount', text: this.likesCount, container: container, onClick: this.showLikers, params: this });
         //like label:
         let likeLabel;
         this.likesCount > 1 ?
             likeLabel = 'Likes' :
             likeLabel = 'Like';
-        eHtml({ class: 'pLikesLabel', text: likeLabel, container: container, onClick: this.showLikers });
+        eHtml({ class: 'pLikesLabel', text: likeLabel, container: container, onClick: this.showLikers, params: this });
 
         //on icon container click: 
         likeIconC.click(() => {
+            if (this.userInfo.loggedIn == false) {
+                //todo show login modal
+                return;
+            }
             //apply classes and animate:
             likeIconC.addClass('rotate');
             //send like request:
@@ -681,9 +685,23 @@ class Post {
     }
 
     //show likers: 
-    showLikers() {
-        //todo
-        console.log('likes')
+    showLikers(post) {
+        //create modal
+        const container = createEmptyModal({ name: 'likers' });
+        const scrollPane = eHtml({ class: 'modalScroll', container: container });
+        post.likers.forEach((l) => {
+            console.log(l);
+            const liker = eHtml({ class: 'likers-modal-liker', container: scrollPane });
+            const likerImgC = eHtml({ class: 'liker-modal-liker-img-container', container: liker });
+            //check if the user has img: 
+            if (l.photoUrl) {
+                const img = eHtml({ type: 'img', class: 'authorImg', container: likerImgC });
+                img.attr('src', post.links.authorImgLink + l.photoUrl);
+            } else {
+                const icon = eHtml({ class: 'authorIconContainer', container: likerImgC, html: '<i class="fas fa-user authorIcon "></i>' });
+            }
+            const likerName = eHtml({ class: 'liker-modal-liker-name', html: '<a href="' + post.links.profileLink + l.id + '">' + l.fname + ' ' + l.lname + '</a>', container: liker });
+        })
     }
 
     //show comments: 
@@ -761,4 +779,19 @@ function eHtml(data) {
 function startLoading() {
     const pageContainer = $('#pageContainer');
     const loadingContainer = eHtml({ class: 'loadingContainer', id: 'loadingContainer', html: '<i class="fas fa-spinner loading-icon rotate"></i>', container: pageContainer });
+}
+
+//empty modal:
+function createEmptyModal(data) {
+    //wrapper
+    const wrapper = eHtml({ class: 'modalWrapper' });
+    $('body').append(wrapper);
+    //container
+    const container = eHtml({ class: 'modal-container ' + data.name + '-container', id: data.name + 'Container', container: wrapper });
+    //close btn:
+    const closeIcon = eHtml({ class: 'modal-close', container: container, text: 'x' }).css('color', 'red').css('text-align', 'right').css('padding-bottom', '8px').css('cursor', 'pointer');
+    closeIcon.click(() => {
+        wrapper.remove();
+    })
+    return container;
 }

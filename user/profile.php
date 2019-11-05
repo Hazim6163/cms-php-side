@@ -56,6 +56,7 @@ if(isset($_POST['getData'])){
 
 //get posts other user
 function getSpUser($id){
+    session_start();
     $res = Utils::getPostsByUserId($id);
     return $res;
 }
