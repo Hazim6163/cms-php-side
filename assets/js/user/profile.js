@@ -84,7 +84,7 @@ function createProfileInfo(data, postsCount) {
     const date = new Date(data.createdAt);
     let joinDate = ' ' + (date.getDate()) + ' - ' + convertToMonth(date.getMonth() + 1) + ' ' + date.getFullYear();
     eHtml({ class: 'joinData', text: 'Join :' + joinDate, container: profileData });
-    eHtml({ class: 'userPostsCount', text: 'Posts : ' + postsCount, container: profileData });
+    eHtml({ class: 'userPostsCount', id: 'userPostsCount', text: 'Posts : ' + postsCount, container: profileData });
 
     return container;
 }
@@ -366,12 +366,19 @@ class Post {
             //change icon to in progress
             icon.html('<i class="fas fa-spinner rotate"></i>');
             //delete request:
-            $.post(this.phpUtils, { deletePost: true, id: this.id, in: 'profile', extra: { id: this.authorId } }, (res) => {
+            $.post(this.phpUtils, { deletePost: true, id: this.id, extra: { id: this.authorId, requestFrom: 'web-profile' } }, (res) => {
+                console.log(res);
                 if (res.deleted) {
-                    //todo update posts container
                     this.createAlertModal({
                         message: 'Post Deleted !!', status: 'p', nextFun: () => {
                             this.authorMenuInProgress = false;
+                            //remove post from posts container: 
+                            $('#postIdContainer' + this.id).toggle('fast', () => {
+                                $('#postIdContainer' + this.id).remove();
+                                //change post count in the profile: 
+                                const postsCount = parseInt($('#userPostsCount').text().substring(7)) - 1;
+                                $('#userPostsCount').text('Posts : ' + postsCount);
+                            });
                         }
                     });
                 } else {
@@ -385,7 +392,7 @@ class Post {
                 menu.hide('fast', () => {
                     icon.html('<i class="fas fa-ellipsis-v menuIcon"></i>');
                 });
-            })
+            }, 'json')
         })
         return wrapper;
     }
@@ -459,6 +466,7 @@ class Post {
         const close = eHtml({ class: 'modalClose alertMCloseContainer', id: 'closeAlertM', container: container, html: '<i class="fas fa-times alertMCloseIcon"></i>' });
         close.click(() => {
             wrapper.remove();
+            data.nextFun(data.args);
         });
         //modal content
         const content = eHtml({ class: 'AlertMContent', container: container });
@@ -490,7 +498,7 @@ class Post {
     //  post v1
     postV1() {
         //post container:
-        const container = eHtml({ class: 'postContainer' });
+        const container = eHtml({ class: 'postContainer', id: 'postIdContainer' + this.id });
         //post header: 
         this.postHeaderV1(container);
         //post body: 

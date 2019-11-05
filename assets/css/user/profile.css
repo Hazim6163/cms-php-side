@@ -474,5 +474,22 @@
     cursor: pointer;
 }
 
+.alertMInfo {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 16px;
+    align-items: center;
+    justify-content: start;
+}
+
+.alert-modal-info-msg {
+    padding-left: 16px;
+}
+
+.alert-info-failed {
+    color: red;
+}
+
+
 /* end alert modal */
 /* end post styling */

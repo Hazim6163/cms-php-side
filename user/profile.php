@@ -1,6 +1,21 @@
 <?php
 require('../classes/utils.php');
 
+if(isset($_POST['deletePost'])){
+    session_start();
+    $headers = array(
+        'Authorization: ' . $_SESSION['token']
+    );
+    $postData = array(
+        'requestFrom' => $_POST['extra']['requestFrom'],
+        'authorId' => $_POST['extra']['id']
+    );
+    $url = 'http://localhost:3000/posts/?id=' . $_POST['id'];
+    $res = Utils::deleteRequestPost($url, $headers, $postData);
+    echo $res;
+    return;
+}
+
 $reqUserId = false;
 //check if there is a user id: 
 if(isset($_GET['id'])){
