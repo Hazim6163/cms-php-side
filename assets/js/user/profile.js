@@ -630,7 +630,7 @@ class Post {
             likeIconC.html('<i class="fas fa-heart"></i>') :
             likeIconC.html('<i class="far fa-heart"></i>');
         //likes count:
-        eHtml({ class: 'pLikesCount', text: this.likesCount, container: container, onClick: this.showLikers });
+        const eLikesCount = eHtml({ class: 'pLikesCount', text: this.likesCount, container: container, onClick: this.showLikers });
         //like label:
         let likeLabel;
         this.likesCount > 1 ?
@@ -641,12 +641,23 @@ class Post {
         //on icon container click: 
         likeIconC.click(() => {
             //apply classes and animate:
-
+            likeIconC.addClass('rotate');
             //send like request:
             $.post(this.phpUtils, { postLike: true, id: this.id }, (res) => {
                 //update likes count likers:
-
+                eLikesCount.text(res.likesCount);
+                this.likesCount = res.likesCount;
+                this.likers = res.likers
+                //check action:
+                if (res.action == 1) {
+                    //like
+                    likeIconC.html('<i class="fas fa-heart"></i>');
+                } else {
+                    //dislike
+                    likeIconC.html('<i class="far fa-heart"></i>');
+                }
                 //stop animate:
+                likeIconC.removeClass('rotate');
             }, 'json')
         });
 

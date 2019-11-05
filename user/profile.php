@@ -1,6 +1,8 @@
 <?php
 require('../classes/utils.php');
+$code = 100 ;
 
+//delete post request:
 if(isset($_POST['deletePost'])){
     session_start();
     $headers = array(
@@ -12,6 +14,22 @@ if(isset($_POST['deletePost'])){
     );
     $url = 'http://localhost:3000/posts/?id=' . $_POST['id'];
     $res = Utils::deleteRequestPost($url, $headers, $postData);
+    echo $res;
+    return;
+}
+
+//toggle post like request:
+if(isset($_POST['postLike'])){
+    session_start();
+    $headers = array(
+        'Authorization: ' . $_SESSION['token']
+    );
+    $postData = array(
+        'code' => $code,
+        'postId' => $_POST['id']
+    );
+    $url = 'http://localhost:3000/posts/like';
+    $res = Utils::postRequest($url, $postData, $headers);
     echo $res;
     return;
 }
