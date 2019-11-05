@@ -111,6 +111,23 @@ class Utils{
         return $result;
     }
 
+    //delete request with post data: 
+    public static function deleteRequestPost($url, $headers, $data){
+        $url = $url;
+        $options = array(
+            CURLOPT_RETURNTRANSFER=> TRUE,
+            CURLOPT_CUSTOMREQUEST => 'DELETE',
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_POSTFIELDS => $data
+        );
+        $ch = curl_init($url);
+        curl_setopt_array($ch, $options);
+
+        $result = curl_exec($ch);
+
+        return $result;
+    }
+
     // patch request:
     public static function patchRequest($url, $patchData, $headers){
         //init curl:
