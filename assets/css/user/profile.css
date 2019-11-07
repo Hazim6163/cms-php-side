@@ -609,4 +609,42 @@
 
 /* end comments */
 
+/* replays */
+
+.replay-input-v1 {
+    padding: 4px;
+    border: 1px solid #4a7770;
+    border-radius: 10px;
+    min-height: 22px;
+    flex: 1;
+    outline: 0px;
+}
+
+.replay-input-container-v1 {
+    display: flex;
+    align-items: flex-end;
+}
+
+.replay-submit-v1 {
+    margin: 0px 16px;
+    background-color: #4a7770;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 4px 8px;
+    color: whitesmoke;
+    font-size: .7rem;
+    cursor: pointer;
+}
+
+.replay-input-container-v1 {
+    /* align-items: flex-end; */
+    padding: 16px 24px;
+    align-items: flex-end;
+}
+
+
+/* end replays */
+
 /* end post styling */

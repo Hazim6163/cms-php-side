@@ -926,6 +926,32 @@ class Comment {
                 return;
             }
             const container = eHtml({ class: 'comment-v1-replays', id: 'commentIdReplays' + this.data._id, container: commentContainer });
+            //inflate replays:
+            this.inflateCommentReplays(container);
+            //replay input:
+            this.replayInput(container);
+        }
+
+        //replay input: pass replays section
+        this.replayInput = (section) => {
+            const container = eHtml({ class: 'replay-input-container-v1', container: section });
+            //input
+            const input = eHtml({ class: 'replay-input-v1', container: container });
+            input.attr('contenteditable', 'true');
+            //replay submit:
+            const submit = eHtml({ class: 'replay-submit-v1', container: container, text: 'Replay' });
+            submit.click(() => {
+                //todo
+                console.log(this.post);
+                console.log(this.data);
+                console.log(this.links);
+            })
+        }
+
+        //inflate replays: pass replays section
+        this.inflateCommentReplays = (section) => {
+            const container = eHtml({ class: 'comment-replays-container-v1', id: 'commentIdReplaysContainer' + this.data._id, container: section });
+            console.log(this.data.replays);
         }
     }
 }

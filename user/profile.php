@@ -69,6 +69,27 @@ if(isset($_POST['commentLike'])){
     return;
 }
 
+//add replay:
+if(isset($_POST['addReplay'])){
+    session_start();
+    $postId = $_POST['post'];
+    $commentId = $_POST['comment'];
+    $body = $_POST['body'];
+    $url = 'http://localhost:3000/posts/replay';
+    $postData = array(
+        'postId' =>  $postId,
+        'body' => $body,
+        'commentId' => $commentId
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
+    
+    echo($res);
+    return;
+}
+
 $reqUserId = false;
 //check if there is a user id: 
 if(isset($_GET['id'])){
