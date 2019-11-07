@@ -535,4 +535,37 @@
 }
 
 /* end likers modal */
+
+/* comments */
+.add-post-comment-container-v1 {
+    display: flex;
+    padding: 16px 24px;
+    align-items: flex-end;
+}
+
+.comment-input-div {
+    padding: 4px;
+    border: 1px solid #4a7770;
+    border-radius: 10px;
+    min-height: 22px;
+    flex: 1;
+    outline: 0px;
+}
+
+.comment-input-submit {
+    margin: 0px 16px;
+    background-color: #4a7770;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 4px 8px;
+    color: whitesmoke;
+    font-size: .7rem;
+    cursor: pointer;
+}
+
+
+/* end comments */
+
 /* end post styling */

@@ -592,7 +592,7 @@ class Post {
 
     //post footer: 
     postFooterV1(container) {
-        const footer = eHtml({ class: 'postFooter', container: container });
+        const footer = eHtml({ class: 'postFooter', id: 'postIdFooter' + this.id, container: container });
         const footerTree = eHtml({ class: 'footerPTree', container: footer });
         //post categories tree
         this.createCatTree().appendTo(footerTree);
@@ -672,15 +672,15 @@ class Post {
     createPostComments() {
         const container = eHtml({ class: 'pCommentsContainer' });
         //icon
-        eHtml({ class: 'pCommentIconContainer', container: container, html: '<i class="fas fa-comment-alt"></i>', onClick: this.showComments });
+        eHtml({ class: 'pCommentIconContainer', container: container, html: '<i class="fas fa-comment-alt"></i>', onClick: this.showComments, params: this });
         //count
-        eHtml({ class: 'pCommentsCount', text: this.commentsCount, container: container, onClick: this.showComments })
+        eHtml({ class: 'pCommentsCount', text: this.commentsCount, container: container, onClick: this.showComments, params: this })
         //label
         let label;
         this.commentsCount > 1 ?
             label = 'comments' :
             label = 'comment';
-        eHtml({ class: 'pCommentLabel', container: container, text: label, onClick: this.showComments })
+        eHtml({ class: 'pCommentLabel', container: container, text: label, onClick: this.showComments, params: this })
         return container;
     }
 
@@ -705,9 +705,29 @@ class Post {
     }
 
     //show comments: 
-    showComments() {
-        //todo
-        console.log('comments');
+    showComments(post) {
+        if ($('#postIdCommentInput' + post.id).html()) {
+            return;
+        }
+        console.log(post.comments)
+        //add comment component v1
+        const addContainer = eHtml({ class: 'add-post-comment-container-v1', container: $('#postIdContainer' + post.id) });
+        //changes:
+        $('#postIdFooter' + post.id).css('border-radius', '0px');
+        //input:
+        const input = eHtml({ class: 'comment-input-div', id: 'postIdCommentInput' + post.id, container: addContainer });
+        input.attr('contenteditable', 'true');
+        //submit:
+        const submit = eHtml({ class: 'comment-input-submit', container: addContainer, text: 'Comment' });
+        submit.click(() => {
+            //check if the comment is not empty:
+            if (input.text().trim(' ').length > 0) {
+                console.log('pass');
+            } else {
+                console.log('comment cannot be passed');
+            }
+        });
+
     }
 }
 
