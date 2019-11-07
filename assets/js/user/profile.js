@@ -255,7 +255,7 @@ class Post {
             }
             //create comment Obj for each comment: 
             post.comments.forEach((commentData) => {
-                const comment = new Comment({ comment: commentData, links: post.links });
+                const comment = new Comment({ comment: commentData, links: post.links, post: this });
                 container.append(comment.commentContainer());
             })
         }
@@ -778,6 +778,7 @@ class Comment {
     constructor(data) {
         this.data = data.comment;
         this.links = data.links;
+        this.post = data.post;
 
         /** ***** functions ***** */
         //comment container: 
@@ -808,6 +809,7 @@ class Comment {
                 imgContainer = eHtml({ class: 'comment-v1-commenter-img-container authorIconContainer', html: '<i class="fas fa-user authorIcon"></i>', container: container });
             }
             const name = eHtml({ class: 'comment-v1-commenter-name', container: container, text: this.data.authorInfo.fname + ' ' + this.data.authorInfo.lname });
+            //todo author menu
             return container;
         }
         //comment body:
@@ -831,14 +833,27 @@ class Comment {
         this.commentsLikes = (footer) => {
             //comment likes container
             const container = eHtml({ class: 'comment-v1-likes-container', id: 'commentIdLikesContainer' + this.data._id, container: footer });
-            //todo comment likes icon:
+            let icon;
+            icon = eHtml({ class: 'comment-v1-like-icon-container', container: container, html: '<i class="far fa-heart comment-v1-like-icon"></i>' });
+            icon.click(() => {
+                this.toggleLike(icon);
+            })
+            //check if the user already liked the comment:
+            this.data.likers.forEach((l) => {
+                if (l.id == userData.id) {
+                    icon.html('<i class="fas fa-heart comment-v1-like-icon"></i>')
+                }
+            })
             //comment likes label:
-            const label = eHtml({ class: 'comment-v1-likes-label', container: container });
+            const label = eHtml({ class: 'comment-v1-likes-label', id: 'commentIdLabel' + this.data._id, container: container });
             this.likesLabel(label);
         }
 
         //likes label:
         this.likesLabel = (container) => {
+            if (!container) {
+                container = $('#commentIdLabel' + this.data._id);
+            }
             //set like label
             let label;
             if (this.data.likesCount > 1) {
@@ -847,6 +862,35 @@ class Comment {
                 label = 'Like'
             }
             container.text(this.data.likesCount + ' ' + label);
+        }
+
+        //toggle like:
+        this.toggleLike = (icon) => {
+            //check if the user logged in
+            if (!userLoggedIn) {
+                //todo login
+            }
+            //apply request progress changes:
+            icon.children().addClass('rotate');
+            // send like request:
+            $.post(this.links.phpUtils, { commentLike: true, id: this.data._id, postId: this.data.postId }, (res) => {
+                const action = res.action;
+                this.data.likesCount = res.likesCount;
+                //if user liked the comment:
+                if (action == 1) {
+                    //like changes:
+                    //change like icon:
+                    icon.html('<i class="fas fa-heart comment-v1-like-icon"></i>');
+                } else {
+                    //dislike changes:
+                    //change like icon:
+                    icon.html('<i class="far fa-heart comment-v1-like-icon"></i>');
+                }
+                //update post comments:
+                const commentsSection = $('#postIdCommentsSection' + this.post.id);
+                this.post.comments = res.comments;
+                this.post.inflatePostComments(this.post, commentsSection);
+            }, 'json');
         }
     }
 }

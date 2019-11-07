@@ -53,6 +53,22 @@ if(isset($_POST['postComment'])){
     return;
 }
 
+//toggle comment like:
+if(isset($_POST['commentLike'])){
+    session_start();
+    $url = 'http://localhost:3000/posts/comment/like';
+    $postData = array(
+        'postId' =>  $_POST['postId'],
+        'commentId' =>  $_POST['id']
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    $res = Utils::toggleLike($url, $postData, $requestHeaders);
+    echo($res);
+    return;
+}
+
 $reqUserId = false;
 //check if there is a user id: 
 if(isset($_GET['id'])){

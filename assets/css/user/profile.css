@@ -567,11 +567,27 @@
 
 .comment-v1-commenter-img {
     width: 35px;
-  }
-  .comment-v1-header {
+}
+
+.comment-v1-header {
     display: flex;
     align-items: center;
-  }
+}
+
+.comment-v1-likes-container {
+    display: flex;
+    align-items: center;
+}
+
+.comment-v1-likes-label {
+    margin-left: 8px;
+}
+
+.comment-v1-like-icon-container {
+    color: #c20000;
+    cursor: pointer;
+}
+
 /* end comments */
 
 /* end post styling */
