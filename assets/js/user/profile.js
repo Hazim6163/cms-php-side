@@ -819,8 +819,34 @@ class Comment {
         //comment footer:
         this.commentFooter = () => {
             const container = eHtml({ class: 'comment-v1-footer' });
-            //todo comment footer
+            //likes container:
+            this.commentsLikes(container);
+
+            //todo comment footer replays
+            //todo comment footer created date
             return container;
+        }
+
+        //comments likes:
+        this.commentsLikes = (footer) => {
+            //comment likes container
+            const container = eHtml({ class: 'comment-v1-likes-container', id: 'commentIdLikesContainer' + this.data._id, container: footer });
+            //todo comment likes icon:
+            //comment likes label:
+            const label = eHtml({ class: 'comment-v1-likes-label', container: container });
+            this.likesLabel(label);
+        }
+
+        //likes label:
+        this.likesLabel = (container) => {
+            //set like label
+            let label;
+            if (this.data.likesCount > 1) {
+                label = 'Likes'
+            } else {
+                label = 'Like'
+            }
+            container.text(this.data.likesCount + ' ' + label);
         }
     }
 }
