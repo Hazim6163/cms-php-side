@@ -34,6 +34,25 @@ if(isset($_POST['postLike'])){
     return;
 }
 
+//add post comment: 
+if(isset($_POST['postComment'])){
+    session_start();
+    $postId = $_POST['postId'];
+    $commentBody = $_POST['body'];
+    $url = 'http://localhost:3000/posts/comment';
+    $postData = array(
+        'postId' =>  $postId,
+        'body' => $commentBody
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    $res = Utils::postRequest($url, $postData, $requestHeaders);
+    
+    echo($res);
+    return;
+}
+
 $reqUserId = false;
 //check if there is a user id: 
 if(isset($_GET['id'])){

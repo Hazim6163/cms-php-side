@@ -238,9 +238,27 @@ class Post {
         });
         //create post author username element: 
         this.eAuthorUsername = eHtml({ class: 'postAuthorUsername', html: this.authorInfo.username });
-
+        /** ********* functions ******* */
         //create post : 
         this.postV1 = this.postV1();
+        //inflate post comments: 
+        this.inflatePostComments = (post, commentsContainer) => {
+            //comments container obj
+            let container;
+            //check if the comments container already created:
+            if ($('#postIdCommentsContainer' + post.id).html()) {
+                container = $('#postIdCommentsContainer' + post.id);
+                //clean container: 
+                $('#postIdCommentsContainer' + post.id).empty();
+            } else {
+                container = eHtml({ class: 'post-comments-container-v1', id: 'postIdCommentsContainer' + post.id, container: commentsContainer });
+            }
+            //create comment Obj for each comment: 
+            post.comments.forEach((commentData) => {
+                const comment = new Comment({ comment: commentData, links: post.links });
+                container.append(comment.commentContainer());
+            })
+        }
 
     }
 
@@ -706,12 +724,20 @@ class Post {
 
     //show comments: 
     showComments(post) {
-        if ($('#postIdCommentInput' + post.id).html()) {
+        //check if the comments container already opened:
+        if ($('#postIdCommentsSection' + post.id).html()) {
+            $('#postIdCommentsSection' + post.id).remove();
             return;
         }
-        console.log(post.comments)
+
+        //comments container 
+        const commentsSection = eHtml({ id: 'postIdCommentsSection' + post.id, container: $('#postIdContainer' + post.id) });
+
+        //inflate post comments: 
+        post.inflatePostComments(post, commentsSection);
+
         //add comment component v1
-        const addContainer = eHtml({ class: 'add-post-comment-container-v1', container: $('#postIdContainer' + post.id) });
+        const addContainer = eHtml({ class: 'add-post-comment-container-v1', container: commentsSection });
         //changes:
         $('#postIdFooter' + post.id).css('border-radius', '0px');
         //input:
@@ -722,9 +748,26 @@ class Post {
         submit.click(() => {
             //check if the comment is not empty:
             if (input.text().trim(' ').length > 0) {
-                console.log('pass');
+                //create new comment obj
+                const newPostComment = new NewPostComment({
+                    body: input.text(),
+                    postId: post.id,
+                    params: null,
+                    phpUtils: post.links.phpUtils,
+                    nextFun: (params, res) => { //this function will called after request successfully to add comment
+                        //inflate post comments: 
+                        post.comments = res.comments;
+                        post.commentsCount = res.commentsCount;
+                        post.inflatePostComments(post, commentsSection);
+                    },
+                });
+                //save comment obj
+                newPostComment.saveComment();
+                //clear comment input text
+                input.text('');
             } else {
                 console.log('comment cannot be passed');
+                //todo alert comment can't be empty
             }
         });
 
@@ -733,14 +776,52 @@ class Post {
 
 class Comment {
     constructor(data) {
-        this.comment = data.comment;
-        this.body = this.comment.body;
-        this.updatedAt = this.comment.updatedAt;
-        this.likesCount = this.comment.likesCount;
-        this.likers = this.comment.likers;
-        this.replaysCount = this.comment.replaysCount;
-        this.replays = this.comment.replays;
-        this.authorInfo = this.comment.authorInfo;
+        this.data = data.comment;
+        this.links = data.links;
+
+        /** ***** functions ***** */
+        //comment container: 
+        this.commentContainer = () => {
+            const container = eHtml({ class: 'comment-container-v1', id: 'commentContainerId' + this.data._id });
+            //append comment header
+            container.append(this.commentHeader());
+            //append comment body
+            container.append(this.commentBody());
+            //append comment footer
+            container.append(this.commentFooter());
+            //return comment container:
+            return container;
+        }
+        //comment header:
+        this.commentHeader = () => {
+            const container = eHtml({ class: 'comment-v1-header' });
+            if (!this.data.authorInfo || this.data.authorInfo == null) {
+                return;
+            }
+            //commenter img:
+            let imgContainer = eHtml({ class: 'comment-v1-commenter-img-container', container: container });
+            //check if the commenter has img : 
+            if (this.data.authorInfo.photoUrl) {
+                const img = eHtml({ type: 'img', class: 'comment-v1-commenter-img', container: imgContainer });
+                img.attr('src', this.links.authorImgLink + this.data.authorInfo.photoUrl)
+            } else {
+                imgContainer = eHtml({ class: 'comment-v1-commenter-img-container authorIconContainer', html: '<i class="fas fa-user authorIcon"></i>', container: container });
+            }
+            const name = eHtml({ class: 'comment-v1-commenter-name', container: container, text: this.data.authorInfo.fname + ' ' + this.data.authorInfo.lname });
+            return container;
+        }
+        //comment body:
+        this.commentBody = () => {
+            const container = eHtml({ class: 'comment-v1-body' });
+            container.html(this.data.body);
+            return container;
+        }
+        //comment footer:
+        this.commentFooter = () => {
+            const container = eHtml({ class: 'comment-v1-footer' });
+            //todo comment footer
+            return container;
+        }
     }
 }
 
@@ -751,6 +832,22 @@ class Replay {
         this.updatedAt = this.replay.updatedAt;
         this.likesCount = this.replay.likesCount;
         this.authorInfo = this.replay.authorInfo;
+    }
+}
+
+class NewPostComment {
+    constructor(data) {
+        this.body = data.body;
+        this.postId = data.postId;
+        this.nextFun = data.nextFun;
+        this.params = data.params;
+        this.phpUtils = data.phpUtils;
+    }
+
+    saveComment() {
+        $.post(this.phpUtils, { postComment: true, body: this.body, postId: this.postId }, (res) => {
+            this.nextFun(this.params, res);
+        }, 'json');
     }
 }
 

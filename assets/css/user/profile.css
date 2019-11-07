@@ -565,7 +565,13 @@
     cursor: pointer;
 }
 
-
+.comment-v1-commenter-img {
+    width: 35px;
+  }
+  .comment-v1-header {
+    display: flex;
+    align-items: center;
+  }
 /* end comments */
 
 /* end post styling */
