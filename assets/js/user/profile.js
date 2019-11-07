@@ -789,7 +789,7 @@ class Comment {
             //append comment body
             container.append(this.commentBody());
             //append comment footer
-            container.append(this.commentFooter());
+            container.append(this.commentFooter(container));
             //return comment container:
             return container;
         }
@@ -819,12 +819,13 @@ class Comment {
             return container;
         }
         //comment footer:
-        this.commentFooter = () => {
+        this.commentFooter = (commentContainer) => {
             const container = eHtml({ class: 'comment-v1-footer' });
             //likes container:
             this.commentsLikes(container);
 
-            //todo comment footer replays
+            //footer replays
+            this.replaysFooter(container, commentContainer);
             //todo comment footer created date
             return container;
         }
@@ -891,6 +892,40 @@ class Comment {
                 this.post.comments = res.comments;
                 this.post.inflatePostComments(this.post, commentsSection);
             }, 'json');
+        }
+
+        //replays footer
+        this.replaysFooter = (footer, commentContainer) => {
+            const container = eHtml({ class: 'comment-v1-footer-replays', container: footer });
+            //icon
+            eHtml({ class: 'comment-v1-footer-replays-icon', container: container, html: '<i class="fas fa-reply comment-replay-icon"></i>' });
+            //label
+            let label;
+            if (this.data.replaysCount > 1) {
+                label = 'Replays';
+            } else {
+                label = 'Replay'
+            }
+            const eLabel = eHtml({ class: 'comment-v1-footer-replays-label', text: this.data.replaysCount + ' ' + label, container: container });
+            //on container click
+            container.click(() => {
+                //create replays section:
+                this.replays(commentContainer);
+            })
+        }
+
+        /**
+         * create comment replays section
+         * cContainer = comment container:
+         */
+        this.replays = (commentContainer) => {
+            //check if already inflated:
+            if ($('#commentIdReplays' + this.data._id).html()) {
+                //remove section
+                $('#commentIdReplays' + this.data._id).remove();
+                return;
+            }
+            const container = eHtml({ class: 'comment-v1-replays', id: 'commentIdReplays' + this.data._id, container: commentContainer });
         }
     }
 }
