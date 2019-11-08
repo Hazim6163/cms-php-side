@@ -896,7 +896,7 @@ class Comment {
 
         //replays footer
         this.replaysFooter = (footer, commentContainer) => {
-            const container = eHtml({ class: 'comment-v1-footer-replays', container: footer });
+            const container = eHtml({ class: 'comment-v1-footer-replays', id: 'commentIdFooterReplays' + this.data._id, container: footer });
             //icon
             eHtml({ class: 'comment-v1-footer-replays-icon', container: container, html: '<i class="fas fa-reply comment-replay-icon"></i>' });
             //label
@@ -941,10 +941,31 @@ class Comment {
             //replay submit:
             const submit = eHtml({ class: 'replay-submit-v1', container: container, text: 'Replay' });
             submit.click(() => {
-                //todo
-                console.log(this.post);
-                console.log(this.data);
-                console.log(this.links);
+                //replay validate:
+                let body = input.html();
+                body = body.replace('<br>', '');
+                if (input.text().trim(' ').length < 1) {
+                    //todo alert 
+                    return;
+                }
+                const newReplay = new NewReplay({
+                    body: body,
+                    postId: this.post.id,
+                    commentId: this.data._id,
+                    phpUtils: this.links.phpUtils,
+                    nextFun: (res) => {
+                        //update post comments:
+                        const commentsSection = $('#postIdCommentsSection' + this.post.id);
+                        this.post.comments = res.comments;
+                        this.post.inflatePostComments(this.post, commentsSection);
+                        //trigger click on comment:
+                        $('#commentIdFooterReplays' + this.data._id).trigger('click');
+                    }
+                });
+                //save replay:
+                newReplay.save();
+                //clean input:
+                input.html('');
             })
         }
 
@@ -978,6 +999,22 @@ class NewPostComment {
     saveComment() {
         $.post(this.phpUtils, { postComment: true, body: this.body, postId: this.postId }, (res) => {
             this.nextFun(this.params, res);
+        }, 'json');
+    }
+}
+
+class NewReplay {
+    constructor(data) {
+        this.body = data.body;
+        this.postId = data.postId;
+        this.commentId = data.commentId;
+        this.nextFun = data.nextFun;
+        this.phpUtils = data.phpUtils;
+    }
+
+    save() {
+        $.post(this.phpUtils, { addReplay: true, body: this.body, post: this.postId, comment: this.commentId }, (res) => {
+            this.nextFun(res);
         }, 'json');
     }
 }
