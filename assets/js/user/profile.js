@@ -14,7 +14,7 @@ const links = {
     categoriesLink: '../categories/categories.php',
     home: '../index.php',
     profileLink: './profile.php?id=',
-    tagLink: '../error.php', //todo create tag link
+    tagLink: '../error.php', //TODO create tag link
     authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
     phpUtils: './profile.php',
     postImgLink: 'http://localhost:3000/file/uri?uri=',
@@ -324,7 +324,6 @@ class Post {
                 container: container
             });
         })
-        //todo test categories
         return wrapper;
     }
 
@@ -375,7 +374,7 @@ class Post {
         const edit = eHtml({ class: 'mEditPost', text: 'Edit', container: menu });
         edit.click(() => {
             if (this.authorMenuInProgress) return;
-            window.location.href = window.location.href //todo create edit post page
+            window.location.href = window.location.href //TODO create edit post page
         })
         const mDelete = eHtml({ class: 'mDelete', text: 'Delete', container: menu });
         mDelete.click(() => {
@@ -385,7 +384,6 @@ class Post {
             icon.html('<i class="fas fa-spinner rotate"></i>');
             //delete request:
             $.post(this.phpUtils, { deletePost: true, id: this.id, extra: { id: this.authorId, requestFrom: 'web-profile' } }, (res) => {
-                console.log(res);
                 if (res.deleted) {
                     this.createAlertModal({
                         message: 'Post Deleted !!', status: 'p', nextFun: () => {
@@ -400,7 +398,7 @@ class Post {
                         }
                     });
                 } else {
-                    //todo create alert modal
+                    //TODO create alert modal
                     this.createAlertModal({
                         message: res.error, status: 'n', nextFun: () => {
                             this.authorMenuInProgress = false;
@@ -449,7 +447,7 @@ class Post {
         //on privacy save click:
         save.click(() => {
             const val = dropdown.children("option:selected").val();
-            $.post(this.phpUtils, { savePrivacy: true, privacy: val, id: this.id }, (res) => { //todo handel request
+            $.post(this.phpUtils, { savePrivacy: true, privacy: val, id: this.id }, (res) => { //TODO handel request
                 info.show('fast');
                 if (res.changed) {
                     info.addClass('privacy-modal-success-info');
@@ -523,7 +521,7 @@ class Post {
         this.postBodyV1(container);
         // //post footer: 
         this.postFooterV1(container);
-        //todo post comments:
+        //TODO post comments:
         return container;
     }
 
@@ -659,7 +657,7 @@ class Post {
         //on icon container click: 
         likeIconC.click(() => {
             if (this.userInfo.loggedIn == false) {
-                //todo show login modal
+                //TODO show login modal
                 return;
             }
             //apply classes and animate:
@@ -708,7 +706,6 @@ class Post {
         const container = createEmptyModal({ name: 'likers' });
         const scrollPane = eHtml({ class: 'modalScroll', container: container });
         post.likers.forEach((l) => {
-            console.log(l);
             const liker = eHtml({ class: 'likers-modal-liker', container: scrollPane });
             const likerImgC = eHtml({ class: 'liker-modal-liker-img-container', container: liker });
             //check if the user has img: 
@@ -767,7 +764,7 @@ class Post {
                 input.text('');
             } else {
                 console.log('comment cannot be passed');
-                //todo alert comment can't be empty
+                //TODO alert comment can't be empty
             }
         });
 
@@ -809,7 +806,7 @@ class Comment {
                 imgContainer = eHtml({ class: 'comment-v1-commenter-img-container authorIconContainer', html: '<i class="fas fa-user authorIcon"></i>', container: container });
             }
             const name = eHtml({ class: 'comment-v1-commenter-name', container: container, text: this.data.authorInfo.fname + ' ' + this.data.authorInfo.lname });
-            //todo author menu
+            //TODO author menu
             return container;
         }
         //comment body:
@@ -826,7 +823,7 @@ class Comment {
 
             //footer replays
             this.replaysFooter(container, commentContainer);
-            //todo comment footer created date
+            //TODO comment footer created date
             return container;
         }
 
@@ -869,7 +866,7 @@ class Comment {
         this.toggleLike = (icon) => {
             //check if the user logged in
             if (!userLoggedIn) {
-                //todo login
+                //TODO login
             }
             //apply request progress changes:
             icon.children().addClass('rotate');
@@ -945,7 +942,7 @@ class Comment {
                 let body = input.html();
                 body = body.replace('<br>', '');
                 if (input.text().trim(' ').length < 1) {
-                    //todo alert 
+                    //TODO alert 
                     return;
                 }
                 const newReplay = new NewReplay({
