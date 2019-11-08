@@ -694,8 +694,8 @@ class Post {
         //label
         let label;
         this.commentsCount > 1 ?
-            label = 'comments' :
-            label = 'comment';
+            label = 'Comments' :
+            label = 'Comment';
         eHtml({ class: 'pCommentLabel', container: container, text: label, onClick: this.showComments, params: this })
         return container;
     }
@@ -728,7 +728,7 @@ class Post {
         }
 
         //comments container 
-        const commentsSection = eHtml({ id: 'postIdCommentsSection' + post.id, container: $('#postIdContainer' + post.id) });
+        const commentsSection = eHtml({ class: 'post-comments-section', id: 'postIdCommentsSection' + post.id, container: $('#postIdContainer' + post.id) });
 
         //inflate post comments: 
         post.inflatePostComments(post, commentsSection);
