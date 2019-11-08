@@ -706,3 +706,35 @@
 /* end replays */
 
 /* end post styling */
+
+/* responsive */
+@media screen and (max-width: 800px) {
+    #postsContainer {
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 0px 8px 0px 0px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #postsContainer {
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 0px 8px 0px 0px;
+    }
+
+    .userName {
+        font-size: 2rem;
+        border: 0px;
+        margin: auto;
+        max-width: auto;
+    }
+
+    .postLastUpdate {
+        margin: 0px;
+        padding: 4px 0px 4px 24px;
+        background-color: #dfdfdf;
+        flex: 1;
+        border-radius: 0px 0px 15px 15px;
+    }
+}
