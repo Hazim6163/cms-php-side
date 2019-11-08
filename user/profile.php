@@ -90,6 +90,23 @@ if(isset($_POST['addReplay'])){
     return;
 }
 
+//replay like toggle:
+if(isset($_POST['replayLike'])){
+    session_start();
+    $url = 'http://localhost:3000/posts/replay/like';
+    $postData = array(
+        'postId' =>  $_POST['post'],
+        'commentId' =>  $_POST['comment'],
+        'replayId' =>  $_POST['replay']
+    );
+    $requestHeaders = array(
+        'Authorization: '.$_SESSION['token']
+    );
+    $res = Utils::toggleLike($url, $postData, $requestHeaders);
+    echo($res);
+    return;
+}
+
 $reqUserId = false;
 //check if there is a user id: 
 if(isset($_GET['id'])){

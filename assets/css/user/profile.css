@@ -611,6 +611,12 @@
 
 /* replays */
 
+.replay-input-container-v1 {
+    display: flex;
+    align-items: flex-end;
+    padding: 16px 24px;
+}
+
 .replay-input-v1 {
     padding: 4px;
     border: 1px solid #4a7770;
@@ -618,11 +624,6 @@
     min-height: 22px;
     flex: 1;
     outline: 0px;
-}
-
-.replay-input-container-v1 {
-    display: flex;
-    align-items: flex-end;
 }
 
 .replay-submit-v1 {
@@ -638,10 +639,32 @@
     cursor: pointer;
 }
 
-.replay-input-container-v1 {
-    /* align-items: flex-end; */
-    padding: 16px 24px;
-    align-items: flex-end;
+.replay-v1-replayer-img {
+    width: 35px;
+}
+
+.replay-v1-header {
+    display: flex;
+    align-items: center;
+}
+
+.replay-v1-footer {
+    display: flex;
+    align-items: center;
+}
+
+.replay-v1-likes-container {
+    display: flex;
+    align-items: center;
+}
+
+.replay-v1-likes-label {
+    margin-left: 8px;
+}
+
+.replay-v1-like-icon-container {
+    color: #c20000;
+    cursor: pointer;
 }
 
 

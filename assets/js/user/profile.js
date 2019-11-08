@@ -867,6 +867,7 @@ class Comment {
             //check if the user logged in
             if (!userLoggedIn) {
                 //TODO login
+                return;
             }
             //apply request progress changes:
             icon.children().addClass('rotate');
@@ -969,18 +970,133 @@ class Comment {
         //inflate replays: pass replays section
         this.inflateCommentReplays = (section) => {
             const container = eHtml({ class: 'comment-replays-container-v1', id: 'commentIdReplaysContainer' + this.data._id, container: section });
-            console.log(this.data.replays);
+            this.data.replays.forEach((r) => {
+                const replay = new Replay({ replay: r, comment: this, links: this.links });
+                replay.replayContainer().appendTo(container);
+            })
         }
     }
 }
 
 class Replay {
     constructor(data) {
-        this.replay = data.replay;
-        this.body = this.replay.body;
-        this.updatedAt = this.replay.updatedAt;
-        this.likesCount = this.replay.likesCount;
-        this.authorInfo = this.replay.authorInfo;
+        this.data = data.replay;
+        this.comment = data.comment;
+        this.links = data.links;
+        this.post = this.comment.post;
+
+        //create replay container:
+        this.replayContainer = () => {
+            const replay = eHtml({ class: 'replay-container-v1', id: 'replayIdContainer' + this.data._id });
+            //replay header:
+            this.header().appendTo(replay);
+            //replay body:
+            this.body().appendTo(replay);
+            //replay footer:
+            this.footer().appendTo(replay);
+            return replay;
+        }
+
+        //header:
+        this.header = () => {
+            const container = eHtml({ class: 'replay-v1-header' });
+            if (!this.data.authorInfo || this.data.authorInfo == null) {
+                return;
+            }
+            //replayer img:
+            let imgContainer = eHtml({ class: 'replay-v1-replayer-img-container', container: container });
+            //check if the replayer has img : 
+            if (this.data.authorInfo.photoUrl) {
+                const img = eHtml({ type: 'img', class: 'replay-v1-replayer-img', container: imgContainer });
+                img.attr('src', this.links.authorImgLink + this.data.authorInfo.photoUrl)
+            } else {
+                imgContainer = eHtml({ class: 'replay-v1-replayer-img-container authorIconContainer', html: '<i class="fas fa-user authorIcon"></i>', container: container });
+            }
+            const name = eHtml({ class: 'replay-v1-replayer-name', container: container, text: this.data.authorInfo.fname + ' ' + this.data.authorInfo.lname });
+            //TODO author menu
+            return container;
+        }
+        //body:
+        this.body = () => {
+            const container = eHtml({ class: 'replay-v1-body' });
+            container.html(this.data.body);
+            return container;
+        }
+        //footer:
+        this.footer = () => {
+            const container = eHtml({ class: 'replay-v1-footer' });
+            //likes container:
+            this.replayLikes(container);
+            //TODO replay footer created date
+            return container;
+        }
+
+        //replay likes container:
+        this.replayLikes = (footer) => {
+            //replay likes container
+            const container = eHtml({ class: 'replay-v1-likes-container', id: 'replayIdLikesContainer' + this.data._id, container: footer });
+            let icon;
+            icon = eHtml({ class: 'replay-v1-like-icon-container', container: container, html: '<i class="far fa-heart replay-v1-like-icon"></i>' });
+            icon.click(() => {
+                this.toggleLike(icon);
+            })
+            //check if the user already liked the replay:
+            this.data.likers.forEach((l) => {
+                if (l.id == userData.id) {
+                    icon.html('<i class="fas fa-heart replay-v1-like-icon"></i>')
+                }
+            })
+            //replay likes label:
+            const label = eHtml({ class: 'replay-v1-likes-label', id: 'replayIdLabel' + this.data._id, container: container });
+            this.likesLabel(label);
+        }
+
+        //likes label:
+        this.likesLabel = (container) => {
+            if (!container) {
+                container = $('#replayIdLabel' + this.data._id);
+            }
+            //set like label
+            let label;
+            if (this.data.likesCount > 1) {
+                label = 'Likes'
+            } else {
+                label = 'Like'
+            }
+            container.text(this.data.likesCount + ' ' + label);
+        }
+
+        //toggle like:
+        this.toggleLike = (icon) => {
+            //check if the user logged in
+            if (!userLoggedIn) {
+                //TODO login
+                return;
+            }
+            //apply request progress changes:
+            icon.children().addClass('rotate');
+            // send like request:
+            $.post(this.links.phpUtils, { replayLike: true, replay: this.data._id, post: this.data.postId, comment: this.data.commentId }, (res) => {
+                const action = res.action;
+                this.data.likesCount = res.likesCount;
+                //if user liked the replay:
+                if (action == 1) {
+                    //like changes:
+                    //change like icon:
+                    icon.html('<i class="fas fa-heart replay-v1-like-icon"></i>');
+                } else {
+                    //dislike changes:
+                    //change like icon:
+                    icon.html('<i class="far fa-heart replay-v1-like-icon"></i>');
+                }
+                //update post comments:
+                const commentsSection = $('#postIdCommentsSection' + this.post.id);
+                this.post.comments = res.comments;
+                this.post.inflatePostComments(this.post, commentsSection);
+                //trigger click on comment:
+                $('#commentIdFooterReplays' + this.data.commentId).trigger('click');
+            }, 'json');
+        }
     }
 }
 
