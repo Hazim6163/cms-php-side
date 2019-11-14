@@ -4,3 +4,8 @@ vendor/
 sendgrid.env
 *.png
 *.bk.*
+nbproject/project.properties
+nbproject/project.xml
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/private/config.properties
