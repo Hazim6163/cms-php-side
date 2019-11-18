@@ -1,6 +1,7 @@
 <?php
   global $title;
   global $custom_head;
+  $base = 'http://www.mustafa-dev.website/cms';
 ?>
 
 <!DOCTYPE html>
@@ -17,8 +18,8 @@
     <!--google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Germania+One|Roboto+Condensed&display=swap" rel="stylesheet"> 
     <!-- navbar and footer-->
-    <link rel="stylesheet" href="http://localhost/html/cms/assets/css/navbar.css" type="text/css">
-    <link rel="stylesheet" href="http://localhost/html/cms/assets/css/footer.css" type="text/css">
+    <link rel="stylesheet" href=" <?php echo $base ?> /assets/css/navbar.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo $base ?>/assets/css/footer.css" type="text/css">
     <?php echo $custom_head ?>
     <title><?php echo $title; ?></title>
 </head>
