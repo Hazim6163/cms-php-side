@@ -1,4 +1,5 @@
 <?php
+    $base = 'http://www.mustafa-dev.website/cms';
     //TODO logged in users navbar
 ?>
 
@@ -11,10 +12,10 @@
     </div>
     <ul class="menuLinkContainer">
         <li class="menuLink">
-            <a href="http://localhost/html/CMS/index.php">Home</a>
+            <a href=<?php echo $base . '/index.php' ?>>Home</a>
         </li>
         <li class="menuLink">
-            <a href="./categories/categories.php">Categories</a>
+            <a href=<?php echo $base . '/categories/categories.php' ?>>Categories</a>
         </li>
         <?php if(isset($_SESSION['token'])){ ?>
         <li class="menuLink">
@@ -22,7 +23,7 @@
         </li>
         <?php }else { ?>
         <li class="menuLink">
-            <a href="http://localhost/html/CMS/login.php">Login</a>
+            <a href=<?php echo $base . '/login.php' ?>>Login</a>
         </li>
         <?php }?>
     </ul>

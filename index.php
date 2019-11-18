@@ -1,4 +1,5 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
 
 //get categories:
 if(isset($_POST['getCategories'])){
@@ -98,7 +99,7 @@ function uploadFile($inputName, $allowedExt, $dir, $maxSize){
 
 $title = 'Home';
 $custom_head = '
-<link rel="stylesheet" href="./assets/css/index.css">
+<link rel="stylesheet" href="'. $base .'/assets/css/index.css">
 
 <script src="https://kit.fontawesome.com/9b9c3e7d62.js" crossorigin="anonymous"></script>
 ';
