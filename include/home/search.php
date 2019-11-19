@@ -17,6 +17,7 @@ $api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
         return;
     }
     function getResult($str){
+        $api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
         $url = $api_base . '/search?content='.$str;
         $result = connectToServer($url, 'GET');
         return $result;
