@@ -1,3 +1,6 @@
+const base = 'http://www.mustafa-dev.website/cms';
+const api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
+
 //get user data: 
 getUserInfo((userInfo) => {
     //inflate page:
@@ -157,7 +160,7 @@ function createUserImg(url) {
     userImgContainer.append(iconContainer);
     //check if the user has img
     if (url) {
-        imgHolder.attr('src', 'http://localhost:3000/user/profilePhoto?id=' + url);
+        imgHolder.attr('src', api_base + '/user/profilePhoto?id=' + url);
         //hide and show containers:
         removeImgIconContainer.show()
         iconContainer.hide()

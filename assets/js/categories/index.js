@@ -1,3 +1,7 @@
+
+const base = 'http://www.mustafa-dev.website/cms';
+const api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
+
 /**
  * the posts section we take it from the home page 
  * and then edit the links for comment likes replays and login
@@ -38,8 +42,8 @@ function getData(catId, nextFun) {
 function documentReadyAndThen() { }
 
 //urls:
-const userImgBase = 'http://localhost:3000/user/profilePhoto?id=';
-const postImgBase = 'http://localhost:3000/file/uri?uri=';
+const userImgBase = api_base + '/user/profilePhoto?id=';
+const postImgBase = api_base + '/file/uri?uri=';
 //vars:
 // to check comment edit Progress
 var commentInEditProgress = false;
@@ -133,7 +137,7 @@ function createCatImg(cat, container) {
         container: container
     };
     const img = htmlE(data);
-    const src = 'http://localhost:3000/file/uri?uri=' + cat.imgUrl
+    const src = api_base + '/file/uri?uri=' + cat.imgUrl
     img.attr('src', src)
     img.attr('width', '300px')
     return img;
@@ -201,7 +205,7 @@ function htmlE(data) {
 //on category click
 function catClick(params) {
     const cat = params[0];
-    window.location.href = 'http://localhost/html/CMS/categories/categories.php?id=' + cat._id;
+    window.location.href = base + '/categories/categories.php?id=' + cat._id;
 }
 
 //get body nav:
@@ -1854,13 +1858,13 @@ function createLoginModal() {
     const passForget = $('<div>', {
         id: 'LoginFormPasswordForget',
         class: 'LoginFormPasswordForget'
-    }).html('Did you forget your Password or Username <a href="http://localhost/html/cms">Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
+    }).html('Did you forget your Password or Username <a href="'+ base +'>Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
     passForget.appendTo(loginModalContainer);
     //account register:
     const accountRegister = $('<div>', {
         id: 'LoginModalRegisterAccount',
         class: 'LoginModalRegisterAccount'
-    }).html('Or create a new Account <a href="http://localhost/html/CMS/signup.php">register</a>');
+    }).html('Or create a new Account <a href="' + base + '/signup.php">register</a>');
     accountRegister.appendTo(loginModalContainer);
     //modal footer:
     const footer = $('<div>', {

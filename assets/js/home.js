@@ -1,3 +1,6 @@
+const base = 'http://www.mustafa-dev.website/cms';
+const api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
+
 /**
  * in this file we will manage the home page exactly the posts section.
  */
@@ -7,8 +10,8 @@ var userLoggedIn = false;
 var userInfo;
 
 //urls:
-const userImgBase = 'http://localhost:3000/user/profilePhoto?id=';
-const postImgBase = 'http://localhost:3000/file/uri?uri=';
+const userImgBase = api_base + '/user/profilePhoto?id=';
+const postImgBase = api_base + '/file/uri?uri=';
 
 //vars:
 // to check comment edit Progress
@@ -1500,13 +1503,13 @@ function createLoginModal() {
     const passForget = $('<div>', {
         id: 'LoginFormPasswordForget',
         class: 'LoginFormPasswordForget'
-    }).html('Did you forget your Password or Username <a href="http://localhost/html/cms">Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
+    }).html('Did you forget your Password or Username <a href="'+base+'">Click Here</a>');//TODO CREATE FORGET PASSWORD PAGE
     passForget.appendTo(loginModalContainer);
     //account register:
     const accountRegister = $('<div>', {
         id: 'LoginModalRegisterAccount',
         class: 'LoginModalRegisterAccount'
-    }).html('Or create a new Account <a href="http://localhost/html/CMS/signup.php">register</a>');
+    }).html('Or create a new Account <a href="'+base+'/signup.php">register</a>');
     accountRegister.appendTo(loginModalContainer);
     //modal footer:
     const footer = $('<div>', {

@@ -1,5 +1,8 @@
+const base = 'http://www.mustafa-dev.website/cms';
+const api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
+
 //vars: 
-const userImgBaseUrl = 'http://localhost:3000/user/profilePhoto?id='
+const userImgBaseUrl = api_base + '/user/profilePhoto?id='
 
 //user menu icon vars:
 var NavbarUserMenuOpened = false;

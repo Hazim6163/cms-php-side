@@ -1,3 +1,6 @@
+const base = 'http://www.mustafa-dev.website/cms';
+const api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
+
 //loading : 
 startLoading();
 
@@ -15,10 +18,10 @@ const links = {
     home: '../index.php',
     profileLink: './profile.php?id=',
     tagLink: '../error.php', //TODO create tag link
-    authorImgLink: 'http://localhost:3000/user/profilePhoto?id=',
+    authorImgLink: api_base + '/user/profilePhoto?id=',
     phpUtils: './profile.php',
-    postImgLink: 'http://localhost:3000/file/uri?uri=',
-    postLink: 'http://localhost/html/CMS/posts/post.php?id='
+    postImgLink: api_base + '/file/uri?uri=',
+    postLink: base + '/posts/post.php?id='
 }
 //user data: 
 let userData;
