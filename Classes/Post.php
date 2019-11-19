@@ -1,5 +1,7 @@
 <?php
 
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,14 +30,14 @@ class Post {
     public $isFounded;
     
     public static function formServer($id){
-        $url = 'http://localhost:3000/posts/?id='.$id;
+        $url = $api_base . 'posts/?id='.$id;
         $result = Post::connectToServer($url, 'GET');
         return $result;
         
     }
     
     public static function getCategoryPosts($catId){
-        $url = 'http://localhost:3000/posts/category?id='.$catId;
+        $url = $api_base . 'posts/category?id='.$catId;
         $result = Post::connectToServer($url, 'GET');
         return $result;
     }
@@ -44,7 +46,7 @@ class Post {
      * getLastPosts
      */
     public static function getLastPosts(){
-        $url = 'http://localhost:3000/posts/last';
+        $url = $api_base . 'posts/last';
         $result = Post::connectToServer($url, 'GET');
         return $result;
     }

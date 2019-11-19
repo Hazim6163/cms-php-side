@@ -1,4 +1,6 @@
 <?php 
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 //./include/home/categories.php
 require ('./Classes/Category.php');
 /**Classes\Category.php
@@ -20,7 +22,7 @@ foreach ($rootCategories as $category) {
     if(isset($category['imgUrl'])){ ?>
 <div class="category">
     <div class="photo">
-        <img src="http://localhost:3000/file/uri?uri=<?php echo $category['imgUrl']?>" alt="" class="categoryImg">
+        <img src="<?php echo $api_base ?>/file/uri?uri=<?php echo $category['imgUrl']?>" alt="" class="categoryImg">
     </div>
     <div class="content">
         <div class="title">

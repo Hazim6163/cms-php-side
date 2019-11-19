@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 /** style variable */ 
     #search wrapper width
     $sww = '270px';
@@ -15,7 +17,7 @@
         return;
     }
     function getResult($str){
-        $url = 'http://localhost:3000/search?content='.$str;
+        $url = $api_base . 'search?content='.$str;
         $result = connectToServer($url, 'GET');
         return $result;
     }

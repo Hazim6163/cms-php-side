@@ -1,5 +1,6 @@
 <?php
 $base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 //get categories:
 if(isset($_POST['getCategories'])){
@@ -13,7 +14,7 @@ if(isset($_POST['getCategories'])){
 if(isset($_POST['saveCat'])){
     session_start();
 
-    $url = 'http://localhost:3000/categories/add';
+    $url = $api_base . '/categories/add';
     
     $headers = array(
         'Authorization: '.$_SESSION['token']
