@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 require('../classes/utils.php');
 
 /*****  js requests:    ***/
@@ -52,7 +54,7 @@ function isSingle(){
 
 //get root categories:
 function getRootCats(){
-    $url = 'http://localhost:3000/categories/home';
+    $url = $api_base . '/categories/home';
     $res = json_decode(Utils::getRequest($url));
     return $res;
 }
@@ -60,7 +62,7 @@ function getRootCats(){
 //get category:
 function getCat(){
     $id = $_POST['id'];
-    $url = 'http://localhost:3000/categories/category?id=' . $id;
+    $url = $api_base . '/categories/category?id=' . $id;
     $res = json_decode(Utils::getRequest($url));
     return $res;
 }
@@ -68,7 +70,7 @@ function getCat(){
 //get category posts:
 function getCatPosts(){
     $id = $_POST['id'];
-    $url = 'http://localhost:3000/posts/category?id=' . $id ;
+    $url = $api_base . '/posts/category?id=' . $id ;
     $res = json_decode(Utils::getRequest($url));
     return $res;
 }

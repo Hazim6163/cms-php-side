@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 $title = 'Confirm Account';
 $custom_head = '
@@ -28,7 +30,7 @@ function getUserInfo($token){
     global $fname;
     global $isAlreadyConfirmed;
     //send request to get confirmation data;
-    $url = 'http://localhost:3000/users/conformation-info';
+    $url = $api_base . '/users/conformation-info';
     $options = array(
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => 'GET',
@@ -72,7 +74,7 @@ if(isset($_POST['submit'])){
         $uVKey = (int)$_POST['vKey'];
 
     //send the post request to the server ->
-        $url = 'http://localhost:3000/users/confirm';
+        $url = $api_base . '/users/confirm';
         $postFields = array(
             'vKey' => $uVKey
         );

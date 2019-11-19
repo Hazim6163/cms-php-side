@@ -87,7 +87,7 @@ if(isset($_POST['postLike'])){
     session_start();
     //will return true if the user liked and false if disliked
     require ('../../classes/utils.php');
-    $url = $api_base . 'posts/like';
+    $url = $api_base . '/posts/like';
     $postData = array(
         'postId' =>  $_POST['postId']
     );
@@ -102,7 +102,7 @@ if(isset($_POST['postLike'])){
 //post likers array:
 if(isset($_POST['postLikers'])){
     $postId = $_POST['postId'];
-    $url = $api_base . 'posts/likers?postId=' . $postId;
+    $url = $api_base . '/posts/likers?postId=' . $postId;
     require('../../classes/utils.php');
     $res = Utils::getRequest($url);
 
@@ -113,7 +113,7 @@ if(isset($_POST['postLikers'])){
 //comment Likers array:
 if(isset($_POST['commentLikers'])){
     $commentId = $_POST['commentId'];
-    $url = $api_base . 'posts/comments/likers?commentId=' .$commentId;
+    $url = $api_base . '/posts/comments/likers?commentId=' .$commentId;
     require('../../classes/utils.php');
     $res = Utils::getRequest($url);
 
@@ -124,7 +124,7 @@ if(isset($_POST['commentLikers'])){
 //replay Likers array:
 if(isset($_POST['replayLikers'])){
     $replayId = $_POST['replayId'];
-    $url = $api_base . 'posts/replays/likers?replayId=' .$replayId;
+    $url = $api_base . '/posts/replays/likers?replayId=' .$replayId;
     require('../../classes/utils.php');
     $res = Utils::getRequest($url);
 
@@ -137,7 +137,7 @@ if(isset($_POST['addPostComment'])){
     session_start();
     $postId = $_POST['postId'];
     $commentBody = $_POST['commentBody'];
-    $url = $api_base . 'posts/comment';
+    $url = $api_base . '/posts/comment';
     $postData = array(
         'postId' =>  $postId,
         'body' => $commentBody
@@ -157,7 +157,7 @@ if(isset($_POST['deletePostComment'])){
     session_start();
     $postId = $_POST['postId'];
     $commentId = $_POST['commentId'];
-    $url = $api_base . 'posts/comment?commentId='.$commentId.'&postId='.$postId;
+    $url = $api_base . '/posts/comment?commentId='.$commentId.'&postId='.$postId;
     $requestHeaders = array(
         'Authorization: '.$_SESSION['token']
     );
@@ -173,7 +173,7 @@ if(isset($_POST['updatePostComment'])){
     session_start();
     $commentId = $_POST['commentId'];
     $commentBody = $_POST['commentBody'];
-    $url = $api_base . 'posts/comment';
+    $url = $api_base . '/posts/comment';
     $patchField = array(
         'commentId' => $commentId,
         'commentBody' => $commentBody
@@ -194,7 +194,7 @@ if(isset($_POST['addCommentReplay'])){
     $postId = $_POST['postId'];
     $commentId = $_POST['commentId'];
     $body = $_POST['replayBody'];
-    $url = $api_base . 'posts/replay';
+    $url = $api_base . '/posts/replay';
     $postData = array(
         'postId' =>  $postId,
         'body' => $body,
@@ -215,7 +215,7 @@ if(isset($_POST['deleteCommentReplay'])){
     session_start();
     $replayId = $_POST['replayId'];
     $headers = array('Authorization: '.$_SESSION['token']);
-    $url = $api_base . 'posts/replay?replayId=' . $replayId;
+    $url = $api_base . '/posts/replay?replayId=' . $replayId;
     require('../../classes/utils.php');
     $res = Utils::deleteRequest($url, $headers);
 
@@ -228,7 +228,7 @@ if(isset($_POST['updateCommentReplay'])){
     session_start();
     $replayId = $_POST['replayId'];
     $body = $_POST['body'];
-    $url = $api_base . 'posts/replay';
+    $url = $api_base . '/posts/replay';
     $patchField = array(
         'replayId' => $replayId,
         'replayBody' => $body
@@ -250,7 +250,7 @@ if(isset($_POST['login'])){
     );
     $requestBody = json_encode($requestBody);
 
-   $url = $api_base . 'users/login';
+   $url = $api_base . '/users/login';
    $options = array(
     CURLOPT_RETURNTRANSFER => TRUE,
     CURLOPT_CUSTOMREQUEST => 'POST',

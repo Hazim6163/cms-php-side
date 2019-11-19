@@ -30,14 +30,14 @@ class Post {
     public $isFounded;
     
     public static function formServer($id){
-        $url = $api_base . 'posts/?id='.$id;
+        $url = $api_base . '/posts/?id='.$id;
         $result = Post::connectToServer($url, 'GET');
         return $result;
         
     }
     
     public static function getCategoryPosts($catId){
-        $url = $api_base . 'posts/category?id='.$catId;
+        $url = $api_base . '/posts/category?id='.$catId;
         $result = Post::connectToServer($url, 'GET');
         return $result;
     }
@@ -46,7 +46,7 @@ class Post {
      * getLastPosts
      */
     public static function getLastPosts(){
-        $url = $api_base . 'posts/last';
+        $url = $api_base . '/posts/last';
         $result = Post::connectToServer($url, 'GET');
         return $result;
     }

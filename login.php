@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 $title = 'Login';
 $custom_head = '
 <link rel="stylesheet" href="./assets/css/main.css" type="text/css">
@@ -21,7 +23,7 @@ if (isset($_POST['submit'])) {
     );
     $requestBody = json_encode($requestBody);
 
-   $url = 'http://localhost:3000/users/login';
+   $url = $api_base . '/users/login';
    $options = array(
     CURLOPT_RETURNTRANSFER => TRUE,
     CURLOPT_CUSTOMREQUEST => 'POST',
@@ -51,7 +53,7 @@ if (isset($_POST['submit'])) {
 }
 
 function getUserInfo($token){
-    $url = 'http://localhost:3000/users/getUserCard';
+    $url = $api_base . '/users/getUserCard';
     $requestHeaders = array(
         'Authorization: '.$token
     );

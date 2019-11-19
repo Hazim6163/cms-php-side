@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 /*********************************** check js requests ************************************/
 //get user info:
@@ -156,21 +158,21 @@ class Utils{
 
     //get categories:
     public static function getCategories(){
-        $url = 'http://localhost:3000/categories/nested';
+        $url = $api_base . '/categories/nested';
         $res = Utils::getRequest($url);
         return $res;
     }
 
     //get tags:
     public static function getTags(){
-        $url = 'http://localhost:3000/tags';
+        $url = $api_base . '/tags';
         $res = Utils::getRequest($url);
         return $res;
     }
 
     //get posts by user id:
     public static function getPostsByUserId($id){
-        $url = 'http://localhost:3000/posts/user?id=' . $id . '&catTree=true';
+        $url = $api_base . '/posts/user?id=' . $id . '&catTree=true';
         $res = Utils::getRequest($url);
         return $res;
     }

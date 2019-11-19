@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,7 +26,7 @@ class Comment {
     public static function formServer($id){
         $instance = new self();
         
-        $url = 'http://localhost:3000/comments/?id='.$id;
+        $url = $api_base . '/comments/?id='.$id;
         $options = array(
             CURLOPT_RETURNTRANSFER=> TRUE,
             CURLOPT_CUSTOMREQUEST => 'GET'
@@ -55,7 +57,7 @@ class Comment {
     
     public static function getPostComments($postId){
         $isFounded = true;
-        $url = 'http://localhost:3000/comments/post?id='.$postId;
+        $url = $api_base . '/comments/post?id='.$postId;
         $options = array(
             CURLOPT_RETURNTRANSFER=> TRUE,
             CURLOPT_CUSTOMREQUEST => 'GET'

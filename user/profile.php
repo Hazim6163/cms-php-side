@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 require('../classes/utils.php');
 $code = 100 ;
 
@@ -12,7 +14,7 @@ if(isset($_POST['deletePost'])){
         'requestFrom' => $_POST['extra']['requestFrom'],
         'authorId' => $_POST['extra']['id']
     );
-    $url = 'http://localhost:3000/posts/?id=' . $_POST['id'];
+    $url = $api_base . '/posts/?id=' . $_POST['id'];
     $res = Utils::deleteRequestPost($url, $headers, $postData);
     echo $res;
     return;
@@ -28,7 +30,7 @@ if(isset($_POST['postLike'])){
         'code' => $code,
         'postId' => $_POST['id']
     );
-    $url = 'http://localhost:3000/posts/like';
+    $url = $api_base . '/posts/like';
     $res = Utils::postRequest($url, $postData, $headers);
     echo $res;
     return;
@@ -39,7 +41,7 @@ if(isset($_POST['postComment'])){
     session_start();
     $postId = $_POST['postId'];
     $commentBody = $_POST['body'];
-    $url = 'http://localhost:3000/posts/comment';
+    $url = $api_base . '/posts/comment';
     $postData = array(
         'postId' =>  $postId,
         'body' => $commentBody
@@ -56,7 +58,7 @@ if(isset($_POST['postComment'])){
 //toggle comment like:
 if(isset($_POST['commentLike'])){
     session_start();
-    $url = 'http://localhost:3000/posts/comment/like';
+    $url = $api_base . '/posts/comment/like';
     $postData = array(
         'postId' =>  $_POST['postId'],
         'commentId' =>  $_POST['id']
@@ -75,7 +77,7 @@ if(isset($_POST['addReplay'])){
     $postId = $_POST['post'];
     $commentId = $_POST['comment'];
     $body = $_POST['body'];
-    $url = 'http://localhost:3000/posts/replay';
+    $url = $api_base . '/posts/replay';
     $postData = array(
         'postId' =>  $postId,
         'body' => $body,
@@ -93,7 +95,7 @@ if(isset($_POST['addReplay'])){
 //replay like toggle:
 if(isset($_POST['replayLike'])){
     session_start();
-    $url = 'http://localhost:3000/posts/replay/like';
+    $url = $api_base . '/posts/replay/like';
     $postData = array(
         'postId' =>  $_POST['post'],
         'commentId' =>  $_POST['comment'],

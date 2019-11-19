@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,7 +32,7 @@ class Category {
      * to get single category details
      */
     public static function fromServer($id) {
-        $url = 'http://localhost:3000/categories/?id='.$id;
+        $url = $api_base . '/categories/?id='.$id;
         $result = Category::connectToServer($url, 'GET');
         return $result;
     }
@@ -58,7 +60,7 @@ class Category {
      * to get all categories from the server
      **/
     public static function getCategories(){
-        $url = 'http://localhost:3000/categories/';
+        $url = $api_base . '/categories/';
         $result = Category::connectToServer($url, 'GET');
         return $result;
     }
@@ -67,7 +69,7 @@ class Category {
      * to get the children categories 
      */
     public static function getCatByCatId($catId){
-        $url = 'http://localhost:3000/categories/category?id='.$catId;
+        $url = $api_base . '/categories/category?id='.$catId;
         $result = Category::connectToServer($url, 'GET');
         return $result;
     }
@@ -76,7 +78,7 @@ class Category {
      * to get the root categories:
      */
     public static function getRootCategories(){
-        $url = 'http://localhost:3000/categories/home';
+        $url = $api_base . '/categories/home';
         $result = Category::connectToServer($url, 'GET');
         return $result;
     }

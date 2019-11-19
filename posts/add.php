@@ -1,10 +1,12 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 
 /****************** editor requests **********/
 //save post:
 if(isset($_POST['savePost'])){
     session_start();
-    $url = 'http://localhost:3000/posts/add';
+    $url = $api_base . '/posts/add';
     $postData = array(
         'title' => $_POST['title'],
         'des' => $_POST['des'],
@@ -32,7 +34,7 @@ if(isset($_POST['savePost'])){
 //search tag:
 if(isset($_POST['searchTag'])){
     $chars = $_POST['word'];
-    $url = 'http://localhost:3000/search/tags?chars=' . $chars;
+    $url = $api_base . '/search/tags?chars=' . $chars;
     require('../classes/utils.php');
     $res = Utils::getRequest($url);
     
@@ -43,7 +45,7 @@ if(isset($_POST['searchTag'])){
 //submit tag:
 if(isset($_POST['tagSubmit'])){
     session_start();
-    $url = 'http://localhost:3000/tags/';
+    $url = $api_base . '/tags/';
     $postData = array(
         'name' => $_POST['name']
     );

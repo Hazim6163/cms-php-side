@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 require 'vendor/autoload.php';
 
 //check if the user already logged in :
@@ -37,7 +39,7 @@ if (isset($_POST['submit'])){
     /** send the data to the main server : */
 
     // init url:
-    $url = 'http://localhost:3000/users/register';
+    $url = $api_base . '/users/register';
 
     //create the verification code : 
     $vKey = rand(100000, 999999);

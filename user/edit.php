@@ -1,4 +1,6 @@
 <?php
+$base = 'http://www.mustafa-dev.website/cms';
+$api_base = 'http://ec2-35-158-214-140.eu-central-1.compute.amazonaws.com:3000';
 require('../classes/utils.php');
 
 //save user img locally 
@@ -18,7 +20,7 @@ if(isset($_POST["saveImg"])){
 //submit edit:
 if(isset($_POST['edit'])){
     session_start();
-    $url = 'http://localhost:3000/users/edit';
+    $url = $api_base . '/users/edit';
     $postData = array(
         'fname' => $_POST['fname'],
         'lname' => $_POST['lname'],
@@ -66,7 +68,7 @@ if(isset($_POST['updateUser'])){
 }
 
 function getUserInfo($token){
-    $url = 'http://localhost:3000/users/getUserCard';
+    $url = $api_base . '/users/getUserCard';
     $requestHeaders = array(
         'Authorization: '.$token
     );
